@@ -4,14 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
+    "build": "docker build -t svena/pwa-boilerplate .",
+    "dev": "HTTP=8090 HTTPS=8091 node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^1.2.4",
-    "koa-sslify": "^1.1.0",
+    "boom": "^4.2.0",
+    "koa": "2.x",
+    "koa-router": "next",
+    "koa-sslify": "2.1.0",
     "spdy": "^3.4.4"
   }
 }

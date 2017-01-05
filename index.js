@@ -1,19 +1,15 @@
 const koa = require('koa');
 const http = require('http');
 const fs = require('fs');
-const forceSSL = require('koa-sslify');
 const path = require('path');
 const spdy  = require('spdy');
+const router = require('./router');
+const app = require('./app');
 
-const app = koa();
-
-// Force SSL on all page
-app.use(forceSSL(8081));
-
-// index page
-app.use(function * (next) {
-  this.body = "hello world from " + this.request.url;
-});
+const ports = {
+  http: process.env.HTTP || 80,
+  https: process.env.HTTPS || 443
+}
 
 // SSL options
 const options = {
@@ -27,7 +23,7 @@ const options = {
 }
 
 // http server that will only be used as a redirect to SSL
-http.createServer(app.callback()).listen(8080);
+http.createServer(app.callback()).listen(ports.http);
 
 // http2 server
-spdy.createServer(options, app.callback()).listen(8081);
+spdy.createServer(options, app.callback()).listen(ports.https);
