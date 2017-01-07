@@ -8,7 +8,7 @@
     "build": "docker build -t svena/pwa-boilerplate .",
     "docker": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
-    "dev": "HTTP=8090 HTTPS=8091 node index.js",
+    "dev": "cross-env HTTP=8090 HTTPS=8091 node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "boom": "^4.2.0",
+    "cross-env": "^3.1.4",
     "koa": "2.x",
     "koa-router": "next",
     "koa-sslify": "2.1.0",

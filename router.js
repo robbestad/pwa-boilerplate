@@ -13,6 +13,9 @@ router
   })
   .get('/hello', function (ctx, next) {
     ctx.body = require(path.join(__dirname, 'routes', 'hello.js'))();
-  });
+  })
+    .get('/test', function (ctx, next) {
+        ctx.body = require(path.join(__dirname, 'routes', 'hello.js'))();
+    });
 
 module.exports = router;
