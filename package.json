@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "boom": "^4.2.0",doc
+    "boom": "^4.2.0",
     "koa": "2.x",
     "koa-router": "next",
     "koa-sslify": "2.1.0",
