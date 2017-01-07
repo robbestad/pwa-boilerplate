@@ -24,7 +24,7 @@ Additionally, you need to import the server.crt into your Keychain and mark it a
 
 #### Windows
 
-I recommend you use0 [Cmdr](http://cmder.net/) as your shell. Enter the same commands 
+I recommend you use [Cmdr](http://cmder.net/) as your shell. Enter the same commands 
 as for Mac OSX above, then start *certmgr.msc* and import the new cert as a trusted root certificate.
 
  
