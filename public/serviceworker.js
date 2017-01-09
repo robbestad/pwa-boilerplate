@@ -1,35 +1,40 @@
-const delayedResponse = () => {
-    return new Promise(resolve => {
-            setTimeout(e => {
-            resolve('Hello from service worker land');
-}, 1500)
-})
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.url.indexOf('localhost') > -1) {
+    event.respondWith(
+        self.caches.match(event.request).then(response => {
+        return response || fetch(request);
+      })
+    );
+  }
+});
+
+const assets = ['assets/bridge.jpg',
+  'index.html',
+  'main.js'];
+
+const cacheAssets = assets => {
+  return new Promise((resolve, reject) => {
+    caches.open('assets')
+      .then(cache => {
+        cache.addAll(assets)
+          .then(() => {
+            resolve('All assets cached')
+          })
+          .catch(err => {
+            reject(err)
+          })
+      }).catch(err => {
+      reject(err);
+    })
+  });
 };
 
-let result;
+cacheAssets(assets)
+  .then( res => {
+    console.log(res)
+  })
+  .catch(err => {
+    console.error('Cache failed', err)
+  });
 
-self.addEventListener('install', e => {
-    e.waitUntil(
-    delayedResponse().then(response => {
-        result = response;
-})
-);
-});
-self.addEventListener('activate', e => {
-    console.info('Service Worker: Active');
-});
-self.addEventListener('message', e => {
-    console.log('Hi from Service Worker. I got this message from the main script:', e.data);
-return new Promise(resolve => {
-        if (!result) {
-    delayedResponse().then(response => {
-        result = response;
-    resolve(result);
-})
-} else {
-    resolve(result);
-}
-}).then(message => {
-    e.ports[0].postMessage({message});
-});
-});
