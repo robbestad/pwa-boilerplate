@@ -45,9 +45,9 @@
   const img = new Image(),
     url = "/assets/bridge.jpg",
     container = document.querySelector("#holder");
-  img.src = url;
-  img.alt = "A bridge";
   setTimeout(() => {
+    img.src = url;
+    img.alt = "A bridge";
     img.onload = () => container.appendChild(img);
   }, 500)
 </script>
