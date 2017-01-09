@@ -32,6 +32,7 @@ function applyOptions(options) {
 }
 
 function portToUrlString(options) {
+  console.log(options)
   return (options.skipDefaultPort && options.port === 443) ? '' : `:${options.port}`;
 }
 
@@ -66,6 +67,7 @@ module.exports = function enforceHTTPS(options) {
 
   return (ctx, next) => {
 
+    console.log(ctx)
     // First, check if directly requested via https
     var secure = ctx.secure;
 
@@ -100,6 +102,8 @@ module.exports = function enforceHTTPS(options) {
     // build redirect url
     const httpsHost = options.hostname || url.parse('http://' + ctx.request.header.host).hostname;
     var redirectTo = 'https://' + httpsHost + portToUrlString(options);
+    console.log('redireuct')
+    console.log(options)
 
     //    redirectTo = 'https://localhost:8081';
 

@@ -23,7 +23,13 @@ const options = {
 }
 
 // http server that will only be used as a redirect to SSL
-http.createServer(app.callback()).listen(ports.http);
+http.createServer((req, res) => {
+  console.log(
+     "https://" + req.headers['host'] + req.url.replace(ports.http,ports.https
+  ))
+  res.writeHead(301, { "Location":  "https://" + req.headers['host'] + req.url.replace(ports.http,ports.https)});
+  res.end();
+}).listen(ports.http);
 
 // http2 server
 spdy.createServer(options, app.callback()).listen(ports.https);

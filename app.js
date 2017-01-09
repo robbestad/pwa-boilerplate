@@ -11,13 +11,13 @@ const opts = {pathPrefix: '/'};
 
 // Use router
 app
-  .use(convert(serveStatic(root), opts))
-  .use(favicon(path.join(__dirname, 'public', 'assets', 'icons', 'favicon.ico')))
   .use(router.routes())
+  .use(favicon(path.join(__dirname, 'public', 'assets', 'icons', 'favicon.ico')))
   .use(router.allowedMethods({
     throw: false,
     notImplemented: () => new Boom.notImplemented(),
     methodNotAllowed: () => new Boom.methodNotAllowed()
-  }));
+  }))
+  .use(convert(serveStatic(root), opts))
 
 module.exports = app;
