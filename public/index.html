@@ -8,14 +8,23 @@
 </head>
 <body>
 <h1>Caching</h1>
-<small>Look in the Console for service worker activity</small>
 <p id="holder"></p>
 <noscript>
+    <h2>So, I heard you don't like JavaScript?</h2>
     <p>
-        Noscript's usage today can be logical e in two instances :<br>with browser javascript enable <br>and
-        without(browser's javascript disable or eg a firefox plugin noscript states on/off)
+        That's cool. I'm still here for you. I even got this cool little image
+        of a bridge I want to show you.
+    </p>
+    <p>
+        <img src="/assets/bridge.jpg" alt="A bridge">
     </p>
 </noscript>
+<p>
+    <small>
+        <strong>Pro tip! </strong>
+        Examine the console for service worker activity
+    </small>
+</p>
 <script type="text/javascript">
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
@@ -49,7 +58,7 @@
     img.src = url;
     img.alt = "A bridge";
     img.onload = () => container.appendChild(img);
-  }, 500)
+  }, 100)
 </script>
 </body>
 </html>
