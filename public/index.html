@@ -16,7 +16,7 @@
         of a bridge I want to show you.
     </p>
     <p>
-        <img src="/assets/bridge.jpg" alt="A bridge">
+        <img border="1" width="500" height="400" src="/assets/bridge.jpg" alt="A bridge">
     </p>
 </noscript>
 <p>
@@ -54,6 +54,9 @@
   const img = new Image(),
     url = "/assets/bridge.jpg",
     container = document.querySelector("#holder");
+  img.width=500;
+  img.height=400;
+  img.border=1;
   setTimeout(() => {
     img.src = url;
     img.alt = "A bridge";
