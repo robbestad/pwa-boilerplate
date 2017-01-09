@@ -17,6 +17,31 @@
 Noscript's usage today can be logical e in two instances :<br>with browser javascript enable <br>and without(browser's javascript disable or eg a firefox plugin noscript states on/off)
 </p>
 </noscript>
-<script defer type="text/javascript" src="/main.js"></script>
+<script type="text/javascript">
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('./serviceworker.js', {scope: './'})
+    .then(navigator.serviceWorker.ready)
+    .then((registration) => {
+      if (registration.active) {
+        console.info('Service Worker is active');
+      }
+      if (registration.waiting) {
+        console.info('Service Worker is in waiting mode');
+      }
+      if (registration.installing) {
+        console.info('Service Worker is installing');
+      }
+    });
+}
+
+// images
+const img = new Image(),
+  url = "assets/bridge.jpg",
+  container = document.querySelector("#holder");
+img.src = url;
+img.alt = "A bridge";
+img.onload = () => container.appendChild(img);
+</script>
 </body>
 </html>

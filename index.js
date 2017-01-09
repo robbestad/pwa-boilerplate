@@ -24,10 +24,8 @@ const options = {
 
 // http server that will only be used as a redirect to SSL
 http.createServer((req, res) => {
-  console.log(
-     "https://" + req.headers['host'] + req.url.replace(ports.http,ports.https
-  ))
-  res.writeHead(301, { "Location":  "https://" + req.headers['host'] + req.url.replace(ports.http,ports.https)});
+  
+  res.writeHead(301, {"Location": "https://" + (req.headers['host'] + req.url).replace(ports.http,ports.https)});
   res.end();
 }).listen(ports.http);
 
