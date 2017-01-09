@@ -13,6 +13,13 @@ if ('serviceWorker' in navigator) {
         console.info('Service Worker is installing');
       }
     });
+
+  navigator.storageQuota.queryInfo("temporary").then(function (info) {
+    console.log(info.quota);
+    // Result: <quota in bytes>
+    console.log(info.usage);
+    // Result: <used data in bytes>
+  });
 }
 
 // images

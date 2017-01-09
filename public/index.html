@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Service Workers: Caching</title>
-  <meta name="theme-color" content="#2E3AA1">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link defer rel="manifest" href="/manifest.json">
-  
+    <title>Service Workers: Caching</title>
+    <meta name="theme-color" content="#2E3AA1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link defer rel="manifest" href="/manifest.json">
 </head>
 <body>
 <h1>Caching</h1>
 <small>Look in the Console for service worker activity</small>
 <p id="holder"></p>
 <noscript>
-<p>
-Noscript's usage today can be logical e in two instances :<br>with browser javascript enable <br>and without(browser's javascript disable or eg a firefox plugin noscript states on/off)
-</p>
+    <p>
+        Noscript's usage today can be logical e in two instances :<br>with browser javascript enable <br>and
+        without(browser's javascript disable or eg a firefox plugin noscript states on/off)
+    </p>
 </noscript>
 <script type="text/javascript">
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('./serviceworker.js', {scope: './'})
-    .then(navigator.serviceWorker.ready)
-    .then((registration) => {
-      if (registration.active) {
-        console.info('Service Worker is active');
-      }
-      if (registration.waiting) {
-        console.info('Service Worker is in waiting mode');
-      }
-      if (registration.installing) {
-        console.info('Service Worker is installing');
-      }
-    });
-}
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('./serviceworker.js', {scope: './'})
+      .then(navigator.serviceWorker.ready)
+      .then((registration) => {
+        if (registration.active) {
+          console.info('Service Worker is active');
+        }
+        if (registration.waiting) {
+          console.info('Service Worker is in waiting mode');
+        }
+        if (registration.installing) {
+          console.info('Service Worker is installing');
+        }
+      });
+  }
 
-// images
-const img = new Image(),
-  url = "assets/bridge.jpg",
-  container = document.querySelector("#holder");
-img.src = url;
-img.alt = "A bridge";
-img.onload = () => container.appendChild(img);
+  if ('storageQuota' in navigator) {
+    navigator.storageQuota.queryInfo("temporary").then(function (info) {
+      console.log('quota in bytes', info.quota);
+      console.log('used data in bytes', info.usage);
+    });
+  }
+
+  // images
+  const img = new Image(),
+    url = "/assets/bridge.jpg",
+    container = document.querySelector("#holder");
+  img.src = url;
+  img.alt = "A bridge";
+  setTimeout(() => {
+    img.onload = () => container.appendChild(img);
+  }, 500)
 </script>
 </body>
 </html>

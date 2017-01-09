@@ -2,14 +2,14 @@ const koa = require('koa');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const spdy  = require('spdy');
+const spdy = require('spdy');
 const router = require('./router');
 const app = require('./app');
 
 const ports = {
   http: process.env.HTTP || 80,
   https: process.env.HTTPS || 443
-}
+};
 
 // SSL options
 const options = {
@@ -20,12 +20,16 @@ const options = {
     ssl: true,
     plain: false
   }
-}
+};
 
 // http server that will only be used as a redirect to SSL
 http.createServer((req, res) => {
-  
-  res.writeHead(301, {"Location": "https://" + (req.headers['host'] + req.url).replace(ports.http,ports.https)});
+  res.writeHead(301, {
+    "Location": "https://" + (req.headers['host'] + req.url)
+      .replace(ports.http, ports.https)
+      .replace(/:80$/, '')
+      .replace(/:443$/, '')
+  });
   res.end();
 }).listen(ports.http);
 
