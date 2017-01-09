@@ -5,13 +5,18 @@
   <meta name="theme-color" content="#2E3AA1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="manifest" href="/manifest.json">
+  <link defer rel="manifest" href="/manifest.json">
   
 </head>
 <body>
 <h1>Caching</h1>
 <small>Look in the Console for service worker activity</small>
-<p><img width="80%" src="assets/bridge.jpg" alt="A bridge"></p>
-<script type="text/javascript" src="/main.js"></script>
+<p id="holder"></p>
+<noscript>
+<p>
+Noscript's usage today can be logical e in two instances :<br>with browser javascript enable <br>and without(browser's javascript disable or eg a firefox plugin noscript states on/off)
+</p>
+</noscript>
+<script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>

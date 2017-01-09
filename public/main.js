@@ -14,3 +14,12 @@ if ('serviceWorker' in navigator) {
       }
     });
 }
+
+// images
+const img = new Image(),
+  url = "assets/bridge.jpg",
+  container = document.querySelector("#holder");
+console.log(container);
+img.src = url;
+img.alt = "A bridge";
+img.onload = () => container.appendChild(img);
