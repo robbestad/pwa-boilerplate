@@ -13,19 +13,20 @@ const ports = {
 
 const ssl = {
   key: process.env.PUBKEY || fs.readFileSync(path.join(__dirname, 'cert', 'server.key')),
-  cert: process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt'))
+  cert: process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt')),
 };
 
 // SSL options
 const options = {
   key: ssl.key,
-  cert: ssl.cert,
   spdy: {
     protocols: ['h2'],
     ssl: true,
     plain: false
   }
 };
+
+if(ssl.cert) option.cert = ssl.cert;
 
 // http server that will only be used as a redirect to SSL
 http.createServer((req, res) => {
