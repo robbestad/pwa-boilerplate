@@ -12,8 +12,8 @@ const ports = {
 };
 
 const ssl = {
-  key: process.env.PUBKEY || fs.readFileSync(path.join(__dirname, 'cert', 'server.key')),
-  cert: process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt')),
+  key: process.env.PUBKEY || path.join(__dirname, 'cert', 'server.key') ? fs.readFileSync(path.join(__dirname, 'cert', 'server.key')) : '',
+  cert: process.env.CERT || path.join(__dirname, 'cert', 'server.crt') ? fs.readFileSync(path.join(__dirname, 'cert', 'server.crt')) : '',
 };
 
 // SSL options
@@ -25,9 +25,6 @@ const options = {
     plain: false
   }
 };
-
-ssl.cert = process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt'));
-if (ssl.cert) options.cert = ssl.cert;
 
 // http server that will only be used as a redirect to SSL
 http.createServer((req, res) => {
