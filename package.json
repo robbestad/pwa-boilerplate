@@ -9,7 +9,7 @@
     "predocker": "npm run build",
     "docker": "docker run -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
-    "dev": "cross-env HTTP=8089 HTTPS=8090 node index.js",
+    "dev": "cross-env HTTP=8088 HTTPS=8443 node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
