@@ -41,6 +41,7 @@
           console.info('Service Worker is installing');
         }
       });
+
   }
 
   if ('storageQuota' in navigator) {
@@ -63,5 +64,8 @@
     img.onload = () => container.appendChild(img);
   }, 100)
 </script>
+
+<script defer src="//cdn.rawgit.com/amark/gun/master/gun.js"></script>
+
 </body>
 </html>

@@ -5,9 +5,11 @@ let CURRENT_CACHES = {
 };
 const OFFLINE_URL = 'index.html';
 
-const assets = ['/assets/bridge.jpg',
+const assets = [
+  '/assets/bridge.jpg',
   '/index.html',
-  '/main.js'];
+  '/main.js'
+];
 
 const cacheAssets = assets => {
   return new Promise((resolve, reject) => {
@@ -46,7 +48,7 @@ function createCacheBustedRequest(url) {
 
   // If {cache: 'reload'} didn't have any effect, append a cache-busting URL parameter instead.
   let bustedUrl = new URL(url, self.location.href);
-  bustedUrl.search += (bustedUrl.search ? '&' : '') + 'cachebust=' + Date.now();
+  bustedUrl.search += (bustedUrl.search ? '&' : '') + 'cachebust=' + performance.now();
   return new Request(bustedUrl);
 }
 
@@ -94,14 +96,6 @@ self.addEventListener('fetch', event => {
   // versions older than 49, so we need to include a less precise fallback,
   // which checks for a GET request with an Accept: text/html header.
 
-//   const request = event.request;
-//   event.respondWith(
-//     self.caches.match(event.request).then(response => {
-//       return response;
-//       // console.log('returning match', response)
-//       // return response || fetch(request);
-//     })
-//   );
 
   if (event.request.mode !== 'navigate' &&
     (event.request.method === 'GET')

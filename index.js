@@ -11,10 +11,15 @@ const ports = {
   https: process.env.HTTPS || 443
 };
 
+const ssl = {
+  key: process.env.PUBKEY || fs.readFileSync(path.join(__dirname, 'cert', 'server.key')),
+  cert: process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt'))
+};
+
 // SSL options
 const options = {
-  key: fs.readFileSync(path.join(__dirname, 'cert', 'server.key')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert', 'server.crt')),
+  key: ssl.key,
+  cert: ssl.cert,
   spdy: {
     protocols: ['h2'],
     ssl: true,
