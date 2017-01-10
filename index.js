@@ -26,7 +26,7 @@ const options = {
   }
 };
 
-ssl.cert = process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt');
+ssl.cert = process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt'));
 if (ssl.cert) options.cert = ssl.cert;
 
 // http server that will only be used as a redirect to SSL
