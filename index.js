@@ -26,7 +26,8 @@ const options = {
   }
 };
 
-if(ssl.cert) option.cert = ssl.cert;
+ssl.cert = process.env.CERT || fs.readFileSync(path.join(__dirname, 'cert', 'server.crt');
+if (ssl.cert) options.cert = ssl.cert;
 
 // http server that will only be used as a redirect to SSL
 http.createServer((req, res) => {
