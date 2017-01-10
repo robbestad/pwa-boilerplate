@@ -24,7 +24,9 @@
     "koa-convert": "^1.2.0",
     "koa-favicon": "2",
     "koa-router": "next",
+    "koa-sslify": "^1.1.0",
     "koa-static-plus": "^0.1.1",
+    "letsencrypt-express": "2.x",
     "spdy": "^3.4.4"
   }
 }
