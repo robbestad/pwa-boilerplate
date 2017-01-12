@@ -4,28 +4,61 @@
     <title>Service Workers: Caching</title>
     <meta name="theme-color" content="#2E3AA1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link defer rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
+
 </head>
 <body>
-<h1 tabindex="0">Caching</h1>
-<p id="holder"></p>
-<noscript>
-    <h2>So, I heard you don't like JavaScript?</h2>
-    <p>
-        That's cool. I'm still here for you. I even got this cool little image
-        of a bridge I want to show you.
-    </p>
-    <p>
-        <img border="1" width="500" height="400" src="/assets/bridge.jpg" alt="A bridge">
-    </p>
-</noscript>
-<p tabindex="0">
-    <small>
-        <strong>Pro tip! </strong>
-        Examine the console for service worker activity
-    </small>
-</p>
+<div>
+    <div class="row-head">
+        <div class="header-left">
+            <img class="logo" alt="logo">
+        </div>
+        <div class="header-right">
+            søkeboks
+        </div>
+    </div>
+
+    <div class="row animated fadeIn">
+        <div class="frontpage-block">
+
+            <h1 tabindex="0">Caching</h1>
+            <p id="holder"></p>
+            <noscript>
+                <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Sorts+Mill+Goudy" rel="stylesheet">
+                <link rel="stylesheet" href="/assets/app.css" media="screen">
+                <h2>So, I heard you don't like JavaScript?</h2>
+                <p>
+                    That's cool. I'm still here for you. I even got this cool little image
+                    of a bridge I want to show you.
+                </p>
+                <p>
+                    <img border="1" width="500" height="400" src="/assets/bridge.jpg" alt="A bridge">
+                </p>
+            </noscript>
+
+            <p tabindex="0">
+                <small>
+                    <strong>Pro tip! </strong>
+                    Examine the console for service worker activity
+                </small>
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
 <script type="text/javascript">
+  const appendStylesheet = href => {
+    let stylesheet = document.createElement('link');
+    stylesheet.href = href;
+    stylesheet.rel = 'stylesheet';
+    stylesheet.type = 'text/css';
+    document.getElementsByTagName('head')[0].appendChild(stylesheet);
+  };
+  appendStylesheet('/assets/app.css');
+  appendStylesheet('//fonts.googleapis.com/css?family=Droid+Sans|Sorts+Mill+Goudy');
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('./serviceworker.js', {scope: './'})
@@ -41,7 +74,6 @@
           console.info('Service Worker is installing');
         }
       });
-
   }
 
   if ('storageQuota' in navigator) {
@@ -51,18 +83,21 @@
     });
   }
 
-  // images
-  const img = new Image(),
-    url = "/assets/bridge.jpg",
-    container = document.querySelector("#holder");
-  img.width=500;
-  img.height=400;
-  img.border=1;
-  setTimeout(() => {
-    img.src = url;
-    img.alt = "A bridge";
-    img.onload = () => container.appendChild(img);
-  }, 100)
+  const asyncLoadImages = (node, src, width, height, border) => {
+    const img = new Image();
+    const container = document.querySelector(node);
+    img.width = width;
+    img.height = height;
+    img.border = border;
+    setTimeout(() => {
+      img.src = src;
+      img.alt = "A bridge";
+      img.onload = () => container.appendChild(img);
+    }, 100)
+  };
+  asyncLoadImages('#holder', '/assets/bridge.jpg', 500, 400, 1);
+  asyncLoadImages('.logo', '/assets/logo.png', 133, 40, 0);
+
 </script>
 
 <script defer src="//cdn.rawgit.com/amark/gun/master/gun.js"></script>

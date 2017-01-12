@@ -7,6 +7,7 @@ const OFFLINE_URL = 'index.html';
 
 const assets = [
   '/assets/bridge.jpg',
+  '/assets/app.css',
   '/index.html',
   '/main.js'
 ];
