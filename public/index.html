@@ -11,7 +11,7 @@
 <div>
     <div class="row-head">
         <div class="header-left">
-          <span class="logo"></span>
+            <span class="logo"></span>
         </div>
         <div class="header-right">
             søkeboks
@@ -22,8 +22,8 @@
         <div class="frontpage-block">
 
             <h1 tabindex="0">Caching</h1>
-          <p class="live"></p>
-          <p class="holder"></p>
+            <p class="gundata"></p>
+            <p class="holder"></p>
             <noscript>
                 <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Sorts+Mill+Goudy" rel="stylesheet">
                 <link rel="stylesheet" href="/assets/app.css" media="screen">
@@ -90,9 +90,9 @@
     img.width = width;
     img.height = height;
     img.border = border;
-      img.src = src;
-      img.alt = "A bridge";
-      img.onload = (e) => container.appendChild(img);
+    img.src = src;
+    img.alt = "A bridge";
+    img.onload = (e) => container.appendChild(img);
   };
   asyncLoadImages({node: '.logo', src: '/assets/logo.png', width: 133, height: 40, border: 0});
   asyncLoadImages({node: '.holder', src: '/assets/bridge.jpg', width: 500, height: 400, border: 1});
@@ -102,13 +102,31 @@
 <script defer src="https://db.robbestad.no/gun.js"></script>
 <script type="text/javascript">
   setTimeout(() => {
-    const gun = Gun('https://db.robbestad.no:3666');
-    const ref = gun.get("random/mui2");
+    const gun = Gun('https://db.robbestad.no/gun');
+    gun.put({hello: 'mister'}).key("random/mui3");
+    const ref = gun.get("random/mui3");
     ref.on((data) => {
-        console.log(data);
-      document.querySelector('.live').text = data;
+      const div = document.createElement('div');
+      div.text = data.hello;
+      div.textContent = data.hello;
+      document.querySelector('.gundata').appendChild(div);
     });
-  },250);
+  }, 5000);
+
+
+  //  fetch('https://db.robbestad.no/gun.js')
+  //    .then(GunDB => {
+  //      const gun = GunDB('https://db.robbestad.no/gun');
+  //      gun.put({hello: 'mister'}).key("random/mui3");
+  //      const ref = gun.get("random/mui3");
+  //      ref.on((data) => {
+  //        const div = document.createElement('div');
+  //        div.text = data.hello;
+  //        div.textContent = data.hello;
+  //        document.querySelector('.gundata').appendChild(div);
+  //      });
+  //    });
+  //
 </script>
 </body>
 </html>
