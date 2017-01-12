@@ -22,7 +22,8 @@
         <div class="frontpage-block">
 
             <h1 tabindex="0">Caching</h1>
-            <p class="holder"></p>
+          <p class="live"></p>
+          <p class="holder"></p>
             <noscript>
                 <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Sorts+Mill+Goudy" rel="stylesheet">
                 <link rel="stylesheet" href="/assets/app.css" media="screen">
@@ -98,7 +99,16 @@
 
 </script>
 
-<script defer src="//cdn.rawgit.com/amark/gun/master/gun.js"></script>
-
+<script defer src="https://db.robbestad.no/gun.js"></script>
+<script type="text/javascript">
+  setTimeout(() => {
+    const gun = Gun('https://db.robbestad.no:3666');
+    const ref = gun.get("random/mui2");
+    ref.on((data) => {
+        console.log(data);
+      document.querySelector('.live').text = data;
+    });
+  },250);
+</script>
 </body>
 </html>
