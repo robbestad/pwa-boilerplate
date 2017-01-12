@@ -11,7 +11,7 @@
 <div>
     <div class="row-head">
         <div class="header-left">
-            <img class="logo" alt="logo">
+          <span class="logo"></span>
         </div>
         <div class="header-right">
             søkeboks
@@ -22,7 +22,7 @@
         <div class="frontpage-block">
 
             <h1 tabindex="0">Caching</h1>
-            <p id="holder"></p>
+            <p class="holder"></p>
             <noscript>
                 <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Sorts+Mill+Goudy" rel="stylesheet">
                 <link rel="stylesheet" href="/assets/app.css" media="screen">
@@ -83,20 +83,18 @@
     });
   }
 
-  const asyncLoadImages = (node, src, width, height, border) => {
+  const asyncLoadImages = ({node, src, width, height, border}) => {
     const img = new Image();
     const container = document.querySelector(node);
     img.width = width;
     img.height = height;
     img.border = border;
-    setTimeout(() => {
       img.src = src;
       img.alt = "A bridge";
-      img.onload = () => container.appendChild(img);
-    }, 100)
+      img.onload = (e) => container.appendChild(img);
   };
-  asyncLoadImages('#holder', '/assets/bridge.jpg', 500, 400, 1);
-  asyncLoadImages('.logo', '/assets/logo.png', 133, 40, 0);
+  asyncLoadImages({node: '.logo', src: '/assets/logo.png', width: 133, height: 40, border: 0});
+  asyncLoadImages({node: '.holder', src: '/assets/bridge.jpg', width: 500, height: 400, border: 1});
 
 </script>
 
