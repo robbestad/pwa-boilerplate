@@ -96,11 +96,6 @@
       padding: 30px 0 0 0;
     }
 
-    .title{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
     @media screen and (max-width: 768px) {
       .frontpage-block {
@@ -110,6 +105,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      .title{
+        margin: 0 auto;
+        padding: 0;
       }
 
 
@@ -210,14 +210,11 @@
     <div class="row animated fadeIn">
         <div class="frontpage-block">
 
-          <div class="noscript">
-            <div class="noscript-item">
-              <h1>The History of Tower Defense</h1>
-            </div>
+          <div class="title">
+            <h1>The History of Tower Defense</h1>
           </div>
 
-
-          <noscript>
+            <noscript>
               <link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">
               <h2 class="center">So, I understand you don't like JavaScript?</h2>
               <div class="noscript">
