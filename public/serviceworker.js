@@ -6,8 +6,6 @@ let CURRENT_CACHES = {
 const OFFLINE_URL = 'index.html';
 
 const assets = [
-  '/assets/bridge.jpg',
-  '/assets/app.css',
   '/index.html',
   '/main.js'
 ];

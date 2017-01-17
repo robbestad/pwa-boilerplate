@@ -101,14 +101,14 @@
       .frontpage-block {
         padding: 40px 0 0 0;
       }
-
-      h1 {
-        font-size: 18px;
+      .row-head{
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      h3 {
-        font-size: 18px;
-        padding: 2px 0 0 10px;
+      h1 {
+        font-size: 26px;
       }
 
       .row {
@@ -120,7 +120,9 @@
       }
 
       p.paragraph {
-        margin: 20px 20px 0 20px;
+        margin: 20px 25px 0 25px;
+        line-height: 1.75;
+        font-size: 20px;
       }
 
     }
@@ -202,7 +204,7 @@
     <div class="row animated fadeIn">
         <div class="frontpage-block">
 
-            <h1>Zen & the secret art of tower defense</h1>
+            <h1>The History of Tower Defense</h1>
 
 
             <noscript>
@@ -268,7 +270,7 @@
     stylesheet.type = 'text/css';
     document.getElementsByTagName('head')[0].appendChild(stylesheet);
   };
-  appendStylesheet('/assets/app.css');
+
   appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
   if ('serviceWorker' in navigator) {
