@@ -4,7 +4,7 @@
     <title>Robbestad</title>
     <meta name="theme-color" content="#2E3AA1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
 
   <style rel="stylesheet" type="text/css">
@@ -64,17 +64,6 @@
       flex-direction: column;
     }
 
-    .frontpage-image {
-      width: 80vw;
-      max-width: 500px;
-      max-height: 300px;
-      border-radius: 10px;
-    }
-
-    .header {
-      display: inline-flex;
-    }
-
     a {
       color: #1a0dab;
       text-decoration: none;
@@ -114,10 +103,6 @@
 
 
     @media screen and (max-width: 768px) {
-      .header-left {
-        padding-top: 5px;
-      }
-
       .frontpage-block {
         padding: 40px 0 0 0;
       }
@@ -135,9 +120,10 @@
         width: 98vw;
       }
 
-      .header-right {
-        padding-top: 8px;
+      img {
+        max-width: 300px;
       }
+
     }
     .noscript {
       display: flex;
