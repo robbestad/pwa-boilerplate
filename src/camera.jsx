@@ -60,37 +60,37 @@ export default class Camera extends React.Component {
     let w = img.width;
     let h = img.height;
     console.log(w,h);
-    const scaleW = (w / 0.2) / 10;
-    const scaleH = (h / 0.2) / 10;
-    let tempCanvas = document.createElement('canvas');
-    let tempCtx = tempCanvas.getContext('2d');
-    canvas.width = w/scaleW < 300 ? w/scaleW : 300;
-    canvas.height = h/scaleH < 400 ? h/scaleH : 400;
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0, w/scaleW, h/scaleH);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, scaleW, scaleH);
-
-    // const sw = w > 300 ? w / 0.2 : 300;
-    // const sh = h > 400 ? h / 0.2 : 400;
+    // const scaleW = (w / 0.2) / 10;
+    // const scaleH = (h / 0.2) / 10;
     // let tempCanvas = document.createElement('canvas');
     // let tempCtx = tempCanvas.getContext('2d');
-    // canvas.width =  sw;
-    // canvas.height =   sh;
+    // canvas.width = w/scaleW < 300 ? w/scaleW : 300;
+    // canvas.height = h/scaleH < 400 ? h/scaleH : 400;
     // tempCanvas.width = canvas.width;
     // tempCanvas.height = canvas.height;
-    // tempCtx.drawImage(img, 0, 0, sw, sh);
-    // ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh);
-    // this.setState({
-    //   imageCanvasDisplay: 'block',
-    //   imageCanvasWidth: sw + "px",
-    //   imageCanvasHeight: sh + "px"
-    // });
+    // tempCtx.drawImage(img, 0, 0, w/scaleW, h/scaleH);
+    // ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation,w/scaleW, h/scaleH);
+
+    const sw = w > 300 ? w / 0.5 : 300;
+    const sh = h > 400 ? h / 0.5 : 400;
+    let tempCanvas = document.createElement('canvas');
+    let tempCtx = tempCanvas.getContext('2d');
+    canvas.width =  sw;
+    canvas.height =   sh;
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    tempCtx.drawImage(img, 0, 0,  ~~(sw/2), ~~(sh/2));
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, ~~(sw/2), ~~(sh/2));
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth:  w/scaleW + "px",
-      imageCanvasHeight: h/scaleH + "px"
+      imageCanvasWidth: ~~(sw/2) + "px",
+      imageCanvasHeight: ~~(sh/2) + "px"
     });
+    // this.setState({
+    //   imageCanvasDisplay: 'block',
+    //   imageCanvasWidth:  w/2 + "px",
+    //   imageCanvasHeight: h/2 + "px"
+    // });
 
   }
 
@@ -122,9 +122,9 @@ export default class Camera extends React.Component {
       this.setState({imageLoaded: true});
     }
 
-    setTimeout(()=>{
-      this.faceRecog();
-    }, 500);
+    // setTimeout(()=>{
+    //   this.faceRecog();
+    // }, 500);
   }
 
 
@@ -215,7 +215,7 @@ export default class Camera extends React.Component {
           <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
             width: this.state.imageCanvasWidth,
             height: this.state.imageCanvasHeight,
-            display: this.state.imageCanvasDisplay
+            display: 'block'
           }}>
             Your browser does not support the HTML5 canvas tag.
           </canvas>
