@@ -49,7 +49,6 @@ export default class Camera extends React.Component {
       faceApiText: null
     };
     this.putImage = this.putImage.bind(this);
-    this.saveImage = this.saveImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.faceRecog = this.faceRecog.bind(this);
   }

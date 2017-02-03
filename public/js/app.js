@@ -9543,7 +9543,6 @@ var Camera = function (_React$Component) {
       faceApiText: null
     };
     _this.putImage = _this.putImage.bind(_this);
-    _this.saveImage = _this.saveImage.bind(_this);
     _this.takePhoto = _this.takePhoto.bind(_this);
     _this.faceRecog = _this.faceRecog.bind(_this);
     return _this;
