@@ -45,7 +45,8 @@ export default class Camera extends React.Component {
       imageCanvasDisplay: 'none',
       spinnerDisplay: 'none',
       imageCanvasWidth: '0px',
-      imageCanvasHeight: '0px'
+      imageCanvasHeight: '0px',
+      faceApiText: null
     };
     this.putImage = this.putImage.bind(this);
     this.saveImage = this.saveImage.bind(this);
@@ -61,20 +62,20 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    const scaleW = w / 300;
-    const scaleH = h / 400;
+    // const scaleW = w / 300;
+    // const scaleH = h / 400;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
-    canvas.width = w / scaleW < 300 ? w / scaleW : 300;
-    canvas.height = h / scaleH < 400 ? h / scaleH : 400;
+    canvas.width = w;// / scaleW < 300 ? w / scaleW : 300;
+    canvas.height = h;// / scaleH < 400 ? h / scaleH : 400;
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0, w / scaleW, h / scaleH);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, scaleW, scaleH);
+    tempCtx.drawImage(img, 0, 0, w, h);
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, w, h);
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth: w / scaleW + "px",
-      imageCanvasHeight: h / scaleH + "px"
+      imageCanvasWidth: w + "px",
+      imageCanvasHeight: h + "px"
     });
 
     this.faceRecog();
@@ -110,9 +111,14 @@ export default class Camera extends React.Component {
 
   }
 
+
   faceRecog() {
     let canvas = this.refs.imageCanvas;
     const dataURL = canvas.toDataURL();
+
+    this.setState({
+      spinnerDisplay: 'block'
+    });
 
     request
       .post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false')
@@ -123,15 +129,18 @@ export default class Camera extends React.Component {
       .set('Accept', 'application/json')
       // .set('Content-Type', 'application/json')
       .set('Content-Type', 'application/octet-stream')
-      .end(function (err, res) {
+      .end((err, res) => {
         if (err || !res.ok) {
           console.error(err);
         } else {
           const data = JSON.stringify(res.body);
           console.log(data);
+          this.setState({
+            faceApiText: data,
+            spinnerDisplay: 'none'
+          })
         }
       });
-
 
 
     //
@@ -208,26 +217,30 @@ export default class Camera extends React.Component {
     });
     return <div>
       <h2>Camera</h2>
+      <small>Click to snap a photo or select an image from your photo roll</small>
+      <div className="faceApi">
+        <div className="spinner" style={{display: this.state.spinnerDisplay}}>
+          <div className="double-bounce1"></div>
+          <div className="double-bounce2"></div>
+        </div>
+        <div> {this.state.faceApiText}</div>
+      </div>
+
       <div className={inputClass}>
         <input type="file" label="Camera" onChange={this.takePhoto}
                className="camera" accept="image/*"/>
-        <small>Click to snap a photo or select an image from your photo roll</small>
-      </div>
-      <div className="spinner">
-        <div className="double-bounce1"></div>
-        <div className="double-bounce2"></div>
-      </div>
 
-      <div className="canvas">
-        <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
-          width: this.state.imageCanvasWidth,
-          height: this.state.imageCanvasHeight,
-          display: this.state.imageCanvasDisplay
-        }}>
-          Your browser does not support the HTML5 canvas tag.
-        </canvas>
-      </div>
+        <div className="canvas">
+          <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
+            width: this.state.imageCanvasWidth,
+            height: this.state.imageCanvasHeight,
+            display: this.state.imageCanvasDisplay
+          }}>
+            Your browser does not support the HTML5 canvas tag.
+          </canvas>
+        </div>
 
+      </div>
     </div>
   }
 }
