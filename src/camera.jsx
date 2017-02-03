@@ -62,22 +62,21 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    // const scaleW = w / 300;
-    // const scaleH = h / 400;
+    const sw = w > 300 ? w / 0.5 : 300;
+    const sh = h > 400 ? h / 0.5 : 400;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
-    canvas.width = w;// / scaleW < 300 ? w / scaleW : 300;
-    canvas.height = h;// / scaleH < 400 ? h / scaleH : 400;
+    canvas.width =  sw;
+    canvas.height =   sh;
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0, w, h);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, w, h);
+    tempCtx.drawImage(img, 0, 0, sw, sh);
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh);
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth: w + "px",
-      imageCanvasHeight: h + "px"
+      imageCanvasWidth: sw + "px",
+      imageCanvasHeight: sh + "px"
     });
-
     this.faceRecog();
   }
 
