@@ -52,8 +52,6 @@ export default class Camera extends React.Component {
     this.saveImage = this.saveImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.faceRecog = this.faceRecog.bind(this);
-
-    // this.faceRecog();
   }
 
 
@@ -63,8 +61,8 @@ export default class Camera extends React.Component {
     let w = img.width;
     let h = img.height;
     console.log(w,h);
-    const scaleW = (w / 0.2) / 100;
-    const scaleH = (h / 0.2) / 100;
+    const scaleW = (w / 0.2) / 10;
+    const scaleH = (h / 0.2) / 10;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     canvas.width = w/scaleW < 300 ? w/scaleW : 300;
@@ -95,7 +93,6 @@ export default class Camera extends React.Component {
       imageCanvasHeight: h/scaleH + "px"
     });
 
-    this.faceRecog();
   }
 
   takePhoto(event) {
@@ -126,6 +123,9 @@ export default class Camera extends React.Component {
       this.setState({imageLoaded: true});
     }
 
+    setTimeout(()=>{
+      this.faceRecog();
+    }, 500);
   }
 
 
@@ -189,40 +189,6 @@ export default class Camera extends React.Component {
 
   }
 
-  saveImage() {
-    let canvas = this.refs.imageCanvas;
-    document.body.style.opacity = 0.4;
-
-    this.setState({
-      spinnerDisplay: 'block',
-      imageCanvasDisplay: 'none'
-    });
-
-    const dataURL = canvas.toDataURL();
-
-    new Promise((resolve, reject) => {
-      request
-        .post('/upload')
-        .send({image: dataURL, username: this.props.username})
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          console.log(err);
-          if (err) {
-            reject(err)
-          }
-          if (res.err) {
-            reject(res.err);
-          }
-          resolve(res);
-        });
-    }).then((res) => {
-      const result = JSON.parse(res.text);
-      console.log(result);
-      this.props.uploadImage(result.secure_url, this.props.username);
-      this.props.history.pushState(null, 'stream');
-      document.body.style.opacity = 1.0;
-    });
-  }
 
   render() {
     const inputClass = classNames({

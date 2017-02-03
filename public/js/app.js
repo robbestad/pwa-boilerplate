@@ -9546,8 +9546,6 @@ var Camera = function (_React$Component) {
     _this.saveImage = _this.saveImage.bind(_this);
     _this.takePhoto = _this.takePhoto.bind(_this);
     _this.faceRecog = _this.faceRecog.bind(_this);
-
-    // this.faceRecog();
     return _this;
   }
 
@@ -9559,8 +9557,8 @@ var Camera = function (_React$Component) {
       var w = img.width;
       var h = img.height;
       console.log(w, h);
-      var scaleW = w / 0.2 / 100;
-      var scaleH = h / 0.2 / 100;
+      var scaleW = w / 0.2 / 10;
+      var scaleH = h / 0.2 / 10;
       var tempCanvas = document.createElement('canvas');
       var tempCtx = tempCanvas.getContext('2d');
       canvas.width = w / scaleW < 300 ? w / scaleW : 300;
@@ -9590,8 +9588,6 @@ var Camera = function (_React$Component) {
         imageCanvasWidth: w / scaleW + "px",
         imageCanvasHeight: h / scaleH + "px"
       });
-
-      this.faceRecog();
     }
   }, {
     key: 'takePhoto',
@@ -9629,6 +9625,10 @@ var Camera = function (_React$Component) {
           _this2.setState({ imageLoaded: true });
         })();
       }
+
+      setTimeout(function () {
+        _this2.faceRecog();
+      }, 500);
     }
   }, {
     key: 'faceRecog',
@@ -9685,40 +9685,6 @@ var Camera = function (_React$Component) {
       // })
       //   .catch(err => console.error(err));
       //
-    }
-  }, {
-    key: 'saveImage',
-    value: function saveImage() {
-      var _this4 = this;
-
-      var canvas = this.refs.imageCanvas;
-      document.body.style.opacity = 0.4;
-
-      this.setState({
-        spinnerDisplay: 'block',
-        imageCanvasDisplay: 'none'
-      });
-
-      var dataURL = canvas.toDataURL();
-
-      new Promise(function (resolve, reject) {
-        _superagent2.default.post('/upload').send({ image: dataURL, username: _this4.props.username }).set('Accept', 'application/json').end(function (err, res) {
-          console.log(err);
-          if (err) {
-            reject(err);
-          }
-          if (res.err) {
-            reject(res.err);
-          }
-          resolve(res);
-        });
-      }).then(function (res) {
-        var result = JSON.parse(res.text);
-        console.log(result);
-        _this4.props.uploadImage(result.secure_url, _this4.props.username);
-        _this4.props.history.pushState(null, 'stream');
-        document.body.style.opacity = 1.0;
-      });
     }
   }, {
     key: 'render',
