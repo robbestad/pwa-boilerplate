@@ -364,12 +364,20 @@
             font-weight:200;
             color: #01222A;
         }
+        .cta.light{
+
+            color: #01222A;
+        }
+        .cta > a, a:visited, a:link, a:hover{
+            color: #01222A;
+        }
         .cta > a{
             color: #01222A;
         }
-        .cta > a.light{
-            color: #01222A;
+        .hidden {
+            display: none;
         }
+
     </style>
 
 </head>
@@ -383,9 +391,11 @@
                 <!--<li>Menu Entry</li>-->
             <!--</ul>-->
         <!--</div>-->
-        <div class="middle">
-            <body>
-            <div class="flex-container">
+
+        <!-- SECTIONS -->
+        <!-- FRONT PAGE -->
+        <div class="middle animated fadeIn">
+            <div class="flex-container hidden">
                 <div class="flex-cell light">
                     <div class="flex-item">
                         <a href="/#add">
@@ -397,7 +407,7 @@
                     <div class="flex-item cta"><a href="/#add">ADD</a></div>
                 </div>
                 <div class="flex-cell dark">
-                    <div class="flex-item cta"><a href="/#find" class="light">FIND</a></div>
+                    <div class="flex-item cta"><a href="/#find">FIND</a></div>
                 </div>
                 <div class="flex-cell dark">
                     <div class="flex-item">
@@ -408,7 +418,16 @@
                 </div>
 
             </div>
-            </body>
+            <!-- END FRONTPAGE -->
+
+
+            <!-- ADD -->
+            <div class="flex-container">
+
+                <div id="camera">CAMERA</div>
+            </div>
+
+            <!-- END ADD -->
 
         </div>
         <!--<div class="right">Another sidebar</div>-->
