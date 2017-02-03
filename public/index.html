@@ -1,336 +1,327 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Robbestad</title>
+    <title>Facer</title>
     <meta name="theme-color" content="#2E3AA1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
 
-  <style rel="stylesheet" type="text/css">
-    :root {
-      --font-size: 21px;
-    }
+    <style rel="stylesheet" type="text/css">
+        :root {
+            --font-size: 21px;
+        }
 
-    html,
-    body {
-      padding: 0;
-      line-height: calc(var(--font-size) * 1.618);
-      background-color: rgba(242, 242, 242, 1);
-      -webkit-font-smoothing: antialiased;
-      font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-      font-size: var(--font-size);
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      font-weight: 400;
-      font-style: normal;
-    }
+        html,
+        body {
+            padding: 0;
+            line-height: calc(var(--font-size) * 1.618);
+            background-color: rgba(242, 242, 242, 1);
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            font-size: var(--font-size);
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-weight: 400;
+            font-style: normal;
+        }
 
-    p.paragraph {
-      font-size: var(--font-size);
-      line-height: calc(var(--font-size) * 1.618);
-      letter-spacing: -.004em;
-      font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-      margin: 20px 100px 0 100px;
-      max-width: 75ch;
-    }
+        p.paragraph {
+            font-size: var(--font-size);
+            line-height: calc(var(--font-size) * 1.618);
+            letter-spacing: -.004em;
+            font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            margin: 20px 100px 0 100px;
+            max-width: 75ch;
+        }
 
-    .site-content {
-      flex-shrink: 1;
-    }
+        .site-content {
+            flex-shrink: 1;
+        }
 
-    .logo {
-      font-size: 26px;
-      font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-    }
+        .logo {
+            font-size: 26px;
+            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+        }
 
-    h1 {
-      font-size: 32px;
-      font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-    }
+        h1 {
+            font-size: 32px;
+            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+        }
 
-    h2 {
-      font-size: 24px;
-      font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-    }
+        h2 {
+            font-size: 24px;
+            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+        }
 
-    .frontpage-block {
-      padding: 50px 0 0 0;
-      display: flex;
-      width: 100vw;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+        .frontpage-block {
+            padding: 50px 0 0 0;
+            display: flex;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-    a {
-      color: #1a0dab;
-      text-decoration: none;
-    }
+        a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
 
-    a:visited, a:active, a:hover {
-      color: #609;
-    }
-    .logo{
-      padding: 0 0 0 5px;
-    }
+        a:visited, a:active, a:hover {
+            color: #609;
+        }
 
-    .row-head {
-      display: flex;
-      width: 100%;
-      height: 55px;
-      background-color: rgba(232, 232, 232, 1);
-      border-bottom: 1px solid #e5e5e5;
-    }
+        .logo {
+            padding: 0 0 0 5px;
+        }
 
-    .row {
-      display: flex;
-    }
+        .row-head {
+            display: flex;
+            width: 100%;
+            height: 55px;
+            background-color: rgba(232, 232, 232, 1);
+            border-bottom: 1px solid #e5e5e5;
+        }
 
+        .row {
+            display: flex;
+        }
 
-    footer {
-      color: #777;
-      font-size: 14px;
-      text-align: center;
-      padding: 30px 0 0 0;
-    }
+        footer {
+            color: #777;
+            font-size: 14px;
+            text-align: center;
+            padding: 30px 0 0 0;
+        }
 
+        @media screen and (max-width: 768px) {
+            .frontpage-block {
+                padding: 40px 0 0 0;
+            }
 
-    @media screen and (max-width: 768px) {
-      .frontpage-block {
-        padding: 40px 0 0 0;
-      }
-      .row-head{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+            .row-head {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-      h1 {
-        font-size: 24px;
-      }
+            h1 {
+                font-size: 24px;
+            }
 
-      .row {
-        width: 98vw;
-      }
+            .row {
+                width: 98vw;
+            }
 
-      img {
-        max-width: 300px;
-      }
+            img {
+                max-width: 300px;
+            }
 
-      p.paragraph {
-        margin: 20px 25px 0 25px;
-        line-height: 1.75;
-        font-size: 20px;
-      }
+            p.paragraph {
+                margin: 20px 25px 0 25px;
+                line-height: 1.75;
+                font-size: 20px;
+            }
 
-    }
-    .noscript {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        }
 
-    .noscript-item {
-      max-width: 100%;
-    }
+        .noscript {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .center{
-      text-align: center;
-    }
+        .noscript-item {
+            max-width: 100%;
+        }
 
-    .holder{
-      max-width: 85%;
-      margin: 0 auto;
-    }
+        .center {
+            text-align: center;
+        }
 
-    .animated {
-      -webkit-animation-duration: 1s;
-      animation-duration: 1s;
-      -webkit-animation-fill-mode: both;
-      animation-fill-mode: both;
-    }
+        .holder {
+            max-width: 85%;
+            margin: 0 auto;
+        }
 
-    @-webkit-keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
+        .animated {
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
 
-      to {
-        opacity: 1;
-      }
-    }
+        @-webkit-keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
+            to {
+                opacity: 1;
+            }
+        }
 
-      to {
-        opacity: 1;
-      }
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-    .fadeIn {
-      -webkit-animation-name: fadeIn;
-      animation-name: fadeIn;
-    }
+            to {
+                opacity: 1;
+            }
+        }
 
-    @-webkit-keyframes fadeInDown {
-      from {
-        opacity: 0;
-        -webkit-transform: translate3d(0, -100%, 0);
-        transform: translate3d(0, -100%, 0);
-      }
+        .fadeIn {
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+        }
 
-      to {
-        opacity: 1;
-        -webkit-transform: none;
-        transform: none;
-      }
-    }
+        @-webkit-keyframes fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
 
-  </style>
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+    </style>
 
 </head>
 <body>
 <div class="site-content">
     <div class="row-head">
-          <h1 class="logo">ROBBESTAD</h1>
+        <h1 class="logo">FACER</h1>
     </div>
 
     <div class="row animated fadeIn">
-    <div class="row animated fadeIn">
-        <div class="frontpage-block">
+        <div class="row animated fadeIn">
+            <div class="frontpage-block">
 
-          <div class="title">
-            <h1>The History of Tower Defense</h1>
-          </div>
-
-            <noscript>
-              <link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">
-              <h2 class="center">So, I understand you don't like JavaScript?</h2>
-              <div class="noscript">
-                  <div class="noscript-item">
-                    <img border="1" width="655" height="354" src="//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg" alt="My Tower Defense game">
-                  </div>
+                <div class="title">
+                    <h1>Be a frontend hero</h1>
                 </div>
 
-              <p class="paragraph">
-                That's cool. I'm still here for you. You can even look at this nice little
-                image of a cool Tower Defense game I'm building.
-              </p>
-            </noscript>
-          <p class="holder"></p>
-          <p class="paragraph">
-            The tower defense genre can trace its lineage back to the golden age of arcade video games in the 1980s.
-
-            The object of the arcade game Space Invaders released in 1978 was to defend the player's territory (represented by the bottom of the screen) against waves of incoming enemies.
-            The game featured shields which could be used to strategically, to obstruct enemy attacks on the player and assist the player to defend their territory, though not specifically to protect the territory.
-          </p>
-          <p class="paragraph">
-            The 1980 game Missile Command changed that by introducing a strategy element. In the game, players could obstruct incoming missiles, and there were multiple attack paths in each attack wave.
-            Missile Command was also the first of its kind to make use of a pointing device, a trackball, enabling players to use a crosshair.
-            The innovation was ahead of its time and anticipated the genre's later boom, which was paved by the wide adoption of the computer mouse.
-          </p>
-          <p class="paragraph">
-            Additionally, in Missile Command, the sole target of the attackers is the base, not a specific player character. <strong>For these reasons, some regard it as the first true game in the genre.</strong>
-          </p>
-          <p class="paragraph">
-            While later arcade games like Defender (1981) and Choplifter (1982) lacked the strategy element of Missile Command, they began a trend of games that shifted the primary objective to
-            defending non-player items. In these games, defending non-players from waves of attackers is key to progressing.
-          </p>
-          <p class="paragraph">
-            Atari's 1982 title Star Wars: The Empire Strikes Back was one of the first tie-ins to popularize the base defense style. The concept of waves of enemies attacking the base in single file (in this case AT-ATs) proved
-            a formula that was subsequently copied by many games as the shift from arcade to PC gaming began. Players were now able to choose from different methods of obstructing attackers' progress.
-          </p>
-          <p class="paragraph">
-            By the mid 1980s, the strategy elements began to further evolve. Titles like Imagine Software's 1984 release Pedro mixed the player's abilities to actively defend and obstruct waves of different enemy types,
-            including fixed obstructions, as well as the ability to build and repair a player's territory.
-          </p>
 
 
+                <noscript>
+                    <link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">
+                    <h2 class="center">So, I understand you don't like JavaScript?</h2>
+                    <div class="noscript">
+                        <div class="noscript-item">
+                            <img border="1" width="655" height="354"
+                                 src="//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg"
+                                 alt="My Tower Defense game">
+                        </div>
+                    </div>
+
+                    <p class="paragraph">
+                        That's cool. I'm still here for you. You can even look at this nice little
+                        image of a cool Tower Defense game I'm building.
+                    </p>
+                </noscript>
+                <p class="holder"></p>
+
+                <!--        <% parts/progressive.html %> -->
+
+
+                <div id="camera">CAMERA</div>
+            </div>
         </div>
+
     </div>
 
-</div>
 
-<footer>
-  <small>
-    <strong>Pro tip! </strong>
-    Examine the console for service worker activity
-  </small>
-</footer>
+    <footer>
+        <small>
+            <strong>Pro tip! </strong>
+            Examine the console for service worker activity
+        </small>
+    </footer>
 
-<script type="text/javascript">
-  const appendStylesheet = href => {
-    let stylesheet = document.createElement('link');
-    stylesheet.href = href;
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    document.getElementsByTagName('head')[0].appendChild(stylesheet);
-  };
+    <script type="text/javascript">
+      const appendStylesheet = href => {
+        let stylesheet = document.createElement('link');
+        stylesheet.href = href;
+        stylesheet.rel = 'stylesheet';
+        stylesheet.type = 'text/css';
+        document.getElementsByTagName('head')[0].appendChild(stylesheet);
+      };
 
-  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
+      appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('./serviceworker.js', {scope: './'})
-      .then(navigator.serviceWorker.ready)
-      .then((registration) => {
-        if (registration.active) {
-          console.info('Service Worker is active');
-        }
-        if (registration.waiting) {
-          console.info('Service Worker is in waiting mode');
-        }
-        if (registration.installing) {
-          console.info('Service Worker is installing');
-        }
-      });
-  }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('./serviceworker.js', {scope: './'})
+          .then(navigator.serviceWorker.ready)
+          .then((registration) => {
+            if (registration.active) {
+              console.info('Service Worker is active');
+            }
+            if (registration.waiting) {
+              console.info('Service Worker is in waiting mode');
+            }
+            if (registration.installing) {
+              console.info('Service Worker is installing');
+            }
+          });
+      }
 
-  if ('storageQuota' in navigator) {
-    navigator.storageQuota.queryInfo("temporary").then(function (info) {
-      console.log('quota in bytes', info.quota);
-      console.log('used data in bytes', info.usage);
-    });
-  }
+      if ('storageQuota' in navigator) {
+        navigator.storageQuota.queryInfo("temporary").then(function (info) {
+          console.log('quota in bytes', info.quota);
+          console.log('used data in bytes', info.usage);
+        });
+      }
 
-  const asyncLoadImages = ({node, src, width, height, border, className}) => {
-    const img = new Image();
-    const container = document.querySelector(node);
-    img.width = width;
-    img.height = height;
-    img.border = border;
-    img.src = src;
-    img.className = className || "center";
-    img.alt = "A bridge";
-    img.onload = (e) => container.appendChild(img);
-  };
+      const asyncLoadImages = ({node, src, width, height, border, className}) => {
+        const img = new Image();
+        const container = document.querySelector(node);
+        img.width = width;
+        img.height = height;
+        img.border = border;
+        img.src = src;
+        img.className = className || "center";
+        img.alt = "A bridge";
+        img.onload = (e) => container.appendChild(img);
+      };
 
-  asyncLoadImages({node: '.holder', src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg', width: 655, height: 364, border: 1});
+//      asyncLoadImages({
+//        node: '.holder',
+//        src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg',
+//        width: 655,
+//        height: 364,
+//        border: 1
+//      });
 
-</script>
+    </script>
+  
+    <script type="text/javascript" defer src="/js/app.js"></script>
 
-<!--
-<script defer src="https://db.robbestad.no/gun.js"></script>
-<script type="text/javascript">
-  setTimeout(() => {
-    const gun = Gun('https://db.robbestad.no/gun');
-    gun.put({hello: 'mister'}).key("random/mui3");
-    const ref = gun.get("random/mui3");
-    ref.on((data) => {
-      const div = document.createElement('div');
-      div.text = data.hello;
-      div.textContent = data.hello;
-      document.querySelector('.gundata').appendChild(div);
-    });
-  }, 5000);
+    <!--
+    <script defer src="https://db.robbestad.no/gun.js"></script>
+    <script type="text/javascript">
+      setTimeout(() => {
+        const gun = Gun('https://db.robbestad.no/gun');
+        gun.put({hello: 'mister'}).key("random/mui3");
+        const ref = gun.get("random/mui3");
+        ref.on((data) => {
+          const div = document.createElement('div');
+          div.text = data.hello;
+          div.textContent = data.hello;
+          document.querySelector('.gundata').appendChild(div);
+        });
+      }, 5000);
 
-</script>
--->
+    </script>
+    -->
 
 </body>
 </html>

@@ -247,6 +247,14 @@ etag@~1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.7.0.tgz#03d30b5f67dd6e632d2945d30d6652731a34d5d8"
 
+exif-component@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/exif-component/-/exif-component-1.0.1.tgz#90cd5927ea49e9e5dd877731c0360322e3fbe62b"
+
+exif-js@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/exif-js/-/exif-js-2.1.1.tgz#2962e6aa6600340a454b24c52e458b81ccf1e6d6"
+
 extend@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.0.tgz#5a474353b9f3353ddd8176dfd37b91c83a46f1d4"
@@ -385,6 +393,16 @@ http-signature@~1.1.0:
     assert-plus "^0.2.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
+
+imagetocanvas@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/imagetocanvas/-/imagetocanvas-2.1.3.tgz#23c12d582aa60b5b5289a3db1298210bb73ee4de"
+  dependencies:
+    exif-js "^2.1.1"
+
+inferno@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.2.2.tgz#0094e4ed428db30184bfa348a5aa38211945e67d"
 
 inherits@2.0.1:
   version "2.0.1"
