@@ -18,6 +18,9 @@
   "license": "ISC",
   "dependencies": {
     "assert": "^1.4.1",
+    "mocha": "^3.2.0"
+  },
+  "devDependencies": {
     "auto-sni": "^1.5.1",
     "boom": "^4.2.0",
     "cross-env": "^3.1.4",
@@ -33,7 +36,6 @@
     "koa-sslify": "^1.1.0",
     "koa-static-plus": "^0.1.1",
     "letsencrypt-express": "2.x",
-    "mocha": "^3.2.0",
     "spdy": "^3.4.4"
   }
 }
