@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+      (function(d) {
+        var config = {
+            kitId: 'wdz1lvl',
+            scriptTimeout: 3000,
+            async: true
+          },
+          h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script>
+
     <title>Facer</title>
     <meta name="theme-color" content="#2E3AA1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +28,7 @@
             line-height: calc(var(--font-size) * 1.618);
             background-color: rgba(242, 242, 242, 1);
             -webkit-font-smoothing: antialiased;
-            font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: var(--font-size);
             display: flex;
             flex-direction: column;
@@ -85,23 +96,19 @@
             max-width: 75ch;
         }
 
-        .site-content {
-            flex-shrink: 1;
-        }
-
         .logo {
             font-size: 26px;
-            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            font-family: 'Roboto Slab', sans-serif;
         }
 
         h1 {
             font-size: 32px;
-            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            font-family: 'Roboto Slab', sans-serif;
         }
 
         h2 {
             font-size: 24px;
-            font-family: 'Poiret One', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            font-family: 'Roboto Slab', sans-serif;
         }
 
         .frontpage-block {
@@ -241,130 +248,296 @@
             }
         }
 
+
+        /* flexbox */
+        .flex-container {
+            display: flex;
+            overflow: hidden;
+        }
+        .flex-container > * {
+            flex: 0 0 auto;
+            overflow: scroll;
+        }
+        .stretchy {
+            flex: 1 1 auto;
+        }
+        .column {
+            flex-direction: column;
+        }
+        html,
+        body,
+        .full-screen {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+        }
+        .full-screen {
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .full-screen > * {
+            flex: 0 0 auto;
+            overflow: scroll;
+        }
+        .full-screen > .header,
+        .full-screen > .footer {
+            height: 50px;
+            background: #ECF1F1;
+            color: #01222A;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 52px;
+            font-family: 'Roboto Slab', sans-serif;
+        }
+        .full-screen > .footer {
+            background: #01222A;
+            color: #ECF1F1;
+            font-size: 20px;
+        }
+        .full-screen > .main {
+            flex: 1 1 auto;
+            display: flex;
+            overflow: hidden;
+        }
+        .full-screen > .main > * {
+            flex: 0 0 auto;
+            overflow: hidden;
+        }
+
+
+        .full-screen > .main > .middle {
+            flex: 1 1 auto;
+        }
+
+        .icon-man{
+            padding: 20px 10px 0 30px;
+            width: 180px;
+        }
+
+        .icon-search{
+            padding: 60px;
+            width: 120px;
+        }
+
+
+        .flex-container {
+            display: flex;
+            justify-content: start;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .flex-cell {
+            flex: 0 0 50%;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            box-sizing: border-box;
+        }
+
+        .flex-cell:before {
+            content: '';
+            display: table;
+            padding-top: 50%;
+        }
+
+        .flex-item {
+            flex-grow: 1;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-cell.dark{
+            background: #046380;
+        }
+        .flex-cell.light{
+            background: #44A3C8;
+        }
+        .cta{
+            font-family: 'Roboto Slab Thin', sans-serif;
+            font-size: 48px;
+            color: #01222A;
+        }
+        .cta > a{
+            color: #01222A;
+        }
     </style>
 
 </head>
 <body>
-<div class="site-content">
-    <div class="row-head">
-        <h1 class="logo">FACER</h1>
-    </div>
 
-    <div class="row animated fadeIn">
-            <div class="frontpage-block">
-
-                <!--<div class="title">-->
-                    <!--<h1>Be a frontend hero</h1>-->
-                <!--</div>-->
-
-                <noscript>
-                    <link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">
-                    <h2 class="center">So, I understand you don't like JavaScript?</h2>
-                    <div class="noscript">
-                        <div class="noscript-item">
-                            <img border="1" width="655" height="354"
-                                 src="//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg"
-                                 alt="My Tower Defense game">
-                        </div>
+<div class="full-screen">
+    <div class="header">FACER</div>
+    <div class="main">
+        <!--<div class="left">Menu-stuff here. No way this will fit.-->
+            <!--<ul>-->
+                <!--<li>Menu Entry</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <div class="middle">
+            <body>
+            <div class="flex-container">
+                <div class="flex-cell light">
+                    <div class="flex-item">
+                        <a href="/#add">
+                        <object data="/assets/man.svg" class="icon-man" type="image/svg+xml">
+                        <img src="/assets/man.png" />
+                        </object>
+                        </a>
                     </div>
+                </div>
+                <div class="flex-cell light">
+                    <div class="flex-item cta"><a href="/#add">ADD</a></div>
+                </div>
+                <div class="flex-cell dark">
+                    <div class="flex-item cta"><a href="/#find">FIND</a></div>
+                </div>
+                <div class="flex-cell dark">
+                    <div class="flex-item">
+                        <a href="/#add">
+                            <object data="/assets/search.svg" class="icon-search" type="image/svg+xml">
+                            <img src="/assets/search.png" />
+                        </object>
+                        </a>
+                    </div>
+                </div>
 
-                    <p class="paragraph">
-                        That's cool. I'm still here for you. You can even look at this nice little
-                        image of a cool Tower Defense game I'm building.
-                    </p>
-                </noscript>
-                <p class="holder"></p>
-
-                <div id="camera">CAMERA</div>
             </div>
+            </body>
 
+        </div>
+        <!--<div class="right">Another sidebar</div>-->
     </div>
+    <div class="footer">HACKED TOGETHER WITH <3</div>
+</div>
+
+<!--<div class="site-content">-->
+    <!--<div class="row-head">-->
+        <!--<h1 class="logo">FACER</h1>-->
+    <!--</div>-->
+
+    <!--<div class="row animated fadeIn">-->
+            <!--<div class="frontpage-block">-->
+
+                <!--&lt;!&ndash;<div class="title">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<h1>Be a frontend hero</h1>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--<noscript>-->
+                    <!--<link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">-->
+                    <!--<h2 class="center">So, I understand you don't like JavaScript?</h2>-->
+                    <!--<div class="noscript">-->
+                        <!--<div class="noscript-item">-->
+                            <!--<img border="1" width="655" height="354"-->
+                                 <!--src="//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg"-->
+                                 <!--alt="My Tower Defense game">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<p class="paragraph">-->
+                        <!--That's cool. I'm still here for you. You can even look at this nice little-->
+                        <!--image of a cool Tower Defense game I'm building.-->
+                    <!--</p>-->
+                <!--</noscript>-->
+                <!--<p class="holder"></p>-->
+
+                <!--<div id="camera">CAMERA</div>-->
+            <!--</div>-->
+
+    <!--</div>-->
 
 
-    <footer>
-        <small>
-            <strong>Pro tip! </strong>
-            Examine the console for service worker activity
-        </small>
-    </footer>
+    <!--<footer>-->
+        <!--<small>-->
+            <!--<strong>Pro tip! </strong>-->
+            <!--Examine the console for service worker activity-->
+        <!--</small>-->
+    <!--</footer>-->
+<!--</div>-->
 
-    <script type="text/javascript">
-      const appendStylesheet = href => {
-        let stylesheet = document.createElement('link');
-        stylesheet.href = href;
-        stylesheet.rel = 'stylesheet';
-        stylesheet.type = 'text/css';
-        document.getElementsByTagName('head')[0].appendChild(stylesheet);
-      };
 
-      appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('./serviceworker.js', {scope: './'})
-          .then(navigator.serviceWorker.ready)
-          .then((registration) => {
-            if (registration.active) {
-              console.info('Service Worker is active');
-            }
-            if (registration.waiting) {
-              console.info('Service Worker is in waiting mode');
-            }
-            if (registration.installing) {
-              console.info('Service Worker is installing');
-            }
-          });
-      }
+<script type="text/javascript">
+  const appendStylesheet = href => {
+    let stylesheet = document.createElement('link');
+    stylesheet.href = href;
+    stylesheet.rel = 'stylesheet';
+    stylesheet.type = 'text/css';
+    document.getElementsByTagName('head')[0].appendChild(stylesheet);
+  };
 
-      if ('storageQuota' in navigator) {
-        navigator.storageQuota.queryInfo("temporary").then(function (info) {
-          console.log('quota in bytes', info.quota);
-          console.log('used data in bytes', info.usage);
-        });
-      }
+  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
-      const asyncLoadImages = ({node, src, width, height, border, className}) => {
-        const img = new Image();
-        const container = document.querySelector(node);
-        img.width = width;
-        img.height = height;
-        img.border = border;
-        img.src = src;
-        img.className = className || "center";
-        img.alt = "A bridge";
-        img.onload = (e) => container.appendChild(img);
-      };
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('./serviceworker.js', {scope: './'})
+      .then(navigator.serviceWorker.ready)
+      .then((registration) => {
+        if (registration.active) {
+          console.info('Service Worker is active');
+        }
+        if (registration.waiting) {
+          console.info('Service Worker is in waiting mode');
+        }
+        if (registration.installing) {
+          console.info('Service Worker is installing');
+        }
+      });
+  }
 
-//      asyncLoadImages({
-//        node: '.holder',
-//        src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg',
-//        width: 655,
-//        height: 364,
-//        border: 1
-//      });
+  if ('storageQuota' in navigator) {
+    navigator.storageQuota.queryInfo("temporary").then(function (info) {
+      console.log('quota in bytes', info.quota);
+      console.log('used data in bytes', info.usage);
+    });
+  }
 
-    </script>
+  const asyncLoadImages = ({node, src, width, height, border, className}) => {
+    const img = new Image();
+    const container = document.querySelector(node);
+    img.width = width;
+    img.height = height;
+    img.border = border;
+    img.src = src;
+    img.className = className || "center";
+    img.alt = "A bridge";
+    img.onload = (e) => container.appendChild(img);
+  };
 
-    <script type="text/javascript"  src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
-    <script type="text/javascript" defer src="/js/app.js"></script>
+  //      asyncLoadImages({
+  //        node: '.holder',
+  //        src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg',
+  //        width: 655,
+  //        height: 364,
+  //        border: 1
+  //      });
 
-    <!--
-    <script defer src="https://db.robbestad.no/gun.js"></script>
-    <script type="text/javascript">
-      setTimeout(() => {
-        const gun = Gun('https://db.robbestad.no/gun');
-        gun.put({hello: 'mister'}).key("random/mui3");
-        const ref = gun.get("random/mui3");
-        ref.on((data) => {
-          const div = document.createElement('div');
-          div.text = data.hello;
-          div.textContent = data.hello;
-          document.querySelector('.gundata').appendChild(div);
-        });
-      }, 5000);
+</script>
 
-    </script>
-    -->
+<script type="text/javascript"  src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
+<script type="text/javascript" defer src="/js/app.js"></script>
+
+<!--
+<script defer src="https://db.robbestad.no/gun.js"></script>
+<script type="text/javascript">
+  setTimeout(() => {
+    const gun = Gun('https://db.robbestad.no/gun');
+    gun.put({hello: 'mister'}).key("random/mui3");
+    const ref = gun.get("random/mui3");
+    ref.on((data) => {
+      const div = document.createElement('div');
+      div.text = data.hello;
+      div.textContent = data.hello;
+      document.querySelector('.gundata').appendChild(div);
+    });
+  }, 5000);
+
+</script>
+-->
 
 </body>
 </html>
