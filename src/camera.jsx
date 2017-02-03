@@ -94,7 +94,7 @@ export default class Camera extends React.Component {
 
         img.onload = () => {
           console.log('blobbing');
-          this.putImage(img, 6);
+          this.putImage(img, 1);
 
           this.setState({imageLoaded: true, currentImg: img.src});
 

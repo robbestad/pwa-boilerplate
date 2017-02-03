@@ -1,13 +1,12 @@
 // Incrementing CACHE_VERSION will kick off the install event and force previously cached resources to be cached again.
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 2;
 let CURRENT_CACHES = {
   offline: 'offline-v' + CACHE_VERSION
 };
 const OFFLINE_URL = 'index.html';
 
 const assets = [
-  '/main.js',
-  '/js/app.js'
+  '/main.js'
 ];
 
 const cacheAssets = assets => {
