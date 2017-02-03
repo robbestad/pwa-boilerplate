@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
+import EXIF from 'exif-js';
 
 function toImg(encodedData) {
   const imgElement = document.createElement('img');
@@ -45,14 +46,13 @@ export default class Camera extends React.Component {
       imageCanvasDisplay: 'none',
       spinnerDisplay: 'none',
       imageCanvasWidth: '0px',
-      imageCanvasHeight: '0px'
+      imageCanvasHeight: '0px',
+      faceApiText: null,
+      currentImg: null
     };
     this.putImage = this.putImage.bind(this);
-    this.saveImage = this.saveImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.faceRecog = this.faceRecog.bind(this);
-
-    // this.faceRecog();
   }
 
 
@@ -61,30 +61,29 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    const scaleW = w / 300;
-    const scaleH = h / 400;
+    console.log(w, h);
+    const sw = w > 300 ? w / 0.5 : 300;
+    const sh = h > 400 ? h / 0.5 : 400;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
-    canvas.width = w / scaleW < 300 ? w / scaleW : 300;
-    canvas.height = h / scaleH < 400 ? h / scaleH : 400;
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0, w / scaleW, h / scaleH);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, scaleW, scaleH);
+    canvas.width = sw;
+    canvas.height = sh;
+    tempCanvas.width = w;
+    tempCanvas.height = h;
+    tempCtx.drawImage(img, 0, 0, ~~(sw / 2), ~~(sh / 2));
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, ~~(sw / 2), ~~(sh / 2));
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth: w / scaleW + "px",
-      imageCanvasHeight: h / scaleH + "px"
+      imageCanvasWidth: "300px",
+      imageCanvasHeight: "390px"
     });
-
-    this.faceRecog();
   }
 
   takePhoto(event) {
-    let camera = document.querySelector('.camera'),
+    let camera = this.refs.camera,
       files = event.target.files,
       file, w, h, mpImg, orientation;
-    let canvas = document.querySelector('.imageCanvas');
+    let canvas = this.refs.imageCanvas;
     if (files && files.length > 0) {
       file = files[0];
       const fileReader = new FileReader();
@@ -93,26 +92,57 @@ export default class Camera extends React.Component {
         const img = new Image();
         img.src = event.target.result;
 
-        //document.write(img.src);
-        try {
-          ImageToCanvas.getExifOrientation(ImageToCanvas.toDataURL(img.src), (orientation) => {
-            putImage(img, orientation);
-          });
-        }
-        catch (e) {
-          console.log(e);
+        img.onload = () => {
+          console.log('blobbing');
           this.putImage(img, 1);
+
+          this.setState({imageLoaded: true, currentImg: img.src});
+
+
+          // ImageToCanvas.getExifOrientation(ImageToCanvas.toBlob(img.src))
+          //   .then(orientation => {
+          //     console.log("orientation: " + orientation);
+          //     this.putImage(img, orientation);
+          //
+          //   });
+
+          this.faceRecog();
+
+          // try {
+          //   console.log('trying to get --- exif');
+          //   ImageToCanvas.getExifOrientation(myImg, (orientation) => {
+          //     this.setState({
+          //       currentImg: myImg
+          //     });
+          //     console.log('got img and exif');
+          //     console.log(myImg);
+          //     putImage(myImg, orientation);
+          //   });
+          // }
+          // catch (e) {
+          //   console.log(e);
+          //   this.putImage(img, 1);
+          // }
         }
+
       };
+
       fileReader.readAsDataURL(file);
-      this.setState({imageLoaded: true});
     }
 
+    // setTimeout(()=>{
+    //   this.faceRecog();
+    // }, 500);
   }
+
 
   faceRecog() {
     let canvas = this.refs.imageCanvas;
     const dataURL = canvas.toDataURL();
+
+    this.setState({
+      spinnerDisplay: 'block'
+    });
 
     request
       .post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false')
@@ -123,15 +153,18 @@ export default class Camera extends React.Component {
       .set('Accept', 'application/json')
       // .set('Content-Type', 'application/json')
       .set('Content-Type', 'application/octet-stream')
-      .end(function (err, res) {
+      .end((err, res) => {
         if (err || !res.ok) {
           console.error(err);
         } else {
           const data = JSON.stringify(res.body);
           console.log(data);
+          this.setState({
+            faceApiText: data,
+            spinnerDisplay: 'none'
+          })
         }
       });
-
 
 
     //
@@ -163,40 +196,6 @@ export default class Camera extends React.Component {
 
   }
 
-  saveImage() {
-    let canvas = this.refs.imageCanvas;
-    document.body.style.opacity = 0.4;
-
-    this.setState({
-      spinnerDisplay: 'block',
-      imageCanvasDisplay: 'none'
-    });
-
-    const dataURL = canvas.toDataURL();
-
-    new Promise((resolve, reject) => {
-      request
-        .post('/upload')
-        .send({image: dataURL, username: this.props.username})
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          console.log(err);
-          if (err) {
-            reject(err)
-          }
-          if (res.err) {
-            reject(res.err);
-          }
-          resolve(res);
-        });
-    }).then((res) => {
-      const result = JSON.parse(res.text);
-      console.log(result);
-      this.props.uploadImage(result.secure_url, this.props.username);
-      this.props.history.pushState(null, 'stream');
-      document.body.style.opacity = 1.0;
-    });
-  }
 
   render() {
     const inputClass = classNames({
@@ -208,26 +207,29 @@ export default class Camera extends React.Component {
     });
     return <div>
       <h2>Camera</h2>
+      <small>Click to snap a photo or select an image from your photo roll</small>
+      <div className="faceApi">
+        <div className="spinner" style={{display: this.state.spinnerDisplay}}>
+          <div className="double-bounce1"></div>
+          <div className="double-bounce2"></div>
+        </div>
+        <div> {this.state.faceApiText}</div>
+      </div>
       <div className={inputClass}>
         <input type="file" label="Camera" onChange={this.takePhoto}
-               className="camera" accept="image/*"/>
-        <small>Click to snap a photo or select an image from your photo roll</small>
-      </div>
-      <div className="spinner">
-        <div className="double-bounce1"></div>
-        <div className="double-bounce2"></div>
-      </div>
+               ref="camera" className="camera" accept="image/*"/>
 
-      <div className="canvas">
-        <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
-          width: this.state.imageCanvasWidth,
-          height: this.state.imageCanvasHeight,
-          display: this.state.imageCanvasDisplay
-        }}>
-          Your browser does not support the HTML5 canvas tag.
-        </canvas>
-      </div>
+        <div className="canvas">
+          <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
+            width: this.state.imageCanvasWidth,
+            height: this.state.imageCanvasHeight,
+            display: 'block'
+          }}>
+            Your browser does not support the HTML5 canvas tag.
+          </canvas>
+        </div>
 
+      </div>
     </div>
   }
 }
