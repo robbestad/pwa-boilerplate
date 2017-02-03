@@ -1,4 +1,4 @@
-# Progressive Web App boilerplate (including a KOA-web server)
+# Facer frontend app (running on a KOA-web server)
 
 ## Start
 
@@ -28,5 +28,8 @@ I recommend you use [Cmdr](http://cmder.net/) as your shell. Enter the same comm
 as for Mac OSX above, then start *certmgr.msc* and import the new cert as a trusted root certificate.
 
  
+## Deploy
+
+Run ```npm run build```
 
 
