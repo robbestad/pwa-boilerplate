@@ -9620,8 +9620,6 @@ var Camera = function (_React$Component) {
 
       _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false')
       // .send({url: "http://techbeat.com/wp-content/uploads/2013/06/o-GOOGLE-FACIAL-RECOGNITION-facebook-1024x767.jpg"})
-      // .send({url: toPng(canvas)})
-      // .send(({data: serializeImage(dataURL)}))
       .send(serializeImage(dataURL)).set('Ocp-Apim-Subscription-Key', '66051470820c45fa9ae399b2fcc93521').set('processData', false).set('Accept', 'application/json')
       // .set('Content-Type', 'application/json')
       .set('Content-Type', 'application/octet-stream').end(function (err, res) {

@@ -10,12 +10,13 @@
     "docker": "docker run -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "dev": "cross-env HTTP=8088 HTTPS=8443 node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "assert": "^1.4.1",
     "auto-sni": "^1.5.1",
     "boom": "^4.2.0",
     "cross-env": "^3.1.4",
@@ -31,6 +32,7 @@
     "koa-sslify": "^1.1.0",
     "koa-static-plus": "^0.1.1",
     "letsencrypt-express": "2.x",
+    "mocha": "^3.2.0",
     "spdy": "^3.4.4"
   }
 }
