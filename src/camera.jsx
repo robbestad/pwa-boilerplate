@@ -2,7 +2,35 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
-import EXIF from 'exif-js';
+
+
+function getOrientation(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+
+    const view = new DataView(e.target.result);
+    if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
+    let length = view.byteLength, offset = 2;
+    while (offset < length) {
+      let marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker == 0xFFE1) {
+        if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1);
+        let little = view.getUint16(offset += 6, false) == 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        let tags = view.getUint16(offset, little);
+        offset += 2;
+        for (let i = 0; i < tags; i++)
+          if (view.getUint16(offset + (i * 12), little) == 0x0112)
+            return callback(view.getUint16(offset + (i * 12) + 8, little));
+      }
+      else if ((marker & 0xFF00) != 0xFF00) break;
+      else offset += view.getUint16(offset, false);
+    }
+    return callback(-1);
+  };
+  reader.readAsArrayBuffer(file);
+}
 
 function toImg(encodedData) {
   const imgElement = document.createElement('img');
@@ -92,47 +120,18 @@ export default class Camera extends React.Component {
         const img = new Image();
         img.src = event.target.result;
 
+        const _this = this;
         img.onload = () => {
-          console.log('blobbing');
-          this.putImage(img, 1);
-
-          this.setState({imageLoaded: true, currentImg: img.src});
-
-
-          // ImageToCanvas.getExifOrientation(ImageToCanvas.toBlob(img.src))
-          //   .then(orientation => {
-          //     console.log("orientation: " + orientation);
-          //     this.putImage(img, orientation);
-          //
-          //   });
-
-          this.faceRecog();
-
-          // try {
-          //   console.log('trying to get --- exif');
-          //   ImageToCanvas.getExifOrientation(myImg, (orientation) => {
-          //     this.setState({
-          //       currentImg: myImg
-          //     });
-          //     console.log('got img and exif');
-          //     console.log(myImg);
-          //     putImage(myImg, orientation);
-          //   });
-          // }
-          // catch (e) {
-          //   console.log(e);
-          //   this.putImage(img, 1);
-          // }
+          getOrientation(file, function (orientation) {
+            _this.putImage(img, orientation);
+            _this.setState({imageLoaded: true, currentImg: img.src});
+            _this.faceRecog();
+          });
         }
-
       };
 
       fileReader.readAsDataURL(file);
     }
-
-    // setTimeout(()=>{
-    //   this.faceRecog();
-    // }, 500);
   }
 
 
@@ -144,15 +143,18 @@ export default class Camera extends React.Component {
       spinnerDisplay: 'block'
     });
 
+    // There's two ways to send images to the cognitive API.
+    // 1. Send a Image URL (need to set Content-Type as application/json)
+    // 2. Send a binary (need to set Content-Type as octet-stream). The image need to be serialized.
     request
       .post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false')
-      // .send({url: "http://techbeat.com/wp-content/uploads/2013/06/o-GOOGLE-FACIAL-RECOGNITION-facebook-1024x767.jpg"})
       .send(serializeImage(dataURL))
+      .set('Content-Type', 'application/octet-stream')
+      // .send({url: "http://techbeat.com/wp-content/uploads/2013/06/o-GOOGLE-FACIAL-RECOGNITION-facebook-1024x767.jpg"})
+      // .set('Content-Type', 'application/json')
       .set('Ocp-Apim-Subscription-Key', '66051470820c45fa9ae399b2fcc93521')
       .set('processData', false)
       .set('Accept', 'application/json')
-      // .set('Content-Type', 'application/json')
-      .set('Content-Type', 'application/octet-stream')
       .end((err, res) => {
         if (err || !res.ok) {
           console.error(err);
