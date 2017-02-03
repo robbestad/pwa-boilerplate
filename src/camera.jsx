@@ -62,8 +62,8 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    const sw = w > 300 ? w / 0.5 : 300;
-    const sh = h > 400 ? h / 0.5 : 400;
+    const sw = w > 300 ? w / 0.2 : 300;
+    const sh = h > 400 ? h / 0.2 : 400;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     canvas.width =  sw;
