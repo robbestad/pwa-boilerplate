@@ -1,11 +1,12 @@
 {
-  "name": "pwa-boilerplate",
-  "version": "0.0.1",
+  "name": "Facer",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index",
     "build": "docker build -t svena/pwa-boilerplate .",
+    "prebuild": "cd src && webpack",
     "predocker": "npm run build",
     "docker": "docker run -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
