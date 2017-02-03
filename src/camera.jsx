@@ -82,10 +82,10 @@ export default class Camera extends React.Component {
   }
 
   takePhoto(event) {
-    let camera = document.querySelector('.camera'),
+    let camera = this.refs.camera,
       files = event.target.files,
       file, w, h, mpImg, orientation;
-    let canvas = document.querySelector('.imageCanvas');
+    let canvas = this.refs.imageCanvas;
     if (files && files.length > 0) {
       file = files[0];
       const fileReader = new FileReader();
@@ -225,10 +225,9 @@ export default class Camera extends React.Component {
         </div>
         <div> {this.state.faceApiText}</div>
       </div>
-
       <div className={inputClass}>
         <input type="file" label="Camera" onChange={this.takePhoto}
-               className="camera" accept="image/*"/>
+               ref="camera" className="camera" accept="image/*"/>
 
         <div className="canvas">
           <canvas ref="imageCanvas" className="imageCanvas" id="imageCanvas" style={{
