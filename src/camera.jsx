@@ -62,21 +62,39 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    const sw = w > 300 ? w / 0.2 : 300;
-    const sh = h > 400 ? h / 0.2 : 400;
+    console.log(w,h);
+    const scaleW = (w / 0.2) / 100;
+    const scaleH = (h / 0.2) / 100;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
-    canvas.width =  sw;
-    canvas.height =   sh;
+    canvas.width = w/scaleW < 300 ? w/scaleW : 300;
+    canvas.height = h/scaleH < 400 ? h/scaleH : 400;
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0, sw, sh);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh);
+    tempCtx.drawImage(img, 0, 0, w/scaleW, h/scaleH);
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, scaleW, scaleH);
+
+    // const sw = w > 300 ? w / 0.2 : 300;
+    // const sh = h > 400 ? h / 0.2 : 400;
+    // let tempCanvas = document.createElement('canvas');
+    // let tempCtx = tempCanvas.getContext('2d');
+    // canvas.width =  sw;
+    // canvas.height =   sh;
+    // tempCanvas.width = canvas.width;
+    // tempCanvas.height = canvas.height;
+    // tempCtx.drawImage(img, 0, 0, sw, sh);
+    // ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh);
+    // this.setState({
+    //   imageCanvasDisplay: 'block',
+    //   imageCanvasWidth: sw + "px",
+    //   imageCanvasHeight: sh + "px"
+    // });
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth: sw + "px",
-      imageCanvasHeight: sh + "px"
+      imageCanvasWidth:  w/scaleW + "px",
+      imageCanvasHeight: h/scaleH + "px"
     });
+
     this.faceRecog();
   }
 
