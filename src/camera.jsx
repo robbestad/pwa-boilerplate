@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
+import EXIF from 'exif-js';
 
 function toImg(encodedData) {
   const imgElement = document.createElement('img');
@@ -93,17 +94,19 @@ export default class Camera extends React.Component {
 
         img.onload = () => {
           console.log('blobbing');
-          this.putImage(img, 1);
+          this.putImage(img, 6);
 
           this.setState({imageLoaded: true, currentImg: img.src});
-          ImageToCanvas.getExifOrientation(ImageToCanvas.toBlob(img.src))
-            .then(orientation => {
-              console.log("orientation: " + orientation);
-              this.putImage(img, orientation);
 
-            });
 
-          //this.faceRecog();
+          // ImageToCanvas.getExifOrientation(ImageToCanvas.toBlob(img.src))
+          //   .then(orientation => {
+          //     console.log("orientation: " + orientation);
+          //     this.putImage(img, orientation);
+          //
+          //   });
+
+          this.faceRecog();
 
           // try {
           //   console.log('trying to get --- exif');
