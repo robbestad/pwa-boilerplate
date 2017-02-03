@@ -9540,7 +9540,8 @@ var Camera = function (_React$Component) {
       spinnerDisplay: 'none',
       imageCanvasWidth: '0px',
       imageCanvasHeight: '0px',
-      faceApiText: null
+      faceApiText: null,
+      currentImg: null
     };
     _this.putImage = _this.putImage.bind(_this);
     _this.takePhoto = _this.takePhoto.bind(_this);
@@ -9556,37 +9557,21 @@ var Camera = function (_React$Component) {
       var w = img.width;
       var h = img.height;
       console.log(w, h);
-      // const scaleW = (w / 0.2) / 10;
-      // const scaleH = (h / 0.2) / 10;
-      // let tempCanvas = document.createElement('canvas');
-      // let tempCtx = tempCanvas.getContext('2d');
-      // canvas.width = w/scaleW < 300 ? w/scaleW : 300;
-      // canvas.height = h/scaleH < 400 ? h/scaleH : 400;
-      // tempCanvas.width = canvas.width;
-      // tempCanvas.height = canvas.height;
-      // tempCtx.drawImage(img, 0, 0, w/scaleW, h/scaleH);
-      // ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation,w/scaleW, h/scaleH);
-
       var sw = w > 300 ? w / 0.5 : 300;
       var sh = h > 400 ? h / 0.5 : 400;
       var tempCanvas = document.createElement('canvas');
       var tempCtx = tempCanvas.getContext('2d');
       canvas.width = sw;
       canvas.height = sh;
-      tempCanvas.width = canvas.width;
-      tempCanvas.height = canvas.height;
+      tempCanvas.width = w;
+      tempCanvas.height = h;
       tempCtx.drawImage(img, 0, 0, ~~(sw / 2), ~~(sh / 2));
       _imagetocanvas2.default.drawCanvas(canvas, toPng(tempCanvas), orientation, ~~(sw / 2), ~~(sh / 2));
       this.setState({
         imageCanvasDisplay: 'block',
-        imageCanvasWidth: ~~(sw / 2) + "px",
-        imageCanvasHeight: ~~(sh / 2) + "px"
+        imageCanvasWidth: "300px",
+        imageCanvasHeight: "390px"
       });
-      // this.setState({
-      //   imageCanvasDisplay: 'block',
-      //   imageCanvasWidth:  w/2 + "px",
-      //   imageCanvasHeight: h/2 + "px"
-      // });
     }
   }, {
     key: 'takePhoto',
@@ -9602,27 +9587,44 @@ var Camera = function (_React$Component) {
           orientation = void 0;
       var canvas = this.refs.imageCanvas;
       if (files && files.length > 0) {
-        (function () {
-          file = files[0];
-          var fileReader = new FileReader();
-          var putImage = _this2.putImage;
-          fileReader.onload = function (event) {
-            var img = new Image();
-            img.src = event.target.result;
+        file = files[0];
+        var fileReader = new FileReader();
+        var putImage = this.putImage;
+        fileReader.onload = function (event) {
+          var img = new Image();
+          img.src = event.target.result;
 
-            //document.write(img.src);
-            try {
-              _imagetocanvas2.default.getExifOrientation(_imagetocanvas2.default.toDataURL(img.src), function (orientation) {
-                putImage(img, orientation);
-              });
-            } catch (e) {
-              console.log(e);
-              _this2.putImage(img, 1);
-            }
+          img.onload = function () {
+            console.log('blobbing');
+            _this2.putImage(img, 1);
+
+            _this2.setState({ imageLoaded: true, currentImg: img.src });
+            _imagetocanvas2.default.getExifOrientation(_imagetocanvas2.default.toBlob(img.src)).then(function (orientation) {
+              console.log("orientation: " + orientation);
+              _this2.putImage(img, orientation);
+            });
+
+            //this.faceRecog();
+
+            // try {
+            //   console.log('trying to get --- exif');
+            //   ImageToCanvas.getExifOrientation(myImg, (orientation) => {
+            //     this.setState({
+            //       currentImg: myImg
+            //     });
+            //     console.log('got img and exif');
+            //     console.log(myImg);
+            //     putImage(myImg, orientation);
+            //   });
+            // }
+            // catch (e) {
+            //   console.log(e);
+            //   this.putImage(img, 1);
+            // }
           };
-          fileReader.readAsDataURL(file);
-          _this2.setState({ imageLoaded: true });
-        })();
+        };
+
+        fileReader.readAsDataURL(file);
       }
 
       // setTimeout(()=>{
@@ -11574,21 +11576,27 @@ ImageToCanvas.isRotated = function (orientation) {
 };
 
 ImageToCanvas.getExifOrientation = function (image) {
-  return new Promise(function(resolve) {
+  console.log('got image');
+  return new Promise(function (resolve) {
+    console.log('checking...');
+    console.log(image);
     EXIF.getData(image, function () {
       var orientation = 1;
       try {
         orientation = EXIF.getTag(image, 'Orientation') || 1;
       } catch (e) {
+        console.error(e);
         // do nothing on err
       }
-      resolve(orientation);
+      finally {
+        resolve(orientation);
+      }
     });
   });
 };
 
 ImageToCanvas.toBlob = function (dataURI, dataType) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     var type = dataType || dataURI.split(',')[0].split(':')[1].split(';')[0] || 'image/jpeg';
     if (type !== 'image/jpeg') {
       // convert to jpeg because Safari & Firefox has issues with pngs

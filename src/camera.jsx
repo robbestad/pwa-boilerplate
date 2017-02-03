@@ -46,7 +46,8 @@ export default class Camera extends React.Component {
       spinnerDisplay: 'none',
       imageCanvasWidth: '0px',
       imageCanvasHeight: '0px',
-      faceApiText: null
+      faceApiText: null,
+      currentImg: null
     };
     this.putImage = this.putImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
@@ -59,39 +60,22 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    console.log(w,h);
-    // const scaleW = (w / 0.2) / 10;
-    // const scaleH = (h / 0.2) / 10;
-    // let tempCanvas = document.createElement('canvas');
-    // let tempCtx = tempCanvas.getContext('2d');
-    // canvas.width = w/scaleW < 300 ? w/scaleW : 300;
-    // canvas.height = h/scaleH < 400 ? h/scaleH : 400;
-    // tempCanvas.width = canvas.width;
-    // tempCanvas.height = canvas.height;
-    // tempCtx.drawImage(img, 0, 0, w/scaleW, h/scaleH);
-    // ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation,w/scaleW, h/scaleH);
-
+    console.log(w, h);
     const sw = w > 300 ? w / 0.5 : 300;
     const sh = h > 400 ? h / 0.5 : 400;
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
-    canvas.width =  sw;
-    canvas.height =   sh;
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    tempCtx.drawImage(img, 0, 0,  ~~(sw/2), ~~(sh/2));
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, ~~(sw/2), ~~(sh/2));
+    canvas.width = sw;
+    canvas.height = sh;
+    tempCanvas.width = w;
+    tempCanvas.height = h;
+    tempCtx.drawImage(img, 0, 0, ~~(sw / 2), ~~(sh / 2));
+    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, ~~(sw / 2), ~~(sh / 2));
     this.setState({
       imageCanvasDisplay: 'block',
-      imageCanvasWidth: ~~(sw/2) + "px",
-      imageCanvasHeight: ~~(sh/2) + "px"
+      imageCanvasWidth: "300px",
+      imageCanvasHeight: "390px"
     });
-    // this.setState({
-    //   imageCanvasDisplay: 'block',
-    //   imageCanvasWidth:  w/2 + "px",
-    //   imageCanvasHeight: h/2 + "px"
-    // });
-
   }
 
   takePhoto(event) {
@@ -107,19 +91,40 @@ export default class Camera extends React.Component {
         const img = new Image();
         img.src = event.target.result;
 
-        //document.write(img.src);
-        try {
-          ImageToCanvas.getExifOrientation(ImageToCanvas.toDataURL(img.src), (orientation) => {
-            putImage(img, orientation);
-          });
-        }
-        catch (e) {
-          console.log(e);
+        img.onload = () => {
+          console.log('blobbing');
           this.putImage(img, 1);
+
+          this.setState({imageLoaded: true, currentImg: img.src});
+          ImageToCanvas.getExifOrientation(ImageToCanvas.toBlob(img.src))
+            .then(orientation => {
+              console.log("orientation: " + orientation);
+              this.putImage(img, orientation);
+
+            });
+
+          //this.faceRecog();
+
+          // try {
+          //   console.log('trying to get --- exif');
+          //   ImageToCanvas.getExifOrientation(myImg, (orientation) => {
+          //     this.setState({
+          //       currentImg: myImg
+          //     });
+          //     console.log('got img and exif');
+          //     console.log(myImg);
+          //     putImage(myImg, orientation);
+          //   });
+          // }
+          // catch (e) {
+          //   console.log(e);
+          //   this.putImage(img, 1);
+          // }
         }
+
       };
+
       fileReader.readAsDataURL(file);
-      this.setState({imageLoaded: true});
     }
 
     // setTimeout(()=>{
