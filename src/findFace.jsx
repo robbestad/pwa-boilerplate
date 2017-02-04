@@ -168,8 +168,8 @@ export default class Camera extends React.Component {
           this.setState({
             faces
           });
-          // this.verifyFaces(faces);
-          this.findSimilar(faces[0]);
+          this.verifyFaces(faces);
+          // this.findSimilar(faces[0]);
         }
       });
   }
@@ -201,14 +201,12 @@ export default class Camera extends React.Component {
   verifyFaces(faces) {
     // NEEDS A PERSON GROUP
     const body = {
-      "personGroupId": "aspc2017faces",
+      "personGroupId": "aspc2017facegroup",
       "faceIds": faces,
       "maxNumOfCandidatesReturned": 1,
       "confidenceThreshold": 0.5
     };
-
     console.log(body);
-
     request
       .post('https://westus.api.cognitive.microsoft.com/face/v1.0/identify')
       .send(body)
@@ -219,7 +217,8 @@ export default class Camera extends React.Component {
         if (err || !res.ok) {
           console.error(err);
         } else {
-          // alert(data);
+          console.log(res);
+          alert(JSON.stringify(res));
         }
       });
   }

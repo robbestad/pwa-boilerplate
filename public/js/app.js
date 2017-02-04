@@ -11240,8 +11240,8 @@ var Camera = function (_React$Component) {
           _this4.setState({
             faces: faces
           });
-          // this.verifyFaces(faces);
-          _this4.findSimilar(faces[0]);
+          _this4.verifyFaces(faces);
+          // this.findSimilar(faces[0]);
         }
       });
     }
@@ -11269,19 +11269,18 @@ var Camera = function (_React$Component) {
     value: function verifyFaces(faces) {
       // NEEDS A PERSON GROUP
       var body = {
-        "personGroupId": "aspc2017faces",
+        "personGroupId": "aspc2017facegroup",
         "faceIds": faces,
         "maxNumOfCandidatesReturned": 1,
         "confidenceThreshold": 0.5
       };
-
       console.log(body);
-
       _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/identify').send(body).set('Content-Type', 'application/json').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
         if (err || !res.ok) {
           console.error(err);
         } else {
-          // alert(data);
+          console.log(res);
+          alert(JSON.stringify(res));
         }
       });
     }
