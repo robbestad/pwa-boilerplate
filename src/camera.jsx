@@ -74,6 +74,7 @@ export default class Camera extends React.Component {
       imageCanvasWidth: '28px',
       imageCanvasHeight: '320px',
       faceApiText: null,
+      storingFace: false,
       userData: '',
       detectedFaces: null,
       faceDataFound: false,
@@ -145,7 +146,8 @@ export default class Camera extends React.Component {
     const dataURL = canvas.toDataURL();
 
     this.setState({
-      spinnerDisplay: true
+      spinnerDisplay: true,
+      storingFace: true
     });
 
 
@@ -257,6 +259,10 @@ export default class Camera extends React.Component {
   uploadImage() {
     // store ID to FACE API
 
+    this.setState({
+      spinnerDisplay: true
+    });
+
     // CREATE A PERSISTED FACE ID
     this.createPersistedFaceID()
       .then(persistedFaceId => {
@@ -278,15 +284,15 @@ export default class Camera extends React.Component {
 
               })
               .catch(err => {
-                console.error(err);
+                alert(JSON.stringify(err));
               });
           })
           .catch(err => {
-            console.error(err);
+            alert(JSON.stringify(err));
           });
       })
       .catch(err => {
-        console.error(err);
+        alert(JSON.stringify(err));
       });
 
 
@@ -312,6 +318,11 @@ export default class Camera extends React.Component {
       metaInput: true
     });
 
+    const specialHideCSS = classNames({
+      hidden: this.state.storingFace
+    });
+
+
     return <div>
       <h1 className="center">ADD A PERSON</h1>
       <div className="center">
@@ -332,22 +343,24 @@ export default class Camera extends React.Component {
           </div>
         </div>
 
-        <div className={canvasCSS}>
-          <canvas ref="photoCanvas" className="imageCanvas">
-            Your browser does not support the HTML5 canvas tag.
-          </canvas>
-        </div>
+        <div className={specialHideCSS}>
+          <div className={canvasCSS}>
+            <canvas ref="photoCanvas" className="imageCanvas">
+              Your browser does not support the HTML5 canvas tag.
+            </canvas>
+          </div>
 
 
-        <div className={addCSS}>
-          <label htmlFor="name">NAME</label>
-          <input id="name" type="text" ref="inputname" className="darkInput"/>
+          <div className={addCSS}>
+            <label htmlFor="name">NAME</label>
+            <input id="name" type="text" ref="inputname" className="darkInput"/>
 
-          <label htmlFor="metadata">METADATA</label>
-          <textarea id="metadata" ref="inputdata" className="darkInput"/>
+            <label htmlFor="metadata">METADATA</label>
+            <textarea id="metadata" ref="inputdata" className="darkInput"/>
 
-          <label htmlFor="addBtn"></label>
-          <button id="addBtn" className="darkButton" onClick={this.uploadImage} value="add">ADD</button>
+            <label htmlFor="addBtn"></label>
+            <button id="addBtn" className="darkButton" onClick={this.uploadImage} value="add">ADD</button>
+          </div>
         </div>
 
 

@@ -10724,6 +10724,7 @@ var Camera = function (_React$Component) {
       imageCanvasWidth: '28px',
       imageCanvasHeight: '320px',
       faceApiText: null,
+      storingFace: false,
       userData: '',
       detectedFaces: null,
       faceDataFound: false,
@@ -10806,7 +10807,8 @@ var Camera = function (_React$Component) {
       var dataURL = canvas.toDataURL();
 
       this.setState({
-        spinnerDisplay: true
+        spinnerDisplay: true,
+        storingFace: true
       });
 
       // There's two ways to send images to the cognitive API.
@@ -10906,6 +10908,10 @@ var Camera = function (_React$Component) {
 
       // store ID to FACE API
 
+      this.setState({
+        spinnerDisplay: true
+      });
+
       // CREATE A PERSISTED FACE ID
       this.createPersistedFaceID().then(function (persistedFaceId) {
 
@@ -10922,13 +10928,13 @@ var Camera = function (_React$Component) {
 
             window.location.href = "/#uploaded";
           }).catch(function (err) {
-            console.error(err);
+            alert(JSON.stringify(err));
           });
         }).catch(function (err) {
-          console.error(err);
+          alert(JSON.stringify(err));
         });
       }).catch(function (err) {
-        console.error(err);
+        alert(JSON.stringify(err));
       });
     }
   }, {
@@ -10951,6 +10957,10 @@ var Camera = function (_React$Component) {
       var addCSS = (0, _classnames2.default)({
         hidden: !this.state.faceDataFound,
         metaInput: true
+      });
+
+      var specialHideCSS = (0, _classnames2.default)({
+        hidden: this.state.storingFace
       });
 
       return _react2.default.createElement(
@@ -10988,33 +10998,37 @@ var Camera = function (_React$Component) {
           ),
           _react2.default.createElement(
             'div',
-            { className: canvasCSS },
+            { className: specialHideCSS },
             _react2.default.createElement(
-              'canvas',
-              { ref: 'photoCanvas', className: 'imageCanvas' },
-              'Your browser does not support the HTML5 canvas tag.'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: addCSS },
-            _react2.default.createElement(
-              'label',
-              { htmlFor: 'name' },
-              'NAME'
+              'div',
+              { className: canvasCSS },
+              _react2.default.createElement(
+                'canvas',
+                { ref: 'photoCanvas', className: 'imageCanvas' },
+                'Your browser does not support the HTML5 canvas tag.'
+              )
             ),
-            _react2.default.createElement('input', { id: 'name', type: 'text', ref: 'inputname', className: 'darkInput' }),
             _react2.default.createElement(
-              'label',
-              { htmlFor: 'metadata' },
-              'METADATA'
-            ),
-            _react2.default.createElement('textarea', { id: 'metadata', ref: 'inputdata', className: 'darkInput' }),
-            _react2.default.createElement('label', { htmlFor: 'addBtn' }),
-            _react2.default.createElement(
-              'button',
-              { id: 'addBtn', className: 'darkButton', onClick: this.uploadImage, value: 'add' },
-              'ADD'
+              'div',
+              { className: addCSS },
+              _react2.default.createElement(
+                'label',
+                { htmlFor: 'name' },
+                'NAME'
+              ),
+              _react2.default.createElement('input', { id: 'name', type: 'text', ref: 'inputname', className: 'darkInput' }),
+              _react2.default.createElement(
+                'label',
+                { htmlFor: 'metadata' },
+                'METADATA'
+              ),
+              _react2.default.createElement('textarea', { id: 'metadata', ref: 'inputdata', className: 'darkInput' }),
+              _react2.default.createElement('label', { htmlFor: 'addBtn' }),
+              _react2.default.createElement(
+                'button',
+                { id: 'addBtn', className: 'darkButton', onClick: this.uploadImage, value: 'add' },
+                'ADD'
+              )
             )
           )
         )
