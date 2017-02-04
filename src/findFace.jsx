@@ -101,7 +101,7 @@ export default class Camera extends React.Component {
       sw = ~~(sw / 1.6);
       sh = ~~(sh / 1.3);
     }
-    console.log(w, h, sw, sh);
+    // console.log(w, h, sw, sh);
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     tempCanvas.width = sw;
@@ -172,8 +172,17 @@ export default class Camera extends React.Component {
             faces
           });
 
-          console.log('verifyFAces');
-          this.verifyFaces(faces);
+
+          if (faces.length) {
+            this.verifyFaces(faces);
+          } else {
+            this.setState({
+              personDetails: {userData: 'No faces found'},
+              spinnerDisplay: false,
+              imageLoaded: true
+            })
+          }
+
           // this.findSimilar(faces[0]);
         }
       });
@@ -215,7 +224,7 @@ export default class Camera extends React.Component {
       "maxNumOfCandidatesReturned": 1,
       "confidenceThreshold": 0.5
     };
-    console.log(body);
+    // console.log(body);
     request
       .post('https://westus.api.cognitive.microsoft.com/face/v1.0/identify')
       .send(body)
@@ -226,7 +235,15 @@ export default class Camera extends React.Component {
         if (err || !res.ok) {
           console.error(err);
         } else {
-          this.getPersonDetails(res.body[0].candidates[0].personId);
+          if (res.body.length < 0) {
+            this.setState({
+              personDetails: {userData: 'No match found'},
+              spinnerDisplay: false,
+              imageLoaded: true
+            })
+          } else {
+            this.getPersonDetails(res.body[0].candidates[0].personId);
+          }
         }
       });
   }
