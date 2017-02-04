@@ -71,6 +71,7 @@ export default class Camera extends React.Component {
     this.state = {
       imageLoaded: false,
       imageCanvasDisplay: 'none',
+      clickedTheButton: false,
       spinnerDisplay: false,
       imageCanvasWidth: '28px',
       imageCanvasHeight: '320px',
@@ -129,7 +130,7 @@ export default class Camera extends React.Component {
           getOrientation(file, (orientation) => {
             if (orientation < 0) orientation = 1;
             this.putImage(img, orientation);
-            this.setState({imageLoaded: true, currentImg: img.src});
+            this.setState({imageLoaded: true, clickedTheButton: true, currentImg: img.src});
             this.faceIdentify();
           });
         }
@@ -145,7 +146,8 @@ export default class Camera extends React.Component {
     const dataURL = canvas.toDataURL();
 
     this.setState({
-      spinnerDisplay: true
+      spinnerDisplay: true,
+      imageLoaded: false
     });
 
     // There's two ways to send images to the cognitive API.
@@ -285,7 +287,7 @@ export default class Camera extends React.Component {
     });
 
     const buttonCSS = classNames({
-      hidden: this.state.imageLoaded
+      hidden: this.state.clickedTheButton
     });
 
     const spinnerCSS = classNames({
