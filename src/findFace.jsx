@@ -6,6 +6,7 @@ import request from 'superagent';
 function getOrientation(file, callback) {
   const reader = new FileReader();
   reader.onload = function (e) {
+
     const view = new DataView(e.target.result);
     if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
     let length = view.byteLength, offset = 2;
@@ -75,18 +76,17 @@ export default class Camera extends React.Component {
       imageCanvasHeight: '320px',
       faceApiText: null,
       userData: '',
-      detectedFaces: null,
       faceDataFound: false,
       currentImg: null
     };
     this.putImage = this.putImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
-    this.faceRecog = this.faceRecog.bind(this);
+    this.faceIdentify = this.faceIdentify.bind(this);
+    this.verifyFaces = this.verifyFaces.bind(this);
+    this.findSimilar = this.findSimilar.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
-    this.createPersistedFaceID = this.createPersistedFaceID.bind(this);
-    this.addPersonFace = this.addPersonFace.bind(this);
-    this.createPerson = this.createPerson.bind(this);
   }
+
 
   putImage(img, orientation) {
     const canvas = this.refs.photoCanvas;
@@ -129,8 +129,7 @@ export default class Camera extends React.Component {
             if (orientation < 0) orientation = 1;
             this.putImage(img, orientation);
             this.setState({imageLoaded: true, currentImg: img.src});
-            this.faceRecog();
-
+            this.faceIdentify();
           });
         }
       };
@@ -140,14 +139,13 @@ export default class Camera extends React.Component {
   }
 
 
-  faceRecog() {
+  faceIdentify() {
     let canvas = this.refs.photoCanvas;
     const dataURL = canvas.toDataURL();
 
     this.setState({
       spinnerDisplay: true
     });
-
 
     // There's two ways to send images to the cognitive API.
     // 1. Send a Image URL (need to set Content-Type as application/json)
@@ -165,128 +163,91 @@ export default class Camera extends React.Component {
         if (err || !res.ok) {
           console.error(err);
         } else {
-          const data = JSON.stringify(res.body);
-          console.log(data);
-          const faces = res.body.map(f => {
-            return {
-              faceId: f.faceId,
-              target: '' + f.faceRectangle.top + ',' + f.faceRectangle.left + ',' + f.faceRectangle.width + ',' + f.faceRectangle.height,
-              faceRectangle: f.faceRectangle
-            }
-          });
+          const faces = res.body.map(f => f.faceId);
+
           this.setState({
-            detectedFaces: faces,
-            faceApiText: data,
-            faceDataFound: true,
-            spinnerDisplay: false
-          })
+            faces
+          });
+          // this.verifyFaces(faces);
+          this.findSimilar(faces[0]);
         }
       });
   }
 
-  createPersistedFaceID() {
-    //RETURNS A PERSISTED FACE ID
+  findSimilar(face) {
+    // NEEDS A FACE LIST
+    const body = {
+      "faceId": face,
+      "faceListId": "aspc2017faces",
+      "maxNumOfCandidatesReturned": 10,
+      "mode": "matchPerson"
+    };
 
-    let canvas = this.refs.photoCanvas;
-    const dataURL = canvas.toDataURL();
-
-    const {userData} = this.state;
-    return new Promise((resolve, reject) => {
-      request
-        .post('https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces')
-        .send(serializeImage(this.state.currentImg))
-        .set('Content-Type', 'application/octet-stream')
-        .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          if (err || !res.ok) {
-            console.error(err);
-          } else {
-            resolve(res.body);
-          }
-        })
-    });
+    request
+      .post('https://westus.api.cognitive.microsoft.com/face/v1.0/findsimilars')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          alert(JSON.stringify(res.body));
+        }
+      });
   }
 
-  createPerson() {
-    // RETURNS a personId
-    const {userData} = this.state;
-    return new Promise((resolve, reject) => {
-      request
-        .post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons')
-        .send({
-          "name": this.refs.inputname.value,
-          "userData": this.refs.inputdata.value
-        })
-        .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          if (err || !res.ok) {
-            console.error(err);
-          } else {
-            const data = JSON.stringify(res.body);
-            resolve(res.body.personId);
-          }
-        })
-    });
-  }
+  verifyFaces(faces) {
+    // NEEDS A PERSON GROUP
+    const body = {
+      "personGroupId": "aspc2017faces",
+      "faceIds": faces,
+      "maxNumOfCandidatesReturned": 1,
+      "confidenceThreshold": 0.5
+    };
 
-  addPersonFace(personId, targetFace) {
-    const {userData} = this.state;
-    return new Promise((resolve, reject) => {
-      request
-        .post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/' + personId + '/persistedFaces')
-        .send(serializeImage(this.state.currentImg))
-        .set('Content-Type', 'application/octet-stream')
-        .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          if (err || !res.ok) {
-            console.error(err);
-          } else {
-            const data = JSON.stringify(res.body);
-            resolve(data);
-          }
-        })
-    });
+    console.log(body);
 
+    request
+      .post('https://westus.api.cognitive.microsoft.com/face/v1.0/identify')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          // alert(data);
+        }
+      });
   }
 
 
   uploadImage() {
     // store ID to FACE API
+    let canvas = this.refs.photoCanvas;
+    const dataURL = canvas.toDataURL();
 
-    // CREATE A PERSISTED FACE ID
-    this.createPersistedFaceID()
-      .then(persistedFaceId => {
+    const {userData} = this.state;
 
-        // CREATE A PERSON
-        this.createPerson()
-          .then(personId => {
-            // ADD A PERSON FACE
-
-            this.addPersonFace(personId)
-              .then(persistedGroupFaceId => {
-                // Returns a persistedGroupFaceId
-                console.log('success');
-                console.log('persistedFaceId', persistedFaceId)
-                console.log('personId', personId)
-                console.log('persistedGroupFaceId', persistedGroupFaceId);
-
-                window.location.href = "/#uploaded";
-
-              })
-              .catch(err => {
-                console.error(err);
-              });
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
+    request
+      .post('https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces?userData=' + JSON.stringify(userData))
+      .send(serializeImage(this.state.currentImg))
+      .set('Content-Type', 'application/octet-stream')
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          const data = JSON.stringify(res.body);
+          //RETURNS A PERSISTED FACE ID
+          console.log(data);
+          alert(data);
+          window.location.href = "/#uploaded";
+        }
       });
 
 
@@ -313,7 +274,7 @@ export default class Camera extends React.Component {
     });
 
     return <div>
-      <h1 className="center">ADD A PERSON</h1>
+      <h1 className="center">IDENTIFY</h1>
       <div className="center">
         <div className={buttonCSS}>
           <label className="camera-snap">
@@ -340,14 +301,6 @@ export default class Camera extends React.Component {
 
 
         <div className={addCSS}>
-          <label htmlFor="name">NAME</label>
-          <input id="name" type="text" ref="inputname" className="darkInput"/>
-
-          <label htmlFor="metadata">METADATA</label>
-          <textarea id="metadata" ref="inputdata" className="darkInput"/>
-
-          <label htmlFor="addBtn"></label>
-          <button id="addBtn" className="darkButton" onClick={this.uploadImage} value="add">ADD</button>
         </div>
 
 

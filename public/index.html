@@ -2,13 +2,29 @@
 <html>
 <head>
     <script>
-      (function(d) {
+      (function (d) {
         var config = {
             kitId: 'wdz1lvl',
             scriptTimeout: 3000,
             async: true
           },
-          h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+          h = d.documentElement, t = setTimeout(function () {
+            h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+          }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a;
+        h.className += " wf-loading";
+        tk.src = 'https://use.typekit.net/' + config.kitId + '.js';
+        tk.async = true;
+        tk.onload = tk.onreadystatechange = function () {
+          a = this.readyState;
+          if (f || a && a != "complete" && a != "loaded")return;
+          f = true;
+          clearTimeout(t);
+          try {
+            Typekit.load(config)
+          } catch (e) {
+          }
+        };
+        s.parentNode.insertBefore(tk, s)
       })(document);
     </script>
 
@@ -20,6 +36,9 @@
     <style rel="stylesheet" type="text/css">
         :root {
             --font-size: 21px;
+            --white: #ECF1F1;
+            --darkBg: #046380;
+            --lightBg: #44A3C8;
         }
 
         html,
@@ -35,10 +54,10 @@
             flex-direction: column;
             margin: 0;
             font-style: normal;
+            background: var(--lightBg);
         }
 
-
-        .faceApi{
+        .faceApi {
             font-family: monospace;
             font-size: 12px;
             width: 300px;
@@ -49,16 +68,79 @@
             word-wrap: break-word;
         }
 
+        .imageCanvas {
+            display: block;
+            width: 260px;
+            height: 300px;
+            margin: 10px;
+            line-height: 150px;
+            color: white;
+            font-weight: bold;
+            font-size: 3em;
+            text-align: center;
+            border-top: 6px solid var(--white);
+            border-left: 6px solid var(--white);
+            border-right: 6px solid var(--white);
+            border-bottom: 20px solid var(--white);
+        }
+
+        .cameraFrame {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        label {
+            display: block;
+            font-family: "roboto", sans-serif;
+            font-weight: 200;
+            color: var(--darkBg);
+        }
+
+        .metaInput {
+            margin-bottom: 50px;
+        }
+
+        .darkInput {
+            width: 220px;
+            border: none;
+            background: var(--darkBg);
+            padding: 25px;
+            border-radius: 15px;
+            font-family: "roboto", sans-serif;
+            font-weight: 200;
+            color: var(--white);
+            font-size: 28px;
+            margin: 20px;
+            border-color: var(--darkBg);
+        }
+
+        .darkButton {
+            width: 270px;
+            border: none;
+            background: var(--darkBg);
+            padding: 25px;
+            border-radius: 15px;
+            font-family: "roboto", sans-serif;
+            font-weight: 200;
+            color: var(--white);
+            font-size: 28px;
+            margin: 20px;
+            border-color: var(--darkBg);
+        }
 
         /** SPINNER **/
         .spinner {
             width: 40px;
             height: 40px;
-            display: none;
             position: relative;
-            margin: 100px auto; }
+            margin: 100px auto;
+        }
 
-        .double-bounce1, .double-bounce2 {
+        .spinner > .double-bounce1, .double-bounce2 {
             width: 100%;
             height: 100%;
             border-radius: 50%;
@@ -68,24 +150,33 @@
             top: 0;
             left: 0;
             -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-            animation: sk-bounce 2.0s infinite ease-in-out; }
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
 
-        .double-bounce2 {
+        .spinner > .double-bounce2 {
             -webkit-animation-delay: -1.0s;
-            animation-delay: -1.0s; }
+            animation-delay: -1.0s;
+        }
 
         @-webkit-keyframes sk-bounce {
             0%, 100% {
-                -webkit-transform: scale(0); }
+                -webkit-transform: scale(0);
+            }
             50% {
-                -webkit-transform: scale(1); } }
+                -webkit-transform: scale(1);
+            }
+        }
+
         @keyframes sk-bounce {
             0%, 100% {
                 transform: scale(0);
-                -webkit-transform: scale(0); }
+                -webkit-transform: scale(0);
+            }
             50% {
                 transform: scale(1);
-                -webkit-transform: scale(1); } }
+                -webkit-transform: scale(1);
+            }
+        }
 
         p.paragraph {
             font-size: var(--font-size);
@@ -102,8 +193,15 @@
         }
 
         h1 {
-            font-size: 32px;
             font-family: 'roboto-slab', sans-serif;
+            font-size: 48px;
+            font-weight: 200;
+            color: #01222A;
+
+        }
+
+        .center {
+            text-align: center;
         }
 
         h2 {
@@ -150,6 +248,14 @@
             font-size: 14px;
             text-align: center;
             padding: 30px 0 0 0;
+        }
+
+        footer > a, a:visited, a:link {
+            color: #777;
+        }
+
+        footer > a:visited {
+            color: #777;
         }
 
         @media screen and (max-width: 768px) {
@@ -248,39 +354,47 @@
             }
         }
 
-
         /* flexbox */
         .flex-container {
             display: flex;
             overflow: hidden;
         }
+
         .flex-container > * {
             flex: 0 0 auto;
             overflow: scroll;
         }
+
         .stretchy {
             flex: 1 1 auto;
         }
+
         .column {
             flex-direction: column;
         }
+
         html,
         body,
         .full-screen {
             height: 100%;
         }
+
         body {
             margin: 0;
+            -webkit-overflow-scrolling: touch;
         }
+
         .full-screen {
             display: flex;
             overflow: hidden;
             flex-direction: column;
         }
+
         .full-screen > * {
             flex: 0 0 auto;
             overflow: scroll;
         }
+
         .full-screen > .header,
         .full-screen > .footer {
             height: 50px;
@@ -291,37 +405,66 @@
             font-size: 52px;
             font-family: 'roboto-slab', sans-serif;
         }
+
         .full-screen > .footer {
             background: #01222A;
             color: #ECF1F1;
             font-size: 20px;
         }
+
         .full-screen > .main {
             flex: 1 1 auto;
             display: flex;
             overflow: hidden;
         }
+
         .full-screen > .main > * {
             flex: 0 0 auto;
-            overflow: hidden;
+            overflow: scroll;
         }
-
 
         .full-screen > .main > .middle {
             flex: 1 1 auto;
         }
 
-        .icon-man{
+        .icon-man {
             padding: 20px 10px 0 30px;
             width: 180px;
         }
 
-        .icon-search{
+        .icon-camera {
+            padding: 20px 10px 0 30px;
+            width: 180px;
+        }
+
+        .icon-cloud {
+            width: 320px;
+            padding: 45px;
+
+        }
+
+        .camera-snap {
+            position: relative;
+            overflow: hidden;
+            clear: left;
+        }
+
+        .camera-snap input[type="file"] {
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            opacity: 0;
+            font-size: 100px;
+            filter: alpha(opacity=0);
+            cursor: pointer;
+        }
+
+        .icon-search {
             padding: 60px;
             width: 120px;
             color: #44A3C8;
         }
-
 
         .flex-container {
             display: flex;
@@ -338,6 +481,11 @@
             box-sizing: border-box;
         }
 
+        .flex-cell.full {
+            flex: 0 0 100%;
+            width: 100%;
+        }
+
         .flex-cell:before {
             content: '';
             display: table;
@@ -347,36 +495,83 @@
         .flex-item {
             flex-grow: 1;
             color: white;
-
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .flex-cell.dark{
+
+        .flex-cell.dark {
             background: #046380;
         }
-        .flex-cell.light{
+
+        .flex-cell.light {
             background: #44A3C8;
         }
-        .cta{
+
+        .cta {
             font-family: 'roboto-slab', sans-serif;
             font-size: 48px;
-            font-weight:200;
+            font-weight: 200;
             color: #01222A;
         }
-        .cta.light{
+
+        .cta.light {
 
             color: #01222A;
         }
-        .cta > a, a:visited, a:link, a:hover{
+
+        .cta > a, a:visited, a:link, a:hover {
             color: #01222A;
         }
-        .cta > a{
+
+        .cta > a {
             color: #01222A;
         }
+
         .hidden {
             display: none;
         }
+
+        .full-width-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width-container > div {
+            flex: 1;
+
+        }
+
+        .background-light {
+            background: var(--lightBg);
+        }
+
+        .background-dark {
+            background: var(--darkBg);
+        }
+
+        /** routes **/
+
+        .route-frontpage {
+            display: none;
+        }
+
+        .route-add {
+            display: none;
+        }
+
+        .route-find {
+            display: none;
+        }
+
+        .route-uploaded {
+            display: none;
+        }
+
+        .route-matching {
+            display: none;
+        }
+
 
     </style>
 
@@ -387,98 +582,94 @@
     <div class="header">FACER</div>
     <div class="main">
         <!--<div class="left">Menu-stuff here. No way this will fit.-->
-            <!--<ul>-->
-                <!--<li>Menu Entry</li>-->
-            <!--</ul>-->
+        <!--<ul>-->
+        <!--<li>Menu Entry</li>-->
+        <!--</ul>-->
         <!--</div>-->
 
-        <!-- SECTIONS -->
-        <!-- FRONT PAGE -->
         <div class="middle animated fadeIn">
-            <div class="flex-container hidden">
-                <div class="flex-cell light">
-                    <div class="flex-item">
-                        <a href="/#add">
-                            <img src="/assets/man.svg" class="icon-man" onerror="this.src='/assets/man.png'">
-                        </a>
-                    </div>
-                </div>
-                <div class="flex-cell light">
-                    <div class="flex-item cta"><a href="/#add">ADD</a></div>
-                </div>
-                <div class="flex-cell dark">
-                    <div class="flex-item cta"><a href="/#find">FIND</a></div>
-                </div>
-                <div class="flex-cell dark">
-                    <div class="flex-item">
-                        <a href="/#add">
-                            <img src="/assets/search.svg" class="icon-search" onerror="this.src='/assets/search.png'">
-                        </a>
-                    </div>
-                </div>
 
+            <!-- FRONT PAGE -->
+            <div class="route-frontpage">
+                <div class="flex-container">
+                    <div class="flex-cell light">
+                        <div class="flex-item">
+                            <a href="/#add">
+                                <img src="/assets/man.svg" class="icon-man" onerror="this.src='/assets/man.png'">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex-cell light">
+                        <div class="flex-item cta"><a href="/#add">ADD</a></div>
+                    </div>
+                    <div class="flex-cell dark">
+                        <div class="flex-item cta"><a href="/#find">FIND</a></div>
+                    </div>
+                    <div class="flex-cell dark">
+                        <div class="flex-item">
+                            <a href="/#find">
+                                <img src="/assets/search.svg" class="icon-search"
+                                     onerror="this.src='/assets/search.png'">
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- END FRONTPAGE -->
 
 
             <!-- ADD -->
-            <div class="flex-container">
-
-                <div id="camera">CAMERA</div>
+            <div class="route-add">
+                <div class="full-width-container">
+                    <div class="background-light" id="camera">CAMERA</div>
+                </div>
             </div>
-
             <!-- END ADD -->
+
+            <!-- UPLOADED -->
+            <div class="route-uploaded">
+                <div class="full-width-container">
+                    <div class="background-light" id="uploaded">
+                        <img src="/assets/cloud.svg" alt="A cloud showing the face has been uplaoded"
+                             class="icon-cloud center">
+
+                        <div class="center">
+                            <label for="backBtn"></label>
+                            <button id="backBtn" class="darkButton" onClick="window.location.href='/'">BACK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END UPLOADED -->
+
+
+            <!-- FIND -->
+            <div class="route-find">
+                <div class="full-width-container">
+                    <div class="background-dark" id="findFace">FINDFACE</div>
+                </div>
+            </div>
+            <!-- END FIND -->
+
+
+            <!-- MATCHING -->
+            <div class="route-matching">
+                <div class="full-width-container">
+                    <div class="background-light" id="matchingGame">
+                        <!--<canvas id="game">No canvas for you?! :(</canvas>-->
+                    </div>
+                </div>
+            </div>
+            <!-- END MATCHING -->
+
+
+
 
         </div>
         <!--<div class="right">Another sidebar</div>-->
     </div>
-    <div class="footer">HACKED TOGETHER WITH <3</div>
+    <div class="footer" onClick="window.location.href='/'">HACKED TOGETHER WITH <3</div>
 </div>
-
-<!--<div class="site-content">-->
-    <!--<div class="row-head">-->
-        <!--<h1 class="logo">FACER</h1>-->
-    <!--</div>-->
-
-    <!--<div class="row animated fadeIn">-->
-            <!--<div class="frontpage-block">-->
-
-                <!--&lt;!&ndash;<div class="title">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<h1>Be a frontend hero</h1>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                <!--<noscript>-->
-                    <!--<link href="//fonts.googleapis.com/css?family=Poiret+One|Oxygen" rel="stylesheet">-->
-                    <!--<h2 class="center">So, I understand you don't like JavaScript?</h2>-->
-                    <!--<div class="noscript">-->
-                        <!--<div class="noscript-item">-->
-                            <!--<img border="1" width="655" height="354"-->
-                                 <!--src="//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg"-->
-                                 <!--alt="My Tower Defense game">-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-                    <!--<p class="paragraph">-->
-                        <!--That's cool. I'm still here for you. You can even look at this nice little-->
-                        <!--image of a cool Tower Defense game I'm building.-->
-                    <!--</p>-->
-                <!--</noscript>-->
-                <!--<p class="holder"></p>-->
-
-                <!--<div id="camera">CAMERA</div>-->
-            <!--</div>-->
-
-    <!--</div>-->
-
-
-    <!--<footer>-->
-        <!--<small>-->
-            <!--<strong>Pro tip! </strong>-->
-            <!--Examine the console for service worker activity-->
-        <!--</small>-->
-    <!--</footer>-->
-<!--</div>-->
-
 
 
 <script type="text/javascript">
@@ -490,7 +681,7 @@
     document.getElementsByTagName('head')[0].appendChild(stylesheet);
   };
 
-  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
+//  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
@@ -538,8 +729,60 @@
 
 </script>
 
-<script type="text/javascript"  src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
+
+<!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>-->
+<!--<script type="text/javascript" src="/games/matching.js"></script>-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
 <script type="text/javascript" defer src="/js/app.js"></script>
+
+<script>
+    /* VERY PRIMITIVE ROUTING */
+    const routing = () => {
+      const frontpage = document.querySelector(".route-frontpage");
+      const addPhoto = document.querySelector(".route-add");
+      const uploaded = document.querySelector(".route-uploaded");
+      const findFace = document.querySelector(".route-find");
+      const matching = document.querySelector(".route-matching");
+
+      frontpage.style.display = "none";
+      addPhoto.style.display = "none";
+      uploaded.style.display = "none";
+      findFace.style.display = "none";
+      matching.style.display = "none";
+
+      if (window.location.hash) {
+        const hash = window.location.hash;
+
+        if (hash === "#add") {
+          addPhoto.style.display = "block";
+          document.body.style.background = '#44A3C8';
+        }
+        if (hash === "#uploaded") {
+          uploaded.style.display = "block";
+        }
+        if (hash === "#find") {
+          findFace.style.display = "block";
+          document.body.style.background = '#046380';
+        }
+
+        if (hash === "#matching") {
+          matching.style.display = "block";
+        }
+
+      } else {
+        frontpage.style.display = "block";
+      }
+    };
+
+    window.onload = () => {
+      routing();
+    };
+
+    window.onhashchange = () => {
+      routing();
+    };
+
+</script>
 
 <!--
 <script defer src="https://db.robbestad.no/gun.js"></script>

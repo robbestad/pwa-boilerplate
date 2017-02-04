@@ -1,8 +1,13 @@
-import Camera from './camera.jsx';
+import Snap from './camera.jsx';
+import Find from './findFace.jsx';
 import React from 'react';
 import {render} from 'react-dom';
 render(
-  <Camera />,
+  <Snap />,
   document.getElementById('camera')
+);
+render(
+  <Find />,
+  document.getElementById('findFace')
 );
 
