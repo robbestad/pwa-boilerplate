@@ -87,6 +87,7 @@ export default class Camera extends React.Component {
     this.createPersistedFaceID = this.createPersistedFaceID.bind(this);
     this.addPersonFace = this.addPersonFace.bind(this);
     this.createPerson = this.createPerson.bind(this);
+    this.trainGroup = this.trainGroup.bind(this);
   }
 
   putImage(img, orientation) {
@@ -233,6 +234,26 @@ export default class Camera extends React.Component {
     });
   }
 
+  trainGroup() {
+    // RETURNS a personId
+    const {userData} = this.state;
+    return new Promise((resolve, reject) => {
+      request
+        .post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/train')
+        .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+          if (err || !res.ok) {
+            console.error(err);
+          } else {
+            const data = JSON.stringify(res.body);
+            resolve(res.body.personId);
+          }
+        })
+    });
+  }
+
   addPersonFace(personId, targetFace) {
     const {userData} = this.state;
     return new Promise((resolve, reject) => {
@@ -274,13 +295,16 @@ export default class Camera extends React.Component {
 
             this.addPersonFace(personId)
               .then(persistedGroupFaceId => {
-                // Returns a persistedGroupFaceId
-                console.log('success');
-                console.log('persistedFaceId', persistedFaceId);
-                console.log('personId', personId);
-                console.log('persistedGroupFaceId', persistedGroupFaceId);
 
-                window.location.href = "/#uploaded";
+                this.trainGroup()
+                  .then(() => {
+                    // Returns a persistedGroupFaceId
+                    console.log('success');
+                    console.log('persistedFaceId', persistedFaceId);
+                    console.log('personId', personId);
+                    console.log('persistedGroupFaceId', persistedGroupFaceId);
+                    window.location.href = "/#uploaded";
+                  })
 
               })
               .catch(err => {
