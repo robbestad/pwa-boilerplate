@@ -146,8 +146,7 @@ export default class Camera extends React.Component {
     const dataURL = canvas.toDataURL();
 
     this.setState({
-      spinnerDisplay: true,
-      storingFace: true
+      spinnerDisplay: true
     });
 
 
@@ -260,7 +259,8 @@ export default class Camera extends React.Component {
     // store ID to FACE API
 
     this.setState({
-      spinnerDisplay: true
+      spinnerDisplay: true,
+      storingFace: true
     });
 
     // CREATE A PERSISTED FACE ID
@@ -276,8 +276,8 @@ export default class Camera extends React.Component {
               .then(persistedGroupFaceId => {
                 // Returns a persistedGroupFaceId
                 console.log('success');
-                console.log('persistedFaceId', persistedFaceId)
-                console.log('personId', personId)
+                console.log('persistedFaceId', persistedFaceId);
+                console.log('personId', personId);
                 console.log('persistedGroupFaceId', persistedGroupFaceId);
 
                 window.location.href = "/#uploaded";

@@ -85,6 +85,7 @@ export default class Camera extends React.Component {
     this.verifyFaces = this.verifyFaces.bind(this);
     this.findSimilar = this.findSimilar.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
+    this.getPersonDetails = this.getPersonDetails.bind(this);
   }
 
 
@@ -168,6 +169,8 @@ export default class Camera extends React.Component {
           this.setState({
             faces
           });
+
+          console.log('verifyFAces');
           this.verifyFaces(faces);
           // this.findSimilar(faces[0]);
         }
@@ -200,6 +203,10 @@ export default class Camera extends React.Component {
 
   verifyFaces(faces) {
     // NEEDS A PERSON GROUP
+    this.setState({
+      imageLoaded: false
+    });
+
     const body = {
       "personGroupId": "aspc2017facegroup",
       "faceIds": faces,
@@ -217,10 +224,29 @@ export default class Camera extends React.Component {
         if (err || !res.ok) {
           console.error(err);
         } else {
-          console.log(res);
-          alert(JSON.stringify(res));
+          this.getPersonDetails(res.body[0].candidates[0].personId);
         }
       });
+  }
+
+  getPersonDetails(personId) {
+    request
+      .get('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/' + personId)
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          //RETURN PERSON DETAILS
+          this.setState({
+            personDetails: res.body,
+            spinnerDisplay: false,
+            imageLoaded: true
+          });
+        }
+      });
+
   }
 
 
@@ -254,12 +280,14 @@ export default class Camera extends React.Component {
 
   render() {
     const canvasCSS = classNames({
-      hidden: !this.state.faceDataFound,
+      hidden: !this.state.imageLoaded,
       cameraFrame: true
     });
+
     const buttonCSS = classNames({
       hidden: this.state.imageLoaded
     });
+
     const spinnerCSS = classNames({
       hidden: !this.state.spinnerDisplay
     });
@@ -268,8 +296,9 @@ export default class Camera extends React.Component {
     });
 
     const addCSS = classNames({
-      hidden: !this.state.faceDataFound,
+      hidden: this.state.spinnerDisplay,
       metaInput: true
+
     });
 
     return <div>
@@ -298,10 +327,15 @@ export default class Camera extends React.Component {
           </canvas>
         </div>
 
-
         <div className={addCSS}>
-        </div>
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.name}
+          </div>
 
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.userData}
+          </div>
+        </div>
 
       </div>
     </div>
