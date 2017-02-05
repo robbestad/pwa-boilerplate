@@ -17,5 +17,4 @@ describe('test image functions', function () {
     assert.equal(sh,600);
   })
 
-
 });
