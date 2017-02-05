@@ -6,14 +6,18 @@
   "scripts": {
     "start": "node index",
     "build": "docker build -t svena/pwa-boilerplate .",
-    "prebuild": "cd src && webpack -p",
-    "predocker": "npm run build",
+    "devbuild": "cd src && webpack",
+    "pbuild": "cd src && webpack -o",
+    "prebuild": "cd src && npm run pbuild",
+    "predocker": "npm run pbuild",
     "docker": "docker run -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
-    "dev": "cross-env HTTP=8088 HTTPS=8443 node index.js",
     "preversion": "npm test && npm run prebuild",
     "postversion": "sh scripts/deploy.sh",
-    "test": "mocha test"
+    "test": "mocha test",
+    "dev": "cross-env HTTP=8088 HTTPS=8443 node index.js",
+    "watch:test": "filewatcher 'src/*' \"npm test\"",
+    "watch:dev": "filewatcher 'src/*' \"npm run devbuild\""
   },
   "keywords": [],
   "author": "",

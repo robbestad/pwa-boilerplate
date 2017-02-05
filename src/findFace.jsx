@@ -2,20 +2,32 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
-const {resizeImage} = require('./helperfncs');
+const {resizeImage, toPng, toImg} = require('./helperfncs');
 const {getOrientation} = require('./getOrientation');
 const {serializeImage} = require('./serializeImage');
 
-function toImg(encodedData) {
-  const imgElement = document.createElement('img');
-  imgElement.src = encodedData;
-  return imgElement;
-}
+function findSimilar(face) {
+  // NEEDS A FACE LIST
+  const body = {
+    "faceId": face,
+    "faceListId": "aspc2017faces",
+    "maxNumOfCandidatesReturned": 10,
+    "mode": "matchPerson"
+  };
 
-function toPng(canvas) {
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
-  return img;
+  request
+    .post('https://westus.api.cognitive.microsoft.com/face/v1.0/findsimilars')
+    .send(body)
+    .set('Content-Type', 'application/json')
+    .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err || !res.ok) {
+        console.error(err);
+      } else {
+        alert(JSON.stringify(res.body));
+      }
+    });
 }
 
 
@@ -38,7 +50,6 @@ export default class Camera extends React.Component {
     this.takePhoto = this.takePhoto.bind(this);
     this.faceIdentify = this.faceIdentify.bind(this);
     this.verifyFaces = this.verifyFaces.bind(this);
-    this.findSimilar = this.findSimilar.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.getPersonDetails = this.getPersonDetails.bind(this);
   }
@@ -128,34 +139,10 @@ export default class Camera extends React.Component {
             })
           }
 
-          // this.findSimilar(faces[0]);
         }
       });
   }
 
-  findSimilar(face) {
-    // NEEDS A FACE LIST
-    const body = {
-      "faceId": face,
-      "faceListId": "aspc2017faces",
-      "maxNumOfCandidatesReturned": 10,
-      "mode": "matchPerson"
-    };
-
-    request
-      .post('https://westus.api.cognitive.microsoft.com/face/v1.0/findsimilars')
-      .send(body)
-      .set('Content-Type', 'application/json')
-      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        if (err || !res.ok) {
-          console.error(err);
-        } else {
-          alert(JSON.stringify(res.body));
-        }
-      });
-  }
 
   verifyFaces(faces) {
     // NEEDS A PERSON GROUP

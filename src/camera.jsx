@@ -2,22 +2,9 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
-const {resizeImage} = require('./helperfncs');
+const {resizeImage, toPng, toImg} = require('./helperfncs');
 const {getOrientation} = require('./getOrientation');
 const {serializeImage} = require('./serializeImage');
-
-function toImg(encodedData) {
-  const imgElement = document.createElement('img');
-  imgElement.src = encodedData;
-  return imgElement;
-}
-
-function toPng(canvas) {
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
-  return img;
-}
-
 
 export default class Camera extends React.Component {
   constructor() {
