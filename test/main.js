@@ -1,7 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const {resizeImage} = require(path.join('..','src','helperfncs'));
+const resizeImage = require(path.join('..','src','helperfncs')).resizeImage;
 
 describe('test image functions', function () {
 
