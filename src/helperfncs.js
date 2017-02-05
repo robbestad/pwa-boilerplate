@@ -11,7 +11,6 @@ exports.resizeImage = function (w,h, maxWidth = 600, maxHeight = 600) {
     sh = 600;
     sw = ~~(sh * aspect);
   }
-
   return {sw, sh};
 };
 
