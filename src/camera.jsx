@@ -101,16 +101,13 @@ export default class Camera extends React.Component {
     const {sw, sh} = resizeImage(w, h);
 
     console.log("ORIGINAL DIMENSIONS", w, h, "RESIZED DIM", sw, sh);
+
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     tempCanvas.width = sw;
     tempCanvas.height = sh;
     tempCtx.drawImage(img, 0, 0, sw, sh);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh, 1, 0, false);
-    canvas.width = sw + 'px';
-    canvas.height = sh + 'px';
-    document.querySelector(".imageCanvas").width = sw + 'px';
-    document.querySelector(".imageCanvas").height = sh + 'px';
+    ImageToCanvas.drawCanvas(canvas, img, orientation, sw, sh, 1, 0, false);
   }
 
   takePhoto(event) {
@@ -349,6 +346,7 @@ export default class Camera extends React.Component {
     return <div>
       <h1 className="center">ADD A PERSON</h1>
       <div className="center">
+
         <div className={buttonCSS}>
           <label className="camera-snap">
             <img src="/assets/camera.svg" className="icon-camera"
