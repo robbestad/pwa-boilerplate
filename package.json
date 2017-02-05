@@ -6,11 +6,13 @@
   "scripts": {
     "start": "node index",
     "build": "docker build -t svena/pwa-boilerplate .",
-    "prebuild": "cd src && webpack",
+    "prebuild": "cd src && webpack -p",
     "predocker": "npm run build",
     "docker": "docker run -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "docker_data": "docker run  -v /usr/src/app:/code  -p 80:80 -p 443:443 svena/pwa-boilerplate",
     "dev": "cross-env HTTP=8088 HTTPS=8443 node index.js",
+    "preversion": "npm run prebuild",
+    "postversion": "sh scripts/deploy.sh",
     "test": "mocha test"
   },
   "keywords": [],
