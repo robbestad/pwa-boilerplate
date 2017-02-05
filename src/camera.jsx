@@ -76,6 +76,7 @@ export default class Camera extends React.Component {
       imageCanvasWidth: '28px',
       imageCanvasHeight: '320px',
       faceApiText: null,
+      updateFeedback: '',
       storingFace: false,
       userData: '',
       detectedFaces: null,
@@ -273,24 +274,38 @@ export default class Camera extends React.Component {
 
     this.setState({
       spinnerDisplay: true,
-      storingFace: true
+      storingFace: true,
+      updateFeedback: 'Creating a face ID'
     });
 
     // CREATE A PERSISTED FACE ID
     this.createPersistedFaceID()
       .then(persistedFaceId => {
+        this.setState({
+          updateFeedback: 'Creating a Person'
+        });
 
         // CREATE A PERSON
         this.createPerson()
           .then(personId => {
             // ADD A PERSON FACE
+            this.setState({
+              updateFeedback: 'Adding the face to the person'
+            });
 
             this.addPersonFace(personId)
               .then(persistedGroupFaceId => {
+                this.setState({
+                  updateFeedback: 'Training the new list'
+                });
 
                 this.trainGroup()
                   .then(() => {
                     // Returns a persistedGroupFaceId
+                    this.setState({
+                      updateFeedback: ''
+                    });
+
                     console.log('success');
                     console.log('persistedFaceId', persistedFaceId);
                     console.log('personId', personId);
@@ -334,8 +349,12 @@ export default class Camera extends React.Component {
       metaInput: true
     });
 
-    const specialHideCSS = classNames({
+    const hideWhileStoring = classNames({
       hidden: this.state.storingFace
+    });
+
+    const showWhileStoring = classNames({
+      hidden: !this.state.storingFace && this.state.updateFeedback !== ''
     });
 
 
@@ -352,6 +371,9 @@ export default class Camera extends React.Component {
           </label>
         </div>
 
+        <div className={showWhileStoring}>
+          {this.state.updateFeedback}
+        </div>
 
         <div className={spinnerCSS}>
           <div className={innerSpinnerCSS}>
@@ -360,7 +382,7 @@ export default class Camera extends React.Component {
           </div>
         </div>
 
-        <div className={specialHideCSS}>
+        <div className={hideWhileStoring}>
           <div className={canvasCSS}>
             <canvas ref="photoCanvas" className="imageCanvas">
               Your browser does not support the HTML5 canvas tag.
