@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
+const {resizeImage} = require('./helperfncs');
 
 function getOrientation(file, callback) {
   const reader = new FileReader();
@@ -41,6 +42,7 @@ function toPng(canvas) {
   img.src = canvas.toDataURL('image/png');
   return img;
 }
+
 
 function serializeImage(dataURL) {
   const BASE64_MARKER = ';base64,';
@@ -95,20 +97,8 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    let sw = w;
-    let sh = h;
-    let aspect = w / h;
-    if (sw > 600)
-    {
-      sw = 600;
-      sh = ~~(sw / aspect);
-    }
-    if (sh > 600)
-    {
-      aspect = w / h;
-      sh = 600;
-      sw = ~~(sh * aspect);
-    }
+
+    const {sw, sh} = resizeImage(w, h);
 
     console.log("ORIGINAL DIMENSIONS", w, h, "RESIZED DIM", sw, sh);
     let tempCanvas = document.createElement('canvas');

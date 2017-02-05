@@ -1,11 +1,14 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
+const {resizeImage} = require(path.join('..','src','helperfncs'));
 
-describe('test', function () {
+describe('test image functions', function () {
 
-  it('should run my first test', function () {
-    assert.equal(1,1);
+  it('should resize images with correct aspect ratios', function () {
+    const {sw, sh} = resizeImage(3264,2448);
+    assert.equal(sw,600);
+    assert.equal(sh,450);
   })
 
 });
