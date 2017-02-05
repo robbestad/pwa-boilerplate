@@ -99,9 +99,6 @@ export default class Camera extends React.Component {
     let h = img.height;
 
     const {sw, sh} = resizeImage(w, h);
-
-    console.log("ORIGINAL DIMENSIONS", w, h, "RESIZED DIM", sw, sh);
-
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     tempCanvas.width = sw;

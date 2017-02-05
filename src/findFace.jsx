@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
+const {resizeImage} = require('./helperfncs');
 
 function getOrientation(file, callback) {
   const reader = new FileReader();
@@ -95,31 +96,14 @@ export default class Camera extends React.Component {
     const ctx = canvas.getContext("2d");
     let w = img.width;
     let h = img.height;
-    let sw = w;
-    let sh = h;
-    let aspect = w / h;
-    if (sw > 600)
-    {
-      sw = 600;
-      sh = ~~(sw / aspect);
-    }
-    if (sh > 600)
-    {
-      aspect = resizeWidth / resizeHeight;
-      sh = 600;
-      sw = ~~(sh * aspect);
-    }
-    // console.log(w, h, sw, sh);
+
+    const {sw, sh} = resizeImage(w, h);
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     tempCanvas.width = sw;
     tempCanvas.height = sh;
     tempCtx.drawImage(img, 0, 0, sw, sh);
-    ImageToCanvas.drawCanvas(canvas, toPng(tempCanvas), orientation, sw, sh, 1, 0, false);
-    canvas.width = sw + 'px';
-    canvas.height = sh + 'px';
-    document.querySelector(".imageCanvas").width = sw + 'px';
-    document.querySelector(".imageCanvas").height = sh + 'px';
+    ImageToCanvas.drawCanvas(canvas, img, orientation, sw, sh, 1, 0, false);
   }
 
   takePhoto(event) {
