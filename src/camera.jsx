@@ -238,10 +238,9 @@ export default class Camera extends React.Component {
         .set('Accept', 'application/json')
         .end((err, res) => {
           if (err || !res.ok) {
-            console.error(err);
+            alert(err);
           } else {
-            const data = JSON.stringify(res.body);
-            resolve(res.body.personId);
+            resolve(res);
           }
         })
     });

@@ -10911,10 +10911,9 @@ var Camera = function (_React$Component) {
       return new Promise(function (resolve, reject) {
         _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/train').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Content-Type', 'application/json').set('Accept', 'application/json').end(function (err, res) {
           if (err || !res.ok) {
-            console.error(err);
+            alert(err);
           } else {
-            var data = JSON.stringify(res.body);
-            resolve(res.body.personId);
+            resolve(res);
           }
         });
       });
