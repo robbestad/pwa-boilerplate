@@ -105,12 +105,12 @@ export default class Camera extends React.Component {
     }
     if (sh > 600)
     {
-      aspect = resizeWidth / resizeHeight;
+      aspect = w / h;
       sh = 600;
       sw = ~~(sh * aspect);
     }
 
-    console.log(w, h, sw, sh);
+    console.log("ORIGINAL DIMENSIONS", w, h, "RESIZED DIM", sw, sh);
     let tempCanvas = document.createElement('canvas');
     let tempCtx = tempCanvas.getContext('2d');
     tempCanvas.width = sw;
