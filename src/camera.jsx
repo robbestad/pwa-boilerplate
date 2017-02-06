@@ -304,7 +304,7 @@ export default class Camera extends React.Component {
 
         <div className={buttonCSS}>
           <label className="camera-snap">
-            <img src="/assets/camera.svg" className="icon-camera"
+            <img src="/assets/camera_bw.svg" className="icon-camera"
                  alt="Click to snap a photo or select an image from your photo roll"/>
             <input type="file" label="Camera" onChange={this.takePhoto}
                    ref="camera" className="camera" accept="image/*"/>

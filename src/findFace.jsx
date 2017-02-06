@@ -225,8 +225,6 @@ export default class Camera extends React.Component {
           window.location.href = "/#uploaded";
         }
       });
-
-
   }
 
   render() {
@@ -253,7 +251,7 @@ export default class Camera extends React.Component {
     });
 
     return <div>
-      <h1 className="center">IDENTIFY</h1>
+      <h1 className="center light-color">IDENTIFY</h1>
       <div className="center">
         <div className={buttonCSS}>
           <label className="camera-snap">
