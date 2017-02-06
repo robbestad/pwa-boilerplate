@@ -5,13 +5,13 @@ const resizeImage = require(path.join('..','src','helperfncs')).resizeImage;
 
 describe('test image functions', function () {
   it('should provide correct aspect ratios for a resized portrait image', function () {
-    const res = resizeImage(3264,2448);
+    const res = resizeImage(3264,2448,600,600);
     assert.equal(res.sw,600);
     assert.equal(res.sh,450);
   });
 
   it('should provide correct aspect ratios for a resized landscape image', function () {
-    const res = resizeImage(1280,1920);
+    const res = resizeImage(1280,1920,600,600);
     assert.equal(res.sw,400);
     assert.equal(res.sh,600);
   })

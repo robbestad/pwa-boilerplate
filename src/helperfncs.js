@@ -1,14 +1,14 @@
-exports.resizeImage = function (w, h, maxWidth = 600, maxHeight = 600) {
+exports.resizeImage = function (w, h, maxWidth = 1000, maxHeight = 1000) {
   let sw = w;
   let sh = h;
   let aspect = w / h;
-  if (sw > 600) {
-    sw = 600;
+  if (sw > maxWidth) {
+    sw = maxWidth;
     sh = ~~(sw / aspect);
   }
-  if (sh > 600) {
+  if (sh > maxHeight) {
     aspect = w / h;
-    sh = 600;
+    sh = maxHeight;
     sw = ~~(sh * aspect);
   }
   return {sw, sh};

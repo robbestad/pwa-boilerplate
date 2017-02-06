@@ -30,7 +30,6 @@ function findSimilar(face) {
     });
 }
 
-
 export default class Camera extends React.Component {
   constructor() {
     super();
@@ -174,7 +173,16 @@ export default class Camera extends React.Component {
               imageLoaded: true
             })
           } else {
-            this.getPersonDetails(res.body[0].candidates[0].personId);
+            if (res.body[0].candidates.length) {
+              this.getPersonDetails(res.body[0].candidates[0].personId);
+            } else {
+              this.setState({
+                personDetails: {userData: 'Face found, but it was not recognized'},
+                spinnerDisplay: false,
+                imageLoaded: true
+              })
+
+            }
           }
         }
       });
