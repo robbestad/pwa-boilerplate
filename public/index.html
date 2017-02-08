@@ -262,9 +262,10 @@ The following code is an experiment in PWA/Web 1.0 retro. Inline everything for 
         }
 
         @media screen and (max-width: 768px) {
-            .imageCanvas{
+            .imageCanvas {
                 max-width: 300px;
             }
+
             .frontpage-block {
                 padding: 40px 0 0 0;
             }
@@ -521,19 +522,19 @@ The following code is an experiment in PWA/Web 1.0 retro. Inline everything for 
             color: var(--lightClrFont);
         }
 
-
         .cta > a, a:visited, a:link, a:hover {
             color: #01222A;
         }
 
         .cta > a {
-            color:  var(--lightClrFont);
+            color: var(--lightClrFont);
         }
+
         .cta > a.dark {
             color: #01222A;
         }
 
-        .light-color{
+        .light-color {
             color: var(--lightClrFont)
         }
 
@@ -672,8 +673,6 @@ The following code is an experiment in PWA/Web 1.0 retro. Inline everything for 
             <!-- END MATCHING -->
 
 
-
-
         </div>
         <!--<div class="right">Another sidebar</div>-->
     </div>
@@ -690,7 +689,7 @@ The following code is an experiment in PWA/Web 1.0 retro. Inline everything for 
     document.getElementsByTagName('head')[0].appendChild(stylesheet);
   };
 
-//  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
+  //  appendStylesheet('//fonts.googleapis.com/css?family=Poiret+One|Oxygen');
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
@@ -798,13 +797,14 @@ The following code is an experiment in PWA/Web 1.0 retro. Inline everything for 
 <script type="text/javascript">
   setTimeout(() => {
     const gun = Gun('https://db.robbestad.no/gun');
-    gun.put({hello: 'mister'}).key("random/mui3");
-    const ref = gun.get("random/mui3");
+    gun.put({NO2: '100mg'}).key("smogAPI");
+    const ref = gun.get("smogAPI");
     ref.on((data) => {
-      const div = document.createElement('div');
-      div.text = data.hello;
-      div.textContent = data.hello;
-      document.querySelector('.gundata').appendChild(div);
+      console.log(data);
+//      const div = document.createElement('div');
+//      div.text = data.hello;
+//      div.textContent = data.hello;
+//      document.querySelector('.gundata').appendChild(div);
     });
   }, 5000);
 
