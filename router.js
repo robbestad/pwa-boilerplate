@@ -4,7 +4,7 @@ const Boom = require('boom');
 
 router
   .get('/hello', function (ctx, next) {
-    ctx.body = require(path.join(__dirname, 'routes', 'hello.js'))();
+    ctx.body = require(path.join(__dirname, 'routes', 'hello.js'));
   })
   .get('/test', function (ctx, next) {
     ctx.body = require(path.join(__dirname, '..', 'src', 'index.html'))

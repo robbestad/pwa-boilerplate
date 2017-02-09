@@ -6,7 +6,9 @@ let CURRENT_CACHES = {
 const OFFLINE_URL = 'index.html';
 
 const assets = [
-  '/main.js'
+  '/main.js',
+  '/vendor.js',
+  '/app.js'
 ];
 
 const cacheAssets = assets => {
