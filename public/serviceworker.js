@@ -7,11 +7,14 @@ const OFFLINE_URL = 'index.html';
 
 const assets = [
   '/main.js',
-  '/vendor.js',
-  '/app.js',
+  '/js/vendor.js',
+  '/js/app.js',
   '/assets/search.png',
   '/assets/man.png',
   '/assets/search.svg',
+  '/assets/search-10.svg',
+  '/assets/cloud.svg',
+  '/assets/camera_bw.svg',
   '/assets/man.svg',
   '/assets/camera.png',
   '/assets/camera.svg'
@@ -107,12 +110,10 @@ self.addEventListener('fetch', event => {
     (event.request.method === 'GET')
     && self.caches.match(event.request)
   ) {
-
     event.respondWith(
       fetch(event.request).catch(function () {
-
-        return caches.match(event.request);
-        //          caches.open('assets').then(caches => caches.match(event.request))
+        // return caches.match(event.request);
+        return caches.open(CURRENT_CACHES.offline).then(caches => caches.match(event.request))
 
       })
     );
