@@ -7,8 +7,6 @@
     "start": "node index",
     "build": "sh scripts/build.sh",
     "release": "standard-version",
-    "docker": "docker run -p 3666:3666 svena/facer-v2",
-    "docker_data": "docker run  -v /usr/src/app:/code -p 3666:3666 svena/facer-v2",
     "test": "mocha test",
     "dev": "cross-env NODE_ENV=development node index.js",
     "watch:test": "filewatcher 'src/*' \"npm test\"",
@@ -17,15 +15,19 @@
   "keywords": [
     "pwa",
     "koa2",
-    "offline",
-    "inferno"
+    "offline"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "assert": "^1.4.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
     "bunyan": "^1.8.12",
     "bunyan-prettystream": "^0.1.3",
+    "colors": "^1.1.2",
+    "isomorphic-fetch": "^2.2.1",
+    "koa-body": "^2.5.0",
     "koa-send": "^4.1.2",
     "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",

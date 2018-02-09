@@ -1,26 +1,48 @@
 <!--
-
-The following code is an experiment in Web 1.0 retro. Everything is inline ... for fun
-
+The following code is an experiment in PWA/Web 1.0 retro. Inline everything for speed
 -->
 <!DOCTYPE html>
 <html>
 <head>
- 
+  <script>
+    (function (d) {
+      var config = {
+          kitId:         'wdz1lvl',
+          scriptTimeout: 3000,
+          async:         true
+        },
+        h = d.documentElement, t = setTimeout(function () {
+          h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+        }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a;
+      h.className += " wf-loading";
+      tk.src = 'https://use.typekit.net/' + config.kitId + '.js';
+      tk.async = true;
+      tk.onload = tk.onreadystatechange = function () {
+        a = this.readyState;
+        if (f || a && a != "complete" && a != "loaded") return;
+        f = true;
+        clearTimeout(t);
+        try {
+          Typekit.load(config)
+        } catch (e) {
+        }
+      };
+      s.parentNode.insertBefore(tk, s)
+    })(document);
+  </script>
+
   <title>Facer</title>
   <meta name="theme-color" content="#2E3AA1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
   <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
   <style rel="stylesheet" type="text/css">
     :root {
       --font-size: 21px;
       --white: #ECF1F1;
       --darkBg: #046380;
-      --lightBg: #046380;
-      --lightClrFont: #F8F7F7;
-      --fontFamily: 'Cormorant Garamond', serif;
+      --lightBg: #44A3C8;
+      --lightClrFont: #F8F7F7
     }
 
     html,
@@ -29,7 +51,7 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       line-height: calc(var(--font-size) * 1.618);
       background-color: rgba(242, 242, 242, 1);
       -webkit-font-smoothing: antialiased;
-      font-family: var(--fontFamily);
+      font-family: "roboto", sans-serif;
       font-weight: 200;
       font-size: var(--font-size);
       display: flex;
@@ -76,7 +98,7 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
 
     label {
       display: block;
-      font-family: var(--fontFamily);
+      font-family: "roboto", sans-serif;
       font-weight: 200;
       color: var(--darkBg);
     }
@@ -85,17 +107,13 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       margin-bottom: 50px;
     }
 
-    .personDetails{
-      color:white;
-    }
-    
     .darkInput {
       width: 220px;
       border: none;
       background: var(--darkBg);
       padding: 25px;
       border-radius: 15px;
-      font-family:var(--fontFamily);
+      font-family: "roboto", sans-serif;
       font-weight: 200;
       color: var(--white);
       font-size: 28px;
@@ -109,7 +127,7 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       background: var(--darkBg);
       padding: 25px;
       border-radius: 15px;
-      font-family:var(--fontFamily);
+      font-family: "roboto", sans-serif;
       font-weight: 200;
       color: var(--white);
       font-size: 28px;
@@ -174,11 +192,11 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
 
     .logo {
       font-size: 26px;
-      font-family: var(--fontFamily);
+      font-family: 'roboto-slab', sans-serif;
     }
 
     h1 {
-      font-family: var(--fontFamily);
+      font-family: 'roboto-slab', sans-serif;
       font-size: 48px;
       font-weight: 200;
       color: #01222A;
@@ -188,13 +206,10 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     .center {
       text-align: center;
     }
-    .center.vertical-aligned{
-      margin: 150px 0 0 0;
-    }
 
     h2 {
       font-size: 24px;
-      font-family: var(--fontFamily);
+      font-family: 'roboto-slab', sans-serif;
     }
 
     .frontpage-block {
@@ -390,19 +405,18 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     .full-screen > .header,
     .full-screen > .footer {
       height: 50px;
-      background: #525252;
-      color: #b3b3b3;
+      background: #ECF1F1;
+      color: #01222A;
       padding-top: 20px;
       text-align: center;
       font-size: 52px;
-      font-family: var(--fontFamily);
+      font-family: 'roboto-slab', sans-serif;
     }
 
     .full-screen > .footer {
-      background: #525252;
-      color: #b3b3b3;
+      background: #01222A;
+      color: #ECF1F1;
       font-size: 20px;
-      font-weight: bolder;
     }
 
     .full-screen > .main {
@@ -413,7 +427,7 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
 
     .full-screen > .main > * {
       flex: 0 0 auto;
-      overflow: none;
+      overflow: scroll;
     }
 
     .full-screen > .main > .middle {
@@ -421,8 +435,8 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     }
 
     .icon-man {
-      padding: 0 0 0 10px;
-      width: 240px;
+      padding: 20px 10px 0 30px;
+      width: 180px;
     }
 
     .icon-camera {
@@ -456,18 +470,14 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     .icon-search {
       padding: 60px;
       width: 120px;
-      color: var(--lightBg);
+      color: #44A3C8;
     }
 
     .flex-container {
       display: flex;
       justify-content: start;
       flex-wrap: wrap;
-      margin:0 auto 0 0;
-      display: block;
-    }
-    .flex-container:first-child {
-      margin:40px auto 0 0;
+      margin-top: 20px;
     }
 
     .flex-cell {
@@ -478,12 +488,6 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       box-sizing: border-box;
     }
 
-    .flex-cell.small{
-      height: 60px;
-      margin: 0 0 0 0;
-      padding: 0;
-    }
-    
     .flex-cell.full {
       flex: 0 0 100%;
       width: 100%;
@@ -508,11 +512,11 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     }
 
     .flex-cell.light {
-      background: var(--lightBg);
+      background: #44A3C8;
     }
 
     .cta {
-      font-family: var(--fontFamily);
+      font-family: 'roboto-slab', sans-serif;
       font-size: 32px;
       font-weight: 200;
       color: var(--lightClrFont);
@@ -528,7 +532,6 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
 
     .cta > a.dark {
       color: #01222A;
-      font-weight:bolder;
     }
 
     .light-color {
@@ -580,35 +583,7 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     }
 
     span.virtual {
-      color: #7a8084;
-    }
-
-    div.splash {
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      background-color: var(--lightBg);
-    }
-
-    div.splash > img {
-      display: block;
-      margin: 150px auto 0 auto;
-    }
-
-    div.splash > div.slogan {
-      display: block;
-      margin: 50px auto;
-      color:white;
-      text-align: center;
-      font-size: 32px;
-    }
-    .hide {
-      visibility: hidden;
-      height: 0;
-      display: none;
+      color: red;
     }
 
   </style>
@@ -625,11 +600,6 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     <!--</ul>-->
     <!--</div>-->
 
-    <div class="splash">
-      <img src="/assets/raven_mobile.png">
-      <div class="slogan">VALAR MORGHULIS</div>
-    </div>
-
     <div class="middle animated fadeIn">
 
       <!-- FRONT PAGE -->
@@ -637,15 +607,24 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
         <div class="flex-container">
           <div class="flex-cell light">
             <div class="flex-item">
-              <a href="/#find">
-                <img src="/assets/starkthrone.png" class="icon-man">
+              <a href="/#add">
+                <img src="/assets/man.svg" class="icon-man" onerror="this.src='/assets/man.png'">
               </a>
             </div>
           </div>
-        </div>
-        <div class="flex-container">
-          <div class="flex-cell small">
-            <div class="flex-item cta"><a href="/#find" class="dark center">PROVE <br/>YOUR WORTH</a></div>
+          <div class="flex-cell light">
+            <div class="flex-item cta"><a href="/#add" class="dark">ADD</a></div>
+          </div>
+          <div class="flex-cell dark">
+            <div class="flex-item cta"><a href="/#find">IDENTIFY</a></div>
+          </div>
+          <div class="flex-cell dark">
+            <div class="flex-item">
+              <a href="/#find">
+                <img src="/assets/search-10.svg" class="icon-search"
+                     onerror="this.src='/assets/search.png'">
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -686,9 +665,21 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       <!-- END FIND -->
 
 
+      <!-- MATCHING -->
+      <div class="route-matching">
+        <div class="full-width-container">
+          <div class="background-light" id="matchingGame">
+            <!--<canvas id="game">No canvas for you?! :(</canvas>-->
+          </div>
+        </div>
+      </div>
+      <!-- END MATCHING -->
+
+
     </div>
+    <!--<div class="right">Another sidebar</div>-->
   </div>
-  <div class="footer" onClick="window.location.href='/'">VALAR MORGHULIS</div>
+  <div class="footer" onClick="window.location.href='/'">HACKED TOGETHER WITH <3</div>
 </div>
 
 
@@ -726,38 +717,32 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       console.log('used data in bytes', info.usage);
     });
   }
-  
-  const start=2000
-  const p=50
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.9;},start)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.8;},start-p+p*2)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.7;},start-p+p*3)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.6;},start-p+p*4)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.5;},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.4;},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.3;},start-p+p*7)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.2;},start-p+p*8)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.1;},start-p+p*9)
-  setTimeout(()=>{document.querySelector(".splash").style.display="none";},start-p+p*10)
 
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="60px auto";},start)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="80px auto"},start-p+p*2)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="100px auto";},start-p+p*3)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="120px auto";},start-p+p*4)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="140px auto";},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="160px auto";},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="180px auto";},start-p+p*7)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="200px auto";},start-p+p*8)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="220px auto";},start-p+p*9)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="30px";},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="26px";},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="24px";},start-p+p*9)
+  const asyncLoadImages = ({node, src, width, height, border, className}) => {
+    const img = new Image();
+    const container = document.querySelector(node);
+    img.width = width;
+    img.height = height;
+    img.border = border;
+    img.src = src;
+    img.className = className || "center";
+    img.alt = "A bridge";
+    img.onload = (e) => container.appendChild(img);
+  };
 
-
+  //      asyncLoadImages({
+  //        node: '.holder',
+  //        src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg',
+  //        width: 655,
+  //        height: 364,
+  //        border: 1
+  //      });
 
 </script>
 
 
+<!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>-->
+<!--<script type="text/javascript" src="/games/matching.js"></script>-->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
 <script type="text/javascript" defer src="/js/vendor.js"></script>
 <script type="text/javascript" defer src="/js/app.js"></script>
@@ -769,18 +754,20 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     const addPhoto = document.querySelector(".route-add");
     const uploaded = document.querySelector(".route-uploaded");
     const findFace = document.querySelector(".route-find");
+    const matching = document.querySelector(".route-matching");
 
     frontpage.style.display = "none";
     addPhoto.style.display = "none";
     uploaded.style.display = "none";
     findFace.style.display = "none";
+    matching.style.display = "none";
 
     if (window.location.hash) {
       const hash = window.location.hash;
 
       if (hash === "#add") {
         addPhoto.style.display = "block";
-        document.body.style.background = 'var(--lightBg)';
+        document.body.style.background = '#44A3C8';
       }
       if (hash === "#uploaded") {
         uploaded.style.display = "block";
@@ -790,6 +777,9 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
         document.body.style.background = '#046380';
       }
 
+      if (hash === "#matching") {
+        matching.style.display = "block";
+      }
 
     } else {
       frontpage.style.display = "block";
@@ -805,6 +795,25 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
   };
 
 </script>
+
+<!--
+<script defer src="https://db.robbestad.no/gun.js"></script>
+<script type="text/javascript">
+  setTimeout(() => {
+    const gun = Gun('https://db.robbestad.no/gun');
+    gun.put({NO2: '100mg'}).key("smogAPI");
+    const ref = gun.get("smogAPI");
+    ref.on((data) => {
+      console.log(data);
+//      const div = document.createElement('div');
+//      div.text = data.hello;
+//      div.textContent = data.hello;
+//      document.querySelector('.gundata').appendChild(div);
+    });
+  }, 5000);
+
+</script>
+-->
 
 </body>
 </html>

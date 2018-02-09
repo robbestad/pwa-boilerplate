@@ -1,1 +1,1025 @@
-webpackJsonp([0],{182:function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var s=a(84),o=n(s),r=a(85),i=n(r),c=a(28),l=n(c),u=a(86);(0,u.render)(l.default.createElement(o.default,null),document.getElementById("camera")),(0,u.render)(l.default.createElement(i.default,null),document.getElementById("findFace"))},49:function(e,t,a){"use strict";t.getOrientation=function(e,t){var a=new FileReader;a.onload=function(e){var a=new DataView(e.target.result);if(65496!=a.getUint16(0,!1))return t(-2);for(var n=a.byteLength,s=2;s<n;){var o=a.getUint16(s,!1);if(s+=2,65505==o){if(1165519206!=a.getUint32(s+=2,!1))return t(-1);var r=18761==a.getUint16(s+=6,!1);s+=a.getUint32(s+4,r);var i=a.getUint16(s,r);s+=2;for(var c=0;c<i;c++)if(274==a.getUint16(s+12*c,r))return t(a.getUint16(s+12*c+8,r))}else{if(65280!=(65280&o))break;s+=a.getUint16(s,!1)}}return t(-1)},a.readAsArrayBuffer(e)}},50:function(e,t,a){"use strict";t.resizeImage=function(e,t){var a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:1e3,n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:1e3,s=e,o=t,r=e/t;return s>a&&(s=a,o=~~(s/r)),o>n&&(r=e/t,o=n,s=~~(o*r)),{sw:s,sh:o}},t.toImg=function(e){var t=document.createElement("img");return t.src=e,t},t.toPng=function(e){var t=document.createElement("img");return t.src=e.toDataURL("image/png"),t}},51:function(e,t,a){"use strict";t.serializeImage=function(e){var t=";base64,";if(e.indexOf(t)==-1){var a=e.split(","),n=a[0].split(":")[1],s=decodeURIComponent(a[1]);return new Blob([s],{type:n})}for(var o=e.split(t),r=o[0].split(":")[1],i=window.atob(o[1]),c=i.length,l=new Uint8Array(c),u=0;u<c;++u)l[u]=i.charCodeAt(u);return new Blob([l],{type:r})}},84:function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}function s(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),c=a(28),l=n(c),u=a(52),d=n(u),f=a(56),p=n(f),m=a(83),g=n(m),h=a(50),v=h.resizeImage,y=(h.toPng,h.toImg,a(49)),b=y.getOrientation,I=a(51),D=I.serializeImage,w=function(e){function t(){s(this,t);var e=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.state={imageLoaded:!1,imageCanvasDisplay:"none",spinnerDisplay:!1,imageCanvasWidth:"28px",imageCanvasHeight:"320px",faceApiText:null,updateFeedback:"",storingFace:!1,userData:"",detectedFaces:null,faceDataFound:!1,currentImg:null},e.putImage=e.putImage.bind(e),e.takePhoto=e.takePhoto.bind(e),e.faceRecog=e.faceRecog.bind(e),e.uploadImage=e.uploadImage.bind(e),e.createPersistedFaceID=e.createPersistedFaceID.bind(e),e.addPersonFace=e.addPersonFace.bind(e),e.createPerson=e.createPerson.bind(e),e.trainGroup=e.trainGroup.bind(e),e}return r(t,e),i(t,[{key:"putImage",value:function(e,t){var a=this.refs.photoCanvas,n=(a.getContext("2d"),e.width),s=e.height,o=v(n,s),r=o.sw,i=o.sh,c=document.createElement("canvas"),l=c.getContext("2d");c.width=r,c.height=i,l.drawImage(e,0,0,r,i),p.default.drawCanvas(a,e,t,r,i,1,0,!1)}},{key:"takePhoto",value:function(e){var t=this,a=(this.refs.camera,e.target.files),n=void 0;if(a&&a.length>0){n=a[0];var s=new FileReader;this.putImage;s.onload=function(e){var a=new Image;a.src=e.target.result;a.onload=function(){b(n,function(e){e<0&&(e=1),t.putImage(a,e),t.setState({imageLoaded:!0,currentImg:a.src}),t.faceRecog()})}},s.readAsDataURL(n)}}},{key:"faceRecog",value:function(){var e=this,t=this.refs.photoCanvas;t.toDataURL();this.setState({spinnerDisplay:!0}),g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false").send(D(this.state.currentImg)).set("Content-Type","application/octet-stream").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("processData",!1).set("Accept","application/json").end(function(t,a){if(t||!a.ok)console.error(t);else{var n=JSON.stringify(a.body);console.log(n);var s=a.body.map(function(e){return{faceId:e.faceId,target:""+e.faceRectangle.top+","+e.faceRectangle.left+","+e.faceRectangle.width+","+e.faceRectangle.height,faceRectangle:e.faceRectangle}});e.setState({detectedFaces:s,faceApiText:n,faceDataFound:!0,spinnerDisplay:!1})}})}},{key:"createPersistedFaceID",value:function(){var e=this,t=this.refs.photoCanvas;t.toDataURL(),this.state.userData;return new Promise(function(t,a){g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces").send(D(e.state.currentImg)).set("Content-Type","application/octet-stream").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Accept","application/json").end(function(e,a){e||!a.ok?console.error(e):t(a.body)})})}},{key:"createPerson",value:function(){var e=this;this.state.userData;return new Promise(function(t,a){g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons").send({name:e.refs.inputname.value,userData:e.refs.inputdata.value}).set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Content-Type","application/json").set("Accept","application/json").end(function(e,a){if(e||!a.ok)console.error(e);else{JSON.stringify(a.body);t(a.body.personId)}})})}},{key:"trainGroup",value:function(){this.state.userData;return new Promise(function(e,t){g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/train").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Content-Type","application/json").set("Accept","application/json").end(function(t,a){t||!a.ok?alert(t):e(a)})})}},{key:"addPersonFace",value:function(e,t){var a=this;this.state.userData;return new Promise(function(t,n){g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/"+e+"/persistedFaces").send(D(a.state.currentImg)).set("Content-Type","application/octet-stream").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Accept","application/json").end(function(e,a){if(e||!a.ok)console.error(e);else{var n=JSON.stringify(a.body);t(n)}})})}},{key:"uploadImage",value:function(){var e=this;this.setState({spinnerDisplay:!0,storingFace:!0,updateFeedback:"Creating a face ID"}),this.createPersistedFaceID().then(function(t){e.setState({updateFeedback:"Creating a Person"}),e.createPerson().then(function(a){e.setState({updateFeedback:"Adding the face to the person"}),e.addPersonFace(a).then(function(n){e.setState({updateFeedback:"Training the new list"}),e.trainGroup().then(function(){e.setState({updateFeedback:""}),console.log("success"),console.log("persistedFaceId",t),console.log("personId",a),console.log("persistedGroupFaceId",n),window.location.href="/#uploaded"})}).catch(function(e){alert(JSON.stringify(e))})}).catch(function(e){alert(JSON.stringify(e))})}).catch(function(e){alert(JSON.stringify(e))})}},{key:"render",value:function(){var e=(0,d.default)({hidden:!this.state.faceDataFound,cameraFrame:!0}),t=(0,d.default)({hidden:this.state.imageLoaded}),a=(0,d.default)({hidden:!this.state.spinnerDisplay}),n=(0,d.default)({spinner:!0}),s=(0,d.default)({hidden:!this.state.faceDataFound,metaInput:!0}),o=(0,d.default)({hidden:this.state.storingFace}),r=(0,d.default)({hidden:!this.state.storingFace&&""!==this.state.updateFeedback});return l.default.createElement("div",null,l.default.createElement("h1",{className:"center"},"ADD A PERSON"),l.default.createElement("div",{className:"center"},l.default.createElement("div",{className:t},l.default.createElement("label",{className:"camera-snap"},l.default.createElement("img",{src:"/assets/camera_bw.svg",className:"icon-camera",alt:"Click to snap a photo or select an image from your photo roll"}),l.default.createElement("input",{type:"file",label:"Camera",onChange:this.takePhoto,ref:"camera",className:"camera",accept:"image/*"}))),l.default.createElement("div",{className:r},this.state.updateFeedback),l.default.createElement("div",{className:a},l.default.createElement("div",{className:n},l.default.createElement("div",{className:"double-bounce1"}),l.default.createElement("div",{className:"double-bounce2"}))),l.default.createElement("div",{className:o},l.default.createElement("div",{className:e},l.default.createElement("canvas",{ref:"photoCanvas",className:"imageCanvas"},"Your browser does not support the HTML5 canvas tag.")),l.default.createElement("div",{className:s},l.default.createElement("label",{htmlFor:"name"},"NAME"),l.default.createElement("input",{id:"name",type:"text",ref:"inputname",className:"darkInput"}),l.default.createElement("label",{htmlFor:"metadata"},"METADATA"),l.default.createElement("textarea",{id:"metadata",ref:"inputdata",className:"darkInput"}),l.default.createElement("label",{htmlFor:"addBtn"}),l.default.createElement("button",{id:"addBtn",className:"darkButton",onClick:this.uploadImage,value:"add"},"ADD")))))}}]),t}(l.default.Component);t.default=w},85:function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}function s(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),c=a(28),l=n(c),u=a(52),d=n(u),f=a(56),p=n(f),m=a(83),g=n(m),h=a(50),v=h.resizeImage,y=(h.toPng,h.toImg,a(49)),b=y.getOrientation,I=a(51),D=I.serializeImage,w=function(e){function t(){s(this,t);var e=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return e.state={imageLoaded:!1,imageCanvasDisplay:"none",clickedTheButton:!1,spinnerDisplay:!1,imageCanvasWidth:"28px",imageCanvasHeight:"320px",faceApiText:null,userData:"",faceDataFound:!1,currentImg:null},e.putImage=e.putImage.bind(e),e.takePhoto=e.takePhoto.bind(e),e.faceIdentify=e.faceIdentify.bind(e),e.verifyFaces=e.verifyFaces.bind(e),e.uploadImage=e.uploadImage.bind(e),e.getPersonDetails=e.getPersonDetails.bind(e),e}return r(t,e),i(t,[{key:"putImage",value:function(e,t){var a=this.refs.photoCanvas,n=(a.getContext("2d"),e.width),s=e.height,o=v(n,s),r=o.sw,i=o.sh,c=document.createElement("canvas"),l=c.getContext("2d");c.width=r,c.height=i,l.drawImage(e,0,0,r,i),p.default.drawCanvas(a,e,t,r,i,1,0,!1)}},{key:"takePhoto",value:function(e){var t=this,a=(this.refs.camera,e.target.files),n=void 0;if(a&&a.length>0){n=a[0];var s=new FileReader;this.putImage;s.onload=function(e){var a=new Image;a.src=e.target.result;a.onload=function(){b(n,function(e){e<0&&(e=1),t.putImage(a,e),t.setState({imageLoaded:!0,clickedTheButton:!0,currentImg:a.src}),t.faceIdentify()})}},s.readAsDataURL(n)}}},{key:"faceIdentify",value:function(){var e=this,t=this.refs.photoCanvas;t.toDataURL();this.setState({spinnerDisplay:!0,imageLoaded:!1}),g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false").send(D(this.state.currentImg)).set("Content-Type","application/octet-stream").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("processData",!1).set("Accept","application/json").end(function(t,a){if(t||!a.ok)console.error(t);else{var n=a.body.map(function(e){return e.faceId});e.setState({faces:n}),n.length?e.verifyFaces(n):e.setState({personDetails:{userData:"No faces found"},spinnerDisplay:!1,imageLoaded:!0})}})}},{key:"verifyFaces",value:function(e){var t=this;this.setState({imageLoaded:!1});var a={personGroupId:"aspc2017facegroup",faceIds:e,maxNumOfCandidatesReturned:1,confidenceThreshold:.5};g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/identify").send(a).set("Content-Type","application/json").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Accept","application/json").end(function(e,a){e||!a.ok?console.error(e):a.body.length<0?t.setState({personDetails:{userData:"No match found"},spinnerDisplay:!1,imageLoaded:!0}):a.body[0].candidates.length?t.getPersonDetails(a.body[0].candidates[0].personId):t.setState({personDetails:{userData:"Face found, but it was not recognized"},spinnerDisplay:!1,imageLoaded:!0})})}},{key:"getPersonDetails",value:function(e){var t=this;g.default.get("https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/"+e).set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Accept","application/json").end(function(e,a){e||!a.ok?console.error(e):t.setState({personDetails:a.body,spinnerDisplay:!1,imageLoaded:!0})})}},{key:"uploadImage",value:function(){var e=this.refs.photoCanvas,t=(e.toDataURL(),this.state.userData);g.default.post("https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces?userData="+JSON.stringify(t)).send(D(this.state.currentImg)).set("Content-Type","application/octet-stream").set("Ocp-Apim-Subscription-Key","286fe5360c85463bac4315dff365fdc2").set("Accept","application/json").end(function(e,t){if(e||!t.ok)console.error(e);else{var a=JSON.stringify(t.body);console.log(a),alert(a),window.location.href="/#uploaded"}})}},{key:"render",value:function(){var e=(0,d.default)({hidden:!this.state.imageLoaded,cameraFrame:!0}),t=(0,d.default)({hidden:this.state.clickedTheButton}),a=(0,d.default)({hidden:!this.state.spinnerDisplay}),n=(0,d.default)({spinner:!0}),s=(0,d.default)({hidden:this.state.spinnerDisplay,metaInput:!0});return l.default.createElement("div",null,l.default.createElement("h1",{className:"center light-color"},"IDENTIFY"),l.default.createElement("div",{className:"center"},l.default.createElement("div",{className:t},l.default.createElement("label",{className:"camera-snap"},l.default.createElement("img",{src:"/assets/camera.svg",className:"icon-camera",alt:"Click to snap a photo or select an image from your photo roll"}),l.default.createElement("input",{type:"file",label:"Camera",onChange:this.takePhoto,ref:"camera",className:"camera",accept:"image/*"}))),l.default.createElement("div",{className:a},l.default.createElement("div",{className:n},l.default.createElement("div",{className:"double-bounce1"}),l.default.createElement("div",{className:"double-bounce2"}))),l.default.createElement("div",{className:e},l.default.createElement("canvas",{ref:"photoCanvas",className:"imageCanvas"},"Your browser does not support the HTML5 canvas tag.")),l.default.createElement("div",{className:s},l.default.createElement("div",{className:"personDetails"},this.state.personDetails&&this.state.personDetails.name),l.default.createElement("div",{className:"personDetails"},this.state.personDetails&&this.state.personDetails.userData))))}}]),t}(l.default.Component);t.default=w}},[182]);
+webpackJsonp([0],{
+
+/***/ 194:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _camera = __webpack_require__(87);
+
+var _camera2 = _interopRequireDefault(_camera);
+
+var _findFace = __webpack_require__(88);
+
+var _findFace2 = _interopRequireDefault(_findFace);
+
+var _react = __webpack_require__(31);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(89);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _reactDom.render)(_react2.default.createElement(_camera2.default, null), document.getElementById('camera'));
+(0, _reactDom.render)(_react2.default.createElement(_findFace2.default, null), document.getElementById('findFace'));
+
+/***/ }),
+
+/***/ 54:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.getOrientation = function (file, callback) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+
+    var view = new DataView(e.target.result);
+    if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
+    var length = view.byteLength,
+        offset = 2;
+    while (offset < length) {
+      var marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker == 0xFFE1) {
+        if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1);
+        var little = view.getUint16(offset += 6, false) == 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        var tags = view.getUint16(offset, little);
+        offset += 2;
+        for (var i = 0; i < tags; i++) {
+          if (view.getUint16(offset + i * 12, little) == 0x0112) return callback(view.getUint16(offset + i * 12 + 8, little));
+        }
+      } else if ((marker & 0xFF00) != 0xFF00) break;else offset += view.getUint16(offset, false);
+    }
+    return callback(-1);
+  };
+  reader.readAsArrayBuffer(file);
+};
+
+/***/ }),
+
+/***/ 55:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.resizeImage = function (w, h) {
+  var maxWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+  var maxHeight = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
+
+  var sw = w;
+  var sh = h;
+  var aspect = w / h;
+  if (sw > maxWidth) {
+    sw = maxWidth;
+    sh = ~~(sw / aspect);
+  }
+  if (sh > maxHeight) {
+    aspect = w / h;
+    sh = maxHeight;
+    sw = ~~(sh * aspect);
+  }
+  return { sw: sw, sh: sh };
+};
+exports.toImg = function (encodedData) {
+  var imgElement = document.createElement('img');
+  imgElement.src = encodedData;
+  return imgElement;
+};
+
+exports.toPng = function (canvas) {
+  var img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
+  return img;
+};
+
+/***/ }),
+
+/***/ 56:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.serializeImage = function (dataURL) {
+  var BASE64_MARKER = ';base64,';
+  if (dataURL.indexOf(BASE64_MARKER) == -1) {
+    var _parts = dataURL.split(',');
+    var _contentType = _parts[0].split(':')[1];
+    var _raw = decodeURIComponent(_parts[1]);
+    return new Blob([_raw], { type: _contentType });
+  }
+  var parts = dataURL.split(BASE64_MARKER);
+  var contentType = parts[0].split(':')[1];
+  var raw = window.atob(parts[1]);
+  var rawLength = raw.length;
+
+  var uInt8Array = new Uint8Array(rawLength);
+
+  for (var i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i);
+  }
+
+  return new Blob([uInt8Array], { type: contentType });
+};
+
+/***/ }),
+
+/***/ 87:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(31);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = __webpack_require__(57);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _imagetocanvas = __webpack_require__(61);
+
+var _imagetocanvas2 = _interopRequireDefault(_imagetocanvas);
+
+var _superagent = __webpack_require__(86);
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _require = __webpack_require__(55),
+    resizeImage = _require.resizeImage,
+    toPng = _require.toPng,
+    toImg = _require.toImg;
+
+var _require2 = __webpack_require__(54),
+    getOrientation = _require2.getOrientation;
+
+var _require3 = __webpack_require__(56),
+    serializeImage = _require3.serializeImage;
+
+var Camera = function (_React$Component) {
+  _inherits(Camera, _React$Component);
+
+  function Camera() {
+    _classCallCheck(this, Camera);
+
+    var _this2 = _possibleConstructorReturn(this, (Camera.__proto__ || Object.getPrototypeOf(Camera)).call(this));
+
+    _this2.state = {
+      imageLoaded: false,
+      imageCanvasDisplay: 'none',
+      spinnerDisplay: false,
+      imageCanvasWidth: '28px',
+      imageCanvasHeight: '320px',
+      faceApiText: null,
+      updateFeedback: '',
+      storingFace: false,
+      userData: '',
+      detectedFaces: null,
+      faceDataFound: false,
+      currentImg: null
+    };
+    _this2.putImage = _this2.putImage.bind(_this2);
+    _this2.takePhoto = _this2.takePhoto.bind(_this2);
+    _this2.faceRecog = _this2.faceRecog.bind(_this2);
+    _this2.uploadImage = _this2.uploadImage.bind(_this2);
+    _this2.createPersistedFaceID = _this2.createPersistedFaceID.bind(_this2);
+    _this2.addPersonFace = _this2.addPersonFace.bind(_this2);
+    _this2.createPerson = _this2.createPerson.bind(_this2);
+    _this2.trainGroup = _this2.trainGroup.bind(_this2);
+    return _this2;
+  }
+
+  _createClass(Camera, [{
+    key: 'putImage',
+    value: function putImage(img, orientation) {
+      var canvas = this.refs.photoCanvas;
+      var ctx = canvas.getContext("2d");
+      var w = img.width;
+      var h = img.height;
+
+      var _resizeImage = resizeImage(w, h),
+          sw = _resizeImage.sw,
+          sh = _resizeImage.sh;
+
+      var tempCanvas = document.createElement('canvas');
+      var tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = sw;
+      tempCanvas.height = sh;
+      tempCtx.drawImage(img, 0, 0, sw, sh);
+      _imagetocanvas2.default.drawCanvas(canvas, img, orientation, sw, sh, 1, 0, false);
+    }
+  }, {
+    key: 'takePhoto',
+    value: function takePhoto(event) {
+      var _this3 = this;
+
+      var camera = this.refs.camera,
+          files = event.target.files,
+          file = void 0,
+          w = void 0,
+          h = void 0,
+          mpImg = void 0,
+          orientation = void 0;
+      if (files && files.length > 0) {
+        file = files[0];
+        var fileReader = new FileReader();
+        var putImage = this.putImage;
+        fileReader.onload = function (event) {
+          var img = new Image();
+          img.src = event.target.result;
+          var _this = _this3;
+          img.onload = function () {
+            getOrientation(file, function (orientation) {
+              if (orientation < 0) orientation = 1;
+              _this3.putImage(img, orientation);
+              _this3.setState({ imageLoaded: true, currentImg: img.src });
+              _this3.faceRecog();
+            });
+          };
+        };
+
+        fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'faceRecog',
+    value: function faceRecog() {
+      var _this4 = this;
+
+      var canvas = this.refs.photoCanvas;
+      var dataURL = canvas.toDataURL();
+
+      this.setState({
+        spinnerDisplay: true
+      });
+
+      // There's two ways to send images to the cognitive API.
+      // 1. Send a Image URL (need to set Content-Type as application/json)
+      // 2. Send a binary (need to set Content-Type as octet-stream). The image need to be serialized.
+      _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false').send(serializeImage(this.state.currentImg)).set('Content-Type', 'application/octet-stream')
+      // .send({url: "http://techbeat.com/wp-content/uploads/2013/06/o-GOOGLE-FACIAL-RECOGNITION-facebook-1024x767.jpg"})
+      // .set('Content-Type', 'application/json')
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('processData', false).set('Accept', 'application/json').end(function (err, res) {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          var data = JSON.stringify(res.body);
+          console.log(data);
+          var faces = res.body.map(function (f) {
+            return {
+              faceId: f.faceId,
+              target: '' + f.faceRectangle.top + ',' + f.faceRectangle.left + ',' + f.faceRectangle.width + ',' + f.faceRectangle.height,
+              faceRectangle: f.faceRectangle
+            };
+          });
+          _this4.setState({
+            detectedFaces: faces,
+            faceApiText: data,
+            faceDataFound: true,
+            spinnerDisplay: false
+          });
+        }
+      });
+    }
+  }, {
+    key: 'createPersistedFaceID',
+    value: function createPersistedFaceID() {
+      var _this5 = this;
+
+      //RETURNS A PERSISTED FACE ID
+
+      var canvas = this.refs.photoCanvas;
+      var dataURL = canvas.toDataURL();
+
+      var userData = this.state.userData;
+
+      return new Promise(function (resolve, reject) {
+        _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces').send(serializeImage(_this5.state.currentImg)).set('Content-Type', 'application/octet-stream').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+          if (err || !res.ok) {
+            console.error(err);
+          } else {
+            resolve(res.body);
+          }
+        });
+      });
+    }
+  }, {
+    key: 'createPerson',
+    value: function createPerson() {
+      var _this6 = this;
+
+      // RETURNS a personId
+      var userData = this.state.userData;
+
+      return new Promise(function (resolve, reject) {
+        _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons').send({
+          "name": _this6.refs.inputname.value,
+          "userData": _this6.refs.inputdata.value
+        }).set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Content-Type', 'application/json').set('Accept', 'application/json').end(function (err, res) {
+          if (err || !res.ok) {
+            console.error(err);
+          } else {
+            var data = JSON.stringify(res.body);
+            resolve(res.body.personId);
+          }
+        });
+      });
+    }
+  }, {
+    key: 'trainGroup',
+    value: function trainGroup() {
+      // RETURNS a personId
+      var userData = this.state.userData;
+
+      return new Promise(function (resolve, reject) {
+        _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/train').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Content-Type', 'application/json').set('Accept', 'application/json').end(function (err, res) {
+          if (err || !res.ok) {
+            alert(err);
+          } else {
+            resolve(res);
+          }
+        });
+      });
+    }
+  }, {
+    key: 'addPersonFace',
+    value: function addPersonFace(personId, targetFace) {
+      var _this7 = this;
+
+      var userData = this.state.userData;
+
+      return new Promise(function (resolve, reject) {
+        _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/' + personId + '/persistedFaces').send(serializeImage(_this7.state.currentImg)).set('Content-Type', 'application/octet-stream').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+          if (err || !res.ok) {
+            console.error(err);
+          } else {
+            var data = JSON.stringify(res.body);
+            resolve(data);
+          }
+        });
+      });
+    }
+  }, {
+    key: 'uploadImage',
+    value: function uploadImage() {
+      var _this8 = this;
+
+      // store ID to FACE API
+
+      this.setState({
+        spinnerDisplay: true,
+        storingFace: true,
+        updateFeedback: 'Creating a face ID'
+      });
+
+      // CREATE A PERSISTED FACE ID
+      this.createPersistedFaceID().then(function (persistedFaceId) {
+        _this8.setState({
+          updateFeedback: 'Creating a Person'
+        });
+
+        // CREATE A PERSON
+        _this8.createPerson().then(function (personId) {
+          // ADD A PERSON FACE
+          _this8.setState({
+            updateFeedback: 'Adding the face to the person'
+          });
+
+          _this8.addPersonFace(personId).then(function (persistedGroupFaceId) {
+            _this8.setState({
+              updateFeedback: 'Training the new list'
+            });
+
+            _this8.trainGroup().then(function () {
+              // Returns a persistedGroupFaceId
+              _this8.setState({
+                updateFeedback: ''
+              });
+
+              console.log('success');
+              console.log('persistedFaceId', persistedFaceId);
+              console.log('personId', personId);
+              console.log('persistedGroupFaceId', persistedGroupFaceId);
+              window.location.href = "/#uploaded";
+            });
+          }).catch(function (err) {
+            alert(JSON.stringify(err));
+          });
+        }).catch(function (err) {
+          alert(JSON.stringify(err));
+        });
+      }).catch(function (err) {
+        alert(JSON.stringify(err));
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var canvasCSS = (0, _classnames2.default)({
+        hidden: !this.state.faceDataFound,
+        cameraFrame: true
+      });
+      var buttonCSS = (0, _classnames2.default)({
+        hidden: this.state.imageLoaded
+      });
+      var spinnerCSS = (0, _classnames2.default)({
+        hidden: !this.state.spinnerDisplay
+      });
+      var innerSpinnerCSS = (0, _classnames2.default)({
+        spinner: true
+      });
+
+      var addCSS = (0, _classnames2.default)({
+        hidden: !this.state.faceDataFound,
+        metaInput: true
+      });
+
+      var hideWhileStoring = (0, _classnames2.default)({
+        hidden: this.state.storingFace
+      });
+
+      var showWhileStoring = (0, _classnames2.default)({
+        hidden: !this.state.storingFace && this.state.updateFeedback !== ''
+      });
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'center vertical-aligned' },
+          _react2.default.createElement(
+            'div',
+            { className: buttonCSS },
+            _react2.default.createElement(
+              'label',
+              { className: 'camera-snap' },
+              _react2.default.createElement('img', { src: '/assets/camera_bw.svg', className: 'icon-camera',
+                alt: 'Click to snap a photo or select an image from your photo roll' }),
+              _react2.default.createElement('input', { type: 'file', label: 'Camera', onChange: this.takePhoto,
+                ref: 'camera', className: 'camera', accept: 'image/*' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: showWhileStoring },
+            this.state.updateFeedback
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: spinnerCSS },
+            _react2.default.createElement(
+              'div',
+              { className: innerSpinnerCSS },
+              _react2.default.createElement('div', { className: 'double-bounce1' }),
+              _react2.default.createElement('div', { className: 'double-bounce2' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: hideWhileStoring },
+            _react2.default.createElement(
+              'div',
+              { className: canvasCSS },
+              _react2.default.createElement(
+                'canvas',
+                { ref: 'photoCanvas', className: 'imageCanvas' },
+                'Your browser does not support the HTML5 canvas tag.'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: addCSS },
+              _react2.default.createElement(
+                'label',
+                { htmlFor: 'name' },
+                'NAME'
+              ),
+              _react2.default.createElement('input', { id: 'name', type: 'text', ref: 'inputname', className: 'darkInput' }),
+              _react2.default.createElement(
+                'label',
+                { htmlFor: 'metadata' },
+                'METADATA'
+              ),
+              _react2.default.createElement('textarea', { id: 'metadata', ref: 'inputdata', className: 'darkInput' }),
+              _react2.default.createElement('label', { htmlFor: 'addBtn' }),
+              _react2.default.createElement(
+                'button',
+                { id: 'addBtn', className: 'darkButton', onClick: this.uploadImage, value: 'add' },
+                'ADD'
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Camera;
+}(_react2.default.Component);
+
+exports.default = Camera;
+
+/***/ }),
+
+/***/ 88:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(31);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = __webpack_require__(57);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _imagetocanvas = __webpack_require__(61);
+
+var _imagetocanvas2 = _interopRequireDefault(_imagetocanvas);
+
+var _superagent = __webpack_require__(86);
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _require = __webpack_require__(55),
+    resizeImage = _require.resizeImage,
+    toPng = _require.toPng,
+    toImg = _require.toImg;
+
+var _require2 = __webpack_require__(54),
+    getOrientation = _require2.getOrientation;
+
+var _require3 = __webpack_require__(56),
+    serializeImage = _require3.serializeImage;
+
+function findSimilar(face) {
+  // NEEDS A FACE LIST
+  var body = {
+    "faceId": face,
+    "faceListId": "aspc2017faces",
+    "maxNumOfCandidatesReturned": 10,
+    "mode": "matchPerson"
+  };
+
+  _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/findsimilars').send(body).set('Content-Type', 'application/json').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+    if (err || !res.ok) {
+      console.error(err);
+    } else {
+      alert(JSON.stringify(res.body));
+    }
+  });
+}
+
+var Camera = function (_React$Component) {
+  _inherits(Camera, _React$Component);
+
+  function Camera() {
+    _classCallCheck(this, Camera);
+
+    var _this2 = _possibleConstructorReturn(this, (Camera.__proto__ || Object.getPrototypeOf(Camera)).call(this));
+
+    _this2.state = {
+      imageLoaded: false,
+      imageCanvasDisplay: 'none',
+      clickedTheButton: false,
+      spinnerDisplay: false,
+      imageCanvasWidth: '28px',
+      imageCanvasHeight: '320px',
+      faceApiText: null,
+      userData: '',
+      faceDataFound: false,
+      currentImg: null
+    };
+    _this2.putImage = _this2.putImage.bind(_this2);
+    _this2.takePhoto = _this2.takePhoto.bind(_this2);
+    _this2.faceIdentify = _this2.faceIdentify.bind(_this2);
+    _this2.verifyFaces = _this2.verifyFaces.bind(_this2);
+    _this2.uploadImage = _this2.uploadImage.bind(_this2);
+    _this2.handleUploadimage = _this2.handleUploadimage.bind(_this2);
+    _this2.setImage = _this2.setImage.bind(_this2);
+    _this2.getPersonDetails = _this2.getPersonDetails.bind(_this2);
+    _this2.uploadDlg = null;
+    _this2.camera = null;
+    return _this2;
+  }
+
+  _createClass(Camera, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.camera) this.camera.click();
+    }
+  }, {
+    key: 'putImage',
+    value: function putImage(img, orientation) {
+      console.log("putImage");
+      var canvas = this.refs.photoCanvas;
+      var ctx = canvas.getContext("2d");
+      var w = img.width;
+      var h = img.height;
+
+      var _resizeImage = resizeImage(w, h),
+          sw = _resizeImage.sw,
+          sh = _resizeImage.sh;
+
+      var tempCanvas = document.createElement('canvas');
+      var tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = sw;
+      tempCanvas.height = sh;
+      tempCtx.drawImage(img, 0, 0, sw, sh);
+      _imagetocanvas2.default.drawCanvas(canvas, img, orientation, sw, sh, 1, 0, false);
+    }
+  }, {
+    key: 'takePhoto',
+    value: function takePhoto(event) {
+      var _this3 = this;
+
+      var camera = this.refs.camera,
+          files = event.target.files,
+          file = void 0,
+          w = void 0,
+          h = void 0,
+          mpImg = void 0,
+          orientation = void 0;
+      if (files && files.length > 0) {
+        file = files[0];
+        var fileReader = new FileReader();
+        var putImage = this.putImage;
+        fileReader.onload = function (event) {
+          var img = new Image();
+          img.src = event.target.result;
+          var _this = _this3;
+          img.onload = function () {
+            getOrientation(file, function (orientation) {
+              if (orientation < 0) orientation = 1;
+              _this3.putImage(img, orientation);
+              _this3.setState({ imageLoaded: true, clickedTheButton: true, currentImg: img.src });
+              _this3.faceIdentify();
+            });
+          };
+        };
+
+        fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'setImage',
+    value: function setImage(file) {
+      var _this4 = this;
+
+      var camera = this.refs.camera,
+          fileReader = new FileReader();
+      fileReader.onload = function (event) {
+        var img = new Image();
+        img.src = event.target.result;
+        var _this = _this4;
+        img.onload = function () {
+          _this4.setState({ currentImg: img.src });
+        };
+      };
+
+      fileReader.readAsDataURL(file);
+
+      //this.state.personDetails && this.state.personDetails.Name
+    }
+  }, {
+    key: 'handleUploadimage',
+    value: function handleUploadimage(e, id) {
+      var _this5 = this;
+
+      this.setState({
+        spinnerDisplay: true,
+        imageLoaded: false
+      });
+
+      var form_id = this.state.form_id;
+
+      var file = e.target.files[0];
+      var imageType = /image.*/;
+
+      if (!file.type.match(imageType)) return;
+
+      var form_data = new FormData();
+      form_data.append('file', file);
+
+      fetch('/verifyPhoto', {
+        method: 'POST',
+        body: form_data
+      }).then(function (res) {
+        return res.json();
+      }, function (error) {
+        return error.message;
+      }).then(function (resp) {
+        _this5.setState({
+          personDetails: resp.persons[0],
+          spinnerDisplay: false,
+          imageLoaded: true
+        });
+        // this.setImage(resp.person[0].Image)
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: 'faceIdentify',
+    value: function faceIdentify() {
+      var _this6 = this;
+
+      var canvas = this.refs.photoCanvas;
+      var dataURL = canvas.toDataURL();
+
+      this.setState({
+        spinnerDisplay: true,
+        imageLoaded: false
+      });
+
+      // There's two ways to send images to the cognitive API.
+      // 1. Send a Image URL (need to set Content-Type as application/json)
+      // 2. Send a binary (need to set Content-Type as octet-stream). The image need to be serialized.
+      _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false').send(serializeImage(this.state.currentImg)).set('Content-Type', 'application/octet-stream')
+      // .send({url: "http://techbeat.com/wp-content/uploads/2013/06/o-GOOGLE-FACIAL-RECOGNITION-facebook-1024x767.jpg"})
+      // .set('Content-Type', 'application/json')
+      .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('processData', false).set('Accept', 'application/json').end(function (err, res) {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          var faces = res.body.map(function (f) {
+            return f.faceId;
+          });
+
+          _this6.setState({
+            faces: faces
+          });
+
+          if (faces.length) {
+            _this6.verifyFaces(faces);
+          } else {
+            _this6.setState({
+              personDetails: { userData: 'No faces found' },
+              spinnerDisplay: false,
+              imageLoaded: true
+            });
+          }
+        }
+      });
+    }
+  }, {
+    key: 'verifyFaces',
+    value: function verifyFaces(faces) {
+      var _this7 = this;
+
+      console.log("verifyFaces");
+      // NEEDS A PERSON GROUP
+      this.setState({
+        imageLoaded: false
+      });
+
+      var body = {
+        "personGroupId": "aspc2017facegroup",
+        "faceIds": faces,
+        "maxNumOfCandidatesReturned": 1,
+        "confidenceThreshold": 0.5
+      };
+      // console.log(body);
+      _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/identify').send(body).set('Content-Type', 'application/json').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          if (res.body.length < 0) {
+            _this7.setState({
+              personDetails: { userData: 'No match found' },
+              spinnerDisplay: false,
+              imageLoaded: true
+            });
+          } else {
+            if (res.body[0].candidates.length) {
+              _this7.getPersonDetails(res.body[0].candidates[0].personId);
+            } else {
+              _this7.setState({
+                personDetails: { userData: 'Face found, but it was not recognized' },
+                spinnerDisplay: false,
+                imageLoaded: true
+              });
+            }
+          }
+        }
+      });
+    }
+  }, {
+    key: 'getPersonDetails',
+    value: function getPersonDetails(personId) {
+      var _this8 = this;
+
+      console.log("getPersonDetails");
+      _superagent2.default.get('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/' + personId).set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          //RETURN PERSON DETAILS
+          _this8.setState({
+            personDetails: res.body,
+            spinnerDisplay: false,
+            imageLoaded: true
+          });
+        }
+      });
+    }
+  }, {
+    key: 'uploadImage',
+    value: function uploadImage() {
+      console.log("uploadImage");
+      // store ID to FACE API
+      var canvas = this.refs.photoCanvas;
+      var dataURL = canvas.toDataURL();
+
+      var userData = this.state.userData;
+
+
+      _superagent2.default.post('https://westus.api.cognitive.microsoft.com/face/v1.0/facelists/aspc2017faces/persistedFaces?userData=' + JSON.stringify(userData)).send(serializeImage(this.state.currentImg)).set('Content-Type', 'application/octet-stream').set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2').set('Accept', 'application/json').end(function (err, res) {
+        if (err || !res.ok) {
+          console.error(err);
+        } else {
+          var data = JSON.stringify(res.body);
+          //RETURNS A PERSISTED FACE ID
+          console.log(data);
+          alert(data);
+          window.location.href = "/#uploaded";
+        }
+      });
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(e) {
+      e.preventDefault();
+      this.uploadDlg.click();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this9 = this;
+
+      var canvasCSS = (0, _classnames2.default)({
+        hidden: !this.state.imageLoaded,
+        cameraFrame: true
+      });
+
+      var buttonCSS = (0, _classnames2.default)({
+        hidden: this.state.clickedTheButton
+      });
+
+      var spinnerCSS = (0, _classnames2.default)({
+        hidden: !this.state.spinnerDisplay
+      });
+      var innerSpinnerCSS = (0, _classnames2.default)({
+        spinner: true
+      });
+
+      var addCSS = (0, _classnames2.default)({
+        hidden: this.state.spinnerDisplay,
+        metaInput: true
+
+      });
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('h1', { className: 'center light-color' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'center vertical-aligned' },
+          _react2.default.createElement(
+            'form',
+            { method: 'post', encType: 'multipart/form-data',
+              className: 'hide',
+              onChange: function onChange(e) {
+                e.preventDefault();
+                _this9.setState({
+                  clickedTheButton: true
+                });
+                _this9.handleUploadimage(e);
+              },
+              ref: function ref(el) {
+                _this9.form = el;
+              },
+              action: '/upload' },
+            _react2.default.createElement('input', { type: 'file', name: 'file',
+              accept: '.jpg, .jpeg, .png', ref: function ref(el) {
+                return _this9.uploadDlg = el;
+              } }),
+            _react2.default.createElement('input', { type: 'submit' })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: buttonCSS },
+            _react2.default.createElement(
+              'label',
+              { className: 'camera-snap' },
+              _react2.default.createElement('img', { src: '/assets/camera.svg', className: 'icon-camera', onClick: function onClick(e) {
+                  return _this9.handleClick(e);
+                },
+                alt: 'Click to snap a photo or select an image from your photo roll' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: spinnerCSS },
+            _react2.default.createElement(
+              'div',
+              { className: innerSpinnerCSS },
+              _react2.default.createElement('div', { className: 'double-bounce1' }),
+              _react2.default.createElement('div', { className: 'double-bounce2' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: addCSS },
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.Name
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.UserData
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.Id
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.Emotion
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.Age
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'personDetails' },
+              this.state.personDetails && this.state.personDetails.Gender
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Camera;
+}(_react2.default.Component);
+/*
+
+        <div className={canvasCSS}>
+          <canvas ref="photoCanvas" className="imageCanvas">
+            Your browser does not support the HTML5 canvas tag.
+          </canvas>
+        </div>
+ */
+
+
+exports.default = Camera;
+
+/***/ })
+
+},[194]);

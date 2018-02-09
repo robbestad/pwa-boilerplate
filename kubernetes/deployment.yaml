@@ -15,7 +15,7 @@ spec:
         app: westerosmessenger
     spec:
       containers:
-      - image: svena/facer-v2:0.3.27
+      - image: svena/facer-v2:0.3.29
         imagePullPolicy: IfNotPresent
         name: westerosmessenger
         ports:

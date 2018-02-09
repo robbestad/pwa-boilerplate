@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImageToCanvas from 'imagetocanvas';
 import request from 'superagent';
+
 const {resizeImage, toPng, toImg} = require('./helperfncs');
 const {getOrientation} = require('./getOrientation');
 const {serializeImage} = require('./serializeImage');
@@ -9,10 +10,10 @@ const {serializeImage} = require('./serializeImage');
 function findSimilar(face) {
   // NEEDS A FACE LIST
   const body = {
-    "faceId": face,
-    "faceListId": "aspc2017faces",
+    "faceId":                     face,
+    "faceListId":                 "aspc2017faces",
     "maxNumOfCandidatesReturned": 10,
-    "mode": "matchPerson"
+    "mode":                       "matchPerson"
   };
 
   request
@@ -34,27 +35,36 @@ export default class Camera extends React.Component {
   constructor() {
     super();
     this.state = {
-      imageLoaded: false,
+      imageLoaded:        false,
       imageCanvasDisplay: 'none',
-      clickedTheButton: false,
-      spinnerDisplay: false,
-      imageCanvasWidth: '28px',
-      imageCanvasHeight: '320px',
-      faceApiText: null,
-      userData: '',
-      faceDataFound: false,
-      currentImg: null
+      clickedTheButton:   false,
+      spinnerDisplay:     false,
+      imageCanvasWidth:   '28px',
+      imageCanvasHeight:  '320px',
+      faceApiText:        null,
+      userData:           '',
+      faceDataFound:      false,
+      currentImg:         null
     };
     this.putImage = this.putImage.bind(this);
     this.takePhoto = this.takePhoto.bind(this);
     this.faceIdentify = this.faceIdentify.bind(this);
     this.verifyFaces = this.verifyFaces.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
+    this.handleUploadimage = this.handleUploadimage.bind(this);
+    this.setImage = this.setImage.bind(this);
     this.getPersonDetails = this.getPersonDetails.bind(this);
+    this.uploadDlg = null
+    this.camera = null
+  }
+
+  componentDidMount() {
+    if (this.camera) this.camera.click()
   }
 
 
   putImage(img, orientation) {
+    console.log("putImage")
     const canvas = this.refs.photoCanvas;
     const ctx = canvas.getContext("2d");
     let w = img.width;
@@ -95,6 +105,55 @@ export default class Camera extends React.Component {
     }
   }
 
+  setImage(file) {
+    let camera = this.refs.camera,
+    fileReader = new FileReader();
+    fileReader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      const _this = this;
+      img.onload = () => {
+        this.setState({currentImg: img.src});
+      }
+    };
+
+    fileReader.readAsDataURL(file);
+
+    //this.state.personDetails && this.state.personDetails.Name
+  }
+
+  handleUploadimage(e, id) {
+    this.setState({
+      spinnerDisplay: true,
+      imageLoaded:    false
+    });
+
+    const {form_id} = this.state;
+    const file = e.target.files[0]
+    const imageType = /image.*/
+
+    if (!file.type.match(imageType)) return
+
+    const form_data = new FormData()
+    form_data.append('file', file)
+
+    fetch('/verifyPhoto', {
+      method: 'POST',
+      body:   form_data
+    })
+      .then(res => res.json(), error => error.message)
+      .then((resp) => {
+        this.setState({
+          personDetails:  resp.persons[0],
+          spinnerDisplay: false,
+          imageLoaded:    true
+        })
+        // this.setImage(resp.person[0].Image)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   faceIdentify() {
     let canvas = this.refs.photoCanvas;
@@ -102,7 +161,7 @@ export default class Camera extends React.Component {
 
     this.setState({
       spinnerDisplay: true,
-      imageLoaded: false
+      imageLoaded:    false
     });
 
     // There's two ways to send images to the cognitive API.
@@ -132,9 +191,9 @@ export default class Camera extends React.Component {
             this.verifyFaces(faces);
           } else {
             this.setState({
-              personDetails: {userData: 'No faces found'},
+              personDetails:  {userData: 'No faces found'},
               spinnerDisplay: false,
-              imageLoaded: true
+              imageLoaded:    true
             })
           }
 
@@ -144,16 +203,17 @@ export default class Camera extends React.Component {
 
 
   verifyFaces(faces) {
+    console.log("verifyFaces")
     // NEEDS A PERSON GROUP
     this.setState({
       imageLoaded: false
     });
 
     const body = {
-      "personGroupId": "aspc2017facegroup",
-      "faceIds": faces,
+      "personGroupId":              "aspc2017facegroup",
+      "faceIds":                    faces,
       "maxNumOfCandidatesReturned": 1,
-      "confidenceThreshold": 0.5
+      "confidenceThreshold":        0.5
     };
     // console.log(body);
     request
@@ -168,18 +228,18 @@ export default class Camera extends React.Component {
         } else {
           if (res.body.length < 0) {
             this.setState({
-              personDetails: {userData: 'No match found'},
+              personDetails:  {userData: 'No match found'},
               spinnerDisplay: false,
-              imageLoaded: true
+              imageLoaded:    true
             })
           } else {
             if (res.body[0].candidates.length) {
               this.getPersonDetails(res.body[0].candidates[0].personId);
             } else {
               this.setState({
-                personDetails: {userData: 'Face found, but it was not recognized'},
+                personDetails:  {userData: 'Face found, but it was not recognized'},
                 spinnerDisplay: false,
-                imageLoaded: true
+                imageLoaded:    true
               })
 
             }
@@ -189,6 +249,7 @@ export default class Camera extends React.Component {
   }
 
   getPersonDetails(personId) {
+    console.log("getPersonDetails")
     request
       .get('https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/aspc2017facegroup/persons/' + personId)
       .set('Ocp-Apim-Subscription-Key', '286fe5360c85463bac4315dff365fdc2')
@@ -199,9 +260,9 @@ export default class Camera extends React.Component {
         } else {
           //RETURN PERSON DETAILS
           this.setState({
-            personDetails: res.body,
+            personDetails:  res.body,
             spinnerDisplay: false,
-            imageLoaded: true
+            imageLoaded:    true
           });
         }
       });
@@ -210,6 +271,7 @@ export default class Camera extends React.Component {
 
 
   uploadImage() {
+    console.log("uploadImage")
     // store ID to FACE API
     let canvas = this.refs.photoCanvas;
     const dataURL = canvas.toDataURL();
@@ -235,9 +297,15 @@ export default class Camera extends React.Component {
       });
   }
 
+
+  handleClick(e) {
+    e.preventDefault()
+    this.uploadDlg.click()
+  }
+
   render() {
     const canvasCSS = classNames({
-      hidden: !this.state.imageLoaded,
+      hidden:      !this.state.imageLoaded,
       cameraFrame: true
     });
 
@@ -253,23 +321,39 @@ export default class Camera extends React.Component {
     });
 
     const addCSS = classNames({
-      hidden: this.state.spinnerDisplay,
+      hidden:    this.state.spinnerDisplay,
       metaInput: true
 
     });
 
     return <div>
-      <h1 className="center light-color">IDENTIFY</h1>
-      <div className="center">
+      <h1 className="center light-color"></h1>
+      <div className="center vertical-aligned">
+
+        <form method="post" encType="multipart/form-data"
+              className="hide"
+              onChange={e => {
+                e.preventDefault()
+                this.setState({
+                  clickedTheButton: true
+                })
+                this.handleUploadimage(e)
+              }}
+              ref={el => {
+                this.form = el
+              }}
+              action="/upload">
+          <input type="file" name="file"
+                 accept=".jpg, .jpeg, .png" ref={el => (this.uploadDlg = el)}/>
+          <input type="submit"/>
+        </form>
+
         <div className={buttonCSS}>
           <label className="camera-snap">
-            <img src="/assets/camera.svg" className="icon-camera"
+            <img src="/assets/camera.svg" className="icon-camera" onClick={e => this.handleClick(e)}
                  alt="Click to snap a photo or select an image from your photo roll"/>
-            <input type="file" label="Camera" onChange={this.takePhoto}
-                   ref="camera" className="camera" accept="image/*"/>
           </label>
         </div>
-
 
         <div className={spinnerCSS}>
           <div className={innerSpinnerCSS}>
@@ -278,23 +362,39 @@ export default class Camera extends React.Component {
           </div>
         </div>
 
-        <div className={canvasCSS}>
-          <canvas ref="photoCanvas" className="imageCanvas">
-            Your browser does not support the HTML5 canvas tag.
-          </canvas>
-        </div>
 
         <div className={addCSS}>
           <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.name}
+            {this.state.personDetails && this.state.personDetails.Name}
           </div>
 
           <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.userData}
+            {this.state.personDetails && this.state.personDetails.UserData}
           </div>
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.Id}
+          </div>
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.Emotion}
+          </div>
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.Age}
+          </div>
+          <div className="personDetails">
+            {this.state.personDetails && this.state.personDetails.Gender}
+          </div>
+
         </div>
 
       </div>
     </div>
   }
 }
+/*
+
+        <div className={canvasCSS}>
+          <canvas ref="photoCanvas" className="imageCanvas">
+            Your browser does not support the HTML5 canvas tag.
+          </canvas>
+        </div>
+ */

@@ -299,8 +299,7 @@ export default class Camera extends React.Component {
 
 
     return <div>
-      <h1 className="center">ADD A PERSON</h1>
-      <div className="center">
+      <div className="center vertical-aligned">
 
         <div className={buttonCSS}>
           <label className="camera-snap">
