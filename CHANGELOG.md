@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.27"></a>
+## [0.3.27](https://github.com/svenanders/pwa-boilerplate/compare/v0.3.26...v0.3.27) (2018-02-09)
+
+
+
 <a name="0.3.26"></a>
 ## [0.3.26](https://github.com/svenanders/pwa-boilerplate/compare/v0.3.25...v0.3.26) (2018-02-09)
 
