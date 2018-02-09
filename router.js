@@ -1,13 +1,11 @@
 const router = require('koa-router')();
 const path = require('path');
+const send = require('koa-send');
 const Boom = require('boom');
 
 router
-  .get('/hello', function (ctx, next) {
-    ctx.body = require(path.join(__dirname, 'routes', 'hello.js'));
+  .get("/health", async ctx => {
+    await send(ctx, `health.html`)
   })
-  .get('/test', function (ctx, next) {
-    ctx.body = require(path.join(__dirname, '..', 'src', 'index.html'))
-  });
 
 module.exports = router;

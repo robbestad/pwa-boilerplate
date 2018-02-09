@@ -6,7 +6,7 @@ const router = require('./router');
 const app = require('./app');
 const createLogger = require("./logger")
 const config = {
-  title: "Facer",
+  title: "vRAVEN",
   env:   process.env.NODE_ENV || "production",
   ports: {
     http:  process.env.HTTP || 3666,

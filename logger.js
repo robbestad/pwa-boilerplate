@@ -30,12 +30,13 @@ function configureStreams(config) {
 			type: "raw",
 			stream: prettyFormat()
 		})
-	} else {
-		streams.push({
-			level: "info",
-			stream: process.stdout
-		})
-	}
+	} 
+	// else {
+	// 	streams.push({
+	// 		level: "info",
+	// 		stream: process.stdout
+	// 	})
+	// }
 	return streams
 }
 

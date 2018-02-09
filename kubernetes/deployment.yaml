@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: westerosmessenger
+  name: westerosmessenger
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: westerosmessenger
+  template:
+    metadata:
+      labels:
+        app: westerosmessenger
+    spec:
+      containers:
+      - image: svena/facer-v2:0.3.27
+        imagePullPolicy: IfNotPresent
+        name: westerosmessenger
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3666
+          initialDelaySeconds: 20
+          periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: westerosmessenger
+  name: westerosmessenger
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3666
+  selector:
+    app: westerosmessenger
