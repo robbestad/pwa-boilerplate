@@ -6,6 +6,41 @@ import request from 'superagent';
 const {resizeImage, toPng, toImg} = require('./helperfncs');
 const {getOrientation} = require('./getOrientation');
 const {serializeImage} = require('./serializeImage');
+const uuid = require("uuid")
+
+const createTransaction = e => {
+  const senderId = e.target.form.senderId.value
+  const messengerId = e.target.form.messengers[e.target.form.messengers.selectedIndex].value
+  const receiverId = e.target.form.receivers[e.target.form.receivers.selectedIndex].value
+  return fetch("/createTransaction", {
+    method:  "POST",
+    headers: new Headers({
+      "Accept":       "application/json",
+      "Content-Type": "application/json"
+    }),
+    body:    JSON.stringify({
+      senderId,
+      messengerId,
+      receiverId
+    })
+  })
+}
+
+const sendMessage = e => {
+  const message = e.target.form.message.value
+  const receiverId = e.target.form.receivers[e.target.form.receivers.selectedIndex].value
+  return fetch("/sendMessage", {
+    method:  "POST",
+    headers: new Headers({
+      "Accept":       "application/json",
+      "Content-Type": "application/json"
+    }),
+    body:    JSON.stringify({
+      message,
+      receiverId
+    })
+  })
+}
 
 function findSimilar(face) {
   // NEEDS A FACE LIST
@@ -44,6 +79,8 @@ export default class Camera extends React.Component {
       faceApiText:        null,
       userData:           '',
       faceDataFound:      false,
+      showMessageForm:    false,
+      messageSent:        false,
       currentImg:         null
     };
     this.putImage = this.putImage.bind(this);
@@ -107,7 +144,7 @@ export default class Camera extends React.Component {
 
   setImage(file) {
     let camera = this.refs.camera,
-    fileReader = new FileReader();
+      fileReader = new FileReader();
     fileReader.onload = (event) => {
       const img = new Image();
       img.src = event.target.result;
@@ -144,9 +181,10 @@ export default class Camera extends React.Component {
       .then(res => res.json(), error => error.message)
       .then((resp) => {
         this.setState({
-          personDetails:  resp.persons[0],
-          spinnerDisplay: false,
-          imageLoaded:    true
+          personDetails:   resp.persons[0],
+          spinnerDisplay:  false,
+          imageLoaded:     true,
+          showMessageForm: true
         })
         // this.setImage(resp.person[0].Image)
       })
@@ -364,25 +402,12 @@ export default class Camera extends React.Component {
 
 
         <div className={addCSS}>
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.Name}
-          </div>
+          <Debug visible={false} {...this.state}/>
 
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.UserData}
-          </div>
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.Id}
-          </div>
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.Emotion}
-          </div>
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.Age}
-          </div>
-          <div className="personDetails">
-            {this.state.personDetails && this.state.personDetails.Gender}
-          </div>
+          <KingsMessageArea visible={this.state.showMessageForm}
+                            senderId={this.state.personDetails && this.state.personDetails.Id}/>
+
+          <MessageSent visible={this.state.messageSent}/>
 
         </div>
 
@@ -390,11 +415,167 @@ export default class Camera extends React.Component {
     </div>
   }
 }
-/*
 
-        <div className={canvasCSS}>
-          <canvas ref="photoCanvas" className="imageCanvas">
-            Your browser does not support the HTML5 canvas tag.
-          </canvas>
+
+class MessageSent extends React.PureComponent {
+  render() {
+    if (!this.props.visible) {
+      return null
+    }
+    return <div>
+      <div className="qr">
+        viser qr kode
+      </div>
+    </div>
+  }
+}
+
+
+class Debug extends React.PureComponent {
+  render() {
+    if (!this.props.visible) {
+      return null
+    }
+    return <div>
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.Name}
+      </div>
+
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.UserData}
+      </div>
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.Id}
+      </div>
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.Emotion}
+      </div>
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.Age}
+      </div>
+      <div className="personDetails">
+        {this.props.personDetails && this.props.personDetails.Gender}
+      </div>
+    </div>
+  }
+}
+
+class KingsMessageArea extends React.PureComponent {
+  constructor() {
+    super()
+    this.state = {
+      messengers: []
+    }
+    this.qrcanvas = null
+    this.form = null
+    this.qrimg = null
+  }
+
+  componentWillMount() {
+    fetch("/messengers")
+      .then(data => data.json())
+      .then(resp => {
+        this.setState({
+          messengers: resp.persons
+        })
+      })
+  }
+
+  render() {
+
+    const spinnerCSS = classNames({
+      hidden: !this.state.spinnerDisplay
+    });
+    const innerSpinnerCSS = classNames({
+      spinner: true
+    });
+
+    if (!this.props.visible) {
+      return null
+    }
+    return <div className={"kingsmessage"}>
+
+      <div className={spinnerCSS}>
+        <div className={innerSpinnerCSS}>
+          <div className="double-bounce1"></div>
+          <div className="double-bounce2"></div>
         </div>
- */
+      </div>
+
+      <div className="qrcanvas">
+        <canvas ref={(e => this.qrcanvas = e)} className="qrCanvas">
+          Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <img src="/assets/transparent.png" ref={e=>{this.qrimg = e}}/>
+      </div>
+
+
+
+      <form ref={e => (this.form = e)}>
+        <input type={"hidden"} name={"senderId"} value={this.props.senderId}/>
+        <label htmlFor={"message"}>Your message</label>
+        <textarea name={"message"} className={"melding"} defaultValue={"Kill the imp!"}/>
+        <label htmlFor={"messengers"}>Choose your messenger</label>
+        <select name={"messengers"}>
+          {this.state.messengers.filter(m => m.Type !== "King").map(m => {
+            return <option key={uuid.v4()} value={m.Id}>Peasant {m.Name}</option>
+          })}
+        </select>
+        <label htmlFor={"receivers"}>Whom shall receive the message?</label>
+        <select name={"receivers"}>
+          {this.state.messengers.filter(m => m.Type === "King").map(m => {
+            return <option key={uuid.v4()} value={m.Id}>King {m.Name}</option>
+          })}
+        </select>
+
+        <label htmlFor={"send"}></label>
+        <input type={"button"} name={"send"} onClick={e => {
+          e.preventDefault()
+          this.setState({
+            spinnerDisplay:  true,
+            showMessageForm: false
+          })
+          this.form.style.display = "none"
+          // createTransaction(e)
+          //   .then(transactionResponse => {
+          //     console.log("transacton response", transactionResponse)
+          //   })
+          sendMessage(e)
+            .then(data => data.blob())
+            .then(blob => {
+              this.setState({
+                spinnerDisplay: false
+              })
+
+              //todo fix canvas scale
+              // this.qrcanvas.style.display = "initial"
+              toCanvas(blob, this.qrcanvas,this.qrimg)
+            })
+        }} className={"send"} defaultValue={"Send!"}/>
+      </form>
+    </div>
+  }
+}
+
+const toCanvas = async (blob, canvas, qrimg) => {
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+  const img = new Image;
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, 400, 400);
+  };
+  const dataurl = await blobToDataURL(blob)
+  img.src = dataurl
+  qrimg.src = dataurl
+  // qrimg = dataurl
+}
+
+const blobToDataURL = blob => {
+  return new Promise(resolve => {
+    let a = new FileReader();
+    a.onload = e => {
+      resolve(e.target.result)
+    }
+    a.readAsDataURL(blob);
+  })
+}

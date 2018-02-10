@@ -1,16 +1,16 @@
 webpackJsonp([0],{
 
-/***/ 194:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _camera = __webpack_require__(87);
+var _camera = __webpack_require__(89);
 
 var _camera2 = _interopRequireDefault(_camera);
 
-var _findFace = __webpack_require__(88);
+var _findFace = __webpack_require__(90);
 
 var _findFace2 = _interopRequireDefault(_findFace);
 
@@ -18,7 +18,7 @@ var _react = __webpack_require__(31);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(89);
+var _reactDom = __webpack_require__(91);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -130,7 +130,7 @@ exports.serializeImage = function (dataURL) {
 
 /***/ }),
 
-/***/ 87:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -543,7 +543,7 @@ exports.default = Camera;
 
 /***/ }),
 
-/***/ 88:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -552,6 +552,8 @@ exports.default = Camera;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -590,6 +592,42 @@ var _require2 = __webpack_require__(54),
 var _require3 = __webpack_require__(56),
     serializeImage = _require3.serializeImage;
 
+var uuid = __webpack_require__(196);
+
+var createTransaction = function createTransaction(e) {
+  var senderId = e.target.form.senderId.value;
+  var messengerId = e.target.form.messengers[e.target.form.messengers.selectedIndex].value;
+  var receiverId = e.target.form.receivers[e.target.form.receivers.selectedIndex].value;
+  return fetch("/createTransaction", {
+    method: "POST",
+    headers: new Headers({
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }),
+    body: JSON.stringify({
+      senderId: senderId,
+      messengerId: messengerId,
+      receiverId: receiverId
+    })
+  });
+};
+
+var sendMessage = function sendMessage(e) {
+  var message = e.target.form.message.value;
+  var receiverId = e.target.form.receivers[e.target.form.receivers.selectedIndex].value;
+  return fetch("/sendMessage", {
+    method: "POST",
+    headers: new Headers({
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }),
+    body: JSON.stringify({
+      message: message,
+      receiverId: receiverId
+    })
+  });
+};
+
 function findSimilar(face) {
   // NEEDS A FACE LIST
   var body = {
@@ -626,6 +664,8 @@ var Camera = function (_React$Component) {
       faceApiText: null,
       userData: '',
       faceDataFound: false,
+      showMessageForm: false,
+      messageSent: false,
       currentImg: null
     };
     _this2.putImage = _this2.putImage.bind(_this2);
@@ -750,7 +790,8 @@ var Camera = function (_React$Component) {
         _this5.setState({
           personDetails: resp.persons[0],
           spinnerDisplay: false,
-          imageLoaded: true
+          imageLoaded: true,
+          showMessageForm: true
         });
         // this.setImage(resp.person[0].Image)
       }).catch(function (error) {
@@ -970,36 +1011,10 @@ var Camera = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: addCSS },
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.Name
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.UserData
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.Id
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.Emotion
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.Age
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'personDetails' },
-              this.state.personDetails && this.state.personDetails.Gender
-            )
+            _react2.default.createElement(Debug, _extends({ visible: false }, this.state)),
+            _react2.default.createElement(KingsMessageArea, { visible: this.state.showMessageForm,
+              senderId: this.state.personDetails && this.state.personDetails.Id }),
+            _react2.default.createElement(MessageSent, { visible: this.state.messageSent })
           )
         )
       );
@@ -1008,18 +1023,271 @@ var Camera = function (_React$Component) {
 
   return Camera;
 }(_react2.default.Component);
-/*
-
-        <div className={canvasCSS}>
-          <canvas ref="photoCanvas" className="imageCanvas">
-            Your browser does not support the HTML5 canvas tag.
-          </canvas>
-        </div>
- */
-
 
 exports.default = Camera;
 
+var MessageSent = function (_React$PureComponent) {
+  _inherits(MessageSent, _React$PureComponent);
+
+  function MessageSent() {
+    _classCallCheck(this, MessageSent);
+
+    return _possibleConstructorReturn(this, (MessageSent.__proto__ || Object.getPrototypeOf(MessageSent)).apply(this, arguments));
+  }
+
+  _createClass(MessageSent, [{
+    key: 'render',
+    value: function render() {
+      if (!this.props.visible) {
+        return null;
+      }
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'qr' },
+          'viser qr kode'
+        )
+      );
+    }
+  }]);
+
+  return MessageSent;
+}(_react2.default.PureComponent);
+
+var Debug = function (_React$PureComponent2) {
+  _inherits(Debug, _React$PureComponent2);
+
+  function Debug() {
+    _classCallCheck(this, Debug);
+
+    return _possibleConstructorReturn(this, (Debug.__proto__ || Object.getPrototypeOf(Debug)).apply(this, arguments));
+  }
+
+  _createClass(Debug, [{
+    key: 'render',
+    value: function render() {
+      if (!this.props.visible) {
+        return null;
+      }
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.Name
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.UserData
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.Id
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.Emotion
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.Age
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'personDetails' },
+          this.props.personDetails && this.props.personDetails.Gender
+        )
+      );
+    }
+  }]);
+
+  return Debug;
+}(_react2.default.PureComponent);
+
+var KingsMessageArea = function (_React$PureComponent3) {
+  _inherits(KingsMessageArea, _React$PureComponent3);
+
+  function KingsMessageArea() {
+    _classCallCheck(this, KingsMessageArea);
+
+    var _this12 = _possibleConstructorReturn(this, (KingsMessageArea.__proto__ || Object.getPrototypeOf(KingsMessageArea)).call(this));
+
+    _this12.state = {
+      messengers: []
+    };
+    _this12.qrcanvas = null;
+    _this12.form = null;
+    _this12.qrimg = null;
+    return _this12;
+  }
+
+  _createClass(KingsMessageArea, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this13 = this;
+
+      fetch("/messengers").then(function (data) {
+        return data.json();
+      }).then(function (resp) {
+        _this13.setState({
+          messengers: resp.persons
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this14 = this;
+
+      var spinnerCSS = (0, _classnames2.default)({
+        hidden: !this.state.spinnerDisplay
+      });
+      var innerSpinnerCSS = (0, _classnames2.default)({
+        spinner: true
+      });
+
+      if (!this.props.visible) {
+        return null;
+      }
+      return _react2.default.createElement(
+        'div',
+        { className: "kingsmessage" },
+        _react2.default.createElement(
+          'div',
+          { className: spinnerCSS },
+          _react2.default.createElement(
+            'div',
+            { className: innerSpinnerCSS },
+            _react2.default.createElement('div', { className: 'double-bounce1' }),
+            _react2.default.createElement('div', { className: 'double-bounce2' })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'qrcanvas' },
+          _react2.default.createElement(
+            'canvas',
+            { ref: function ref(e) {
+                return _this14.qrcanvas = e;
+              }, className: 'qrCanvas' },
+            'Your browser does not support the HTML5 canvas tag.'
+          ),
+          _react2.default.createElement('img', { src: '/assets/transparent.png', ref: function ref(e) {
+              _this14.qrimg = e;
+            } })
+        ),
+        _react2.default.createElement(
+          'form',
+          { ref: function ref(e) {
+              return _this14.form = e;
+            } },
+          _react2.default.createElement('input', { type: "hidden", name: "senderId", value: this.props.senderId }),
+          _react2.default.createElement(
+            'label',
+            { htmlFor: "message" },
+            'Your message'
+          ),
+          _react2.default.createElement('textarea', { name: "message", className: "melding", defaultValue: "Kill the imp!" }),
+          _react2.default.createElement(
+            'label',
+            { htmlFor: "messengers" },
+            'Choose your messenger'
+          ),
+          _react2.default.createElement(
+            'select',
+            { name: "messengers" },
+            this.state.messengers.filter(function (m) {
+              return m.Type !== "King";
+            }).map(function (m) {
+              return _react2.default.createElement(
+                'option',
+                { key: uuid.v4(), value: m.Id },
+                'Peasant ',
+                m.Name
+              );
+            })
+          ),
+          _react2.default.createElement(
+            'label',
+            { htmlFor: "receivers" },
+            'Whom shall receive the message?'
+          ),
+          _react2.default.createElement(
+            'select',
+            { name: "receivers" },
+            this.state.messengers.filter(function (m) {
+              return m.Type === "King";
+            }).map(function (m) {
+              return _react2.default.createElement(
+                'option',
+                { key: uuid.v4(), value: m.Id },
+                'King ',
+                m.Name
+              );
+            })
+          ),
+          _react2.default.createElement('label', { htmlFor: "send" }),
+          _react2.default.createElement('input', { type: "button", name: "send", onClick: function onClick(e) {
+              e.preventDefault();
+              _this14.setState({
+                spinnerDisplay: true,
+                showMessageForm: false
+              });
+              _this14.form.style.display = "none";
+              // createTransaction(e)
+              //   .then(transactionResponse => {
+              //     console.log("transacton response", transactionResponse)
+              //   })
+              sendMessage(e).then(function (data) {
+                return data.blob();
+              }).then(function (blob) {
+                _this14.setState({
+                  spinnerDisplay: false
+                });
+
+                //todo fix canvas scale
+                // this.qrcanvas.style.display = "initial"
+                toCanvas(blob, _this14.qrcanvas, _this14.qrimg);
+              });
+            }, className: "send", defaultValue: "Send!" })
+        )
+      );
+    }
+  }]);
+
+  return KingsMessageArea;
+}(_react2.default.PureComponent);
+
+var toCanvas = async function toCanvas(blob, canvas, qrimg) {
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  var img = new Image();
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0, 400, 400);
+  };
+  var dataurl = await blobToDataURL(blob);
+  img.src = dataurl;
+  qrimg.src = dataurl;
+  // qrimg = dataurl
+};
+
+var blobToDataURL = function blobToDataURL(blob) {
+  return new Promise(function (resolve) {
+    var a = new FileReader();
+    a.onload = function (e) {
+      resolve(e.target.result);
+    };
+    a.readAsDataURL(blob);
+  });
+};
+
 /***/ })
 
-},[194]);
+},[200]);
