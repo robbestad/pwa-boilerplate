@@ -1,3 +1,4 @@
+require("babel-polyfill");
 import Snap from './camera.jsx';
 import Find from './findFace.jsx';
 import React from 'react';

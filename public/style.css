@@ -24,14 +24,6 @@ body {
     background: var(--lightBg);
 }
 
-textarea.melding {
-    padding: 12px;
-    font-size: 24px;
-    border-radius: 6px;
-    font-family: "Cormorant Garamond";
-    height: 100px;
-}
-
 .faceApi {
     font-family: monospace;
     font-size: 12px;
@@ -56,12 +48,6 @@ textarea.melding {
     border-left: 6px solid var(--white);
     border-right: 6px solid var(--white);
     border-bottom: 20px solid var(--white);
-}
-
-.qrCanvas {
-    display:none;
-    width: 400px;
-    height: 400px;
 }
 
 .cameraFrame {
@@ -189,7 +175,7 @@ h1 {
 }
 
 .center.vertical-aligned {
-    margin: 150px 0 0 0;
+    margin: 0 0 0 0;
 }
 
 h2 {
@@ -421,9 +407,10 @@ body {
 }
 
 .icon-throne {
-    width: 320px;
-    height: 423px;
-    background-image: url(/assets/throne_sprite.png);
+    width: 232px;
+    height: 310px;
+    /*transform: scale(0.6,0.6);*/
+    background-image: url(/assets/throne_sprite_small.png);
     background-position: 0 0;
     animation-name: fadeIn;
     animation-duration: 1s;
@@ -443,7 +430,6 @@ body {
 }
 
 .icon-camera {
-    padding: 20px 10px 0 30px;
     width: 180px;
 }
 
@@ -457,6 +443,7 @@ body {
     position: relative;
     overflow: hidden;
     clear: left;
+    margin: 120px 0 0 0;
 }
 
 .camera-snap input[type="file"] {
@@ -630,9 +617,39 @@ div.splash > div.slogan {
 }
 
 input[type="button"] {
-    padding: 20px;
     width: 120px;
     height: 40px;
     display: inline-block;
-    margin: 20px 0;
+    margin: 15px 0;
+    border: 1px solid var(--darkBg);
+    border-radius: 4px;
+    background: #693131;
+    font-size: 20px;
+    color: var(--fontClr);
+    font-family: var(--fontFamily);
+}
+
+textarea {
+    border: 1px solid #F8F7F7;
+    border-radius: 4px;
+    background: transparent;
+    font-size: 20px;
+    color: var(--white);
+    padding: 0 0 0 15px;
+    font-family: var(--fontFamily);
+    height: 70px;
+}
+
+select {
+    max-width: 240px;
+    height: 40px;
+    display: inline-block;
+    margin: 15px 0;
+    border: 1px solid #F8F7F7;
+    border-radius: 4px;
+    background: transparent;
+    font-size: 20px;
+    color: var(--white);
+    padding: 0 5px 0 15px;
+    font-family: var(--fontFamily);
 }

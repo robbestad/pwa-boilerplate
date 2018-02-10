@@ -464,9 +464,9 @@ class KingsMessageArea extends React.PureComponent {
   constructor() {
     super()
     this.state = {
-      messengers: []
+      messengers: [],
+      showQr:false
     }
-    this.qrcanvas = null
     this.form = null
     this.qrimg = null
   }
@@ -502,19 +502,13 @@ class KingsMessageArea extends React.PureComponent {
         </div>
       </div>
 
-      <div className="qrcanvas">
-        <canvas ref={(e => this.qrcanvas = e)} className="qrCanvas">
-          Your browser does not support the HTML5 canvas tag.
-        </canvas>
-        <img src="/assets/transparent.png" ref={e=>{this.qrimg = e}}/>
-      </div>
-
+      <img style={{display: this.state.showQr ? "initial": "none"}} src="/assets/transparent.png" ref={e=>{this.qrimg = e}}/>
 
 
       <form ref={e => (this.form = e)}>
         <input type={"hidden"} name={"senderId"} value={this.props.senderId}/>
         <label htmlFor={"message"}>Your message</label>
-        <textarea name={"message"} className={"melding"} defaultValue={"Kill the imp!"}/>
+        <textarea name={"message"} className={"melding"} defaultValue=""/>
         <label htmlFor={"messengers"}>Choose your messenger</label>
         <select name={"messengers"}>
           {this.state.messengers.filter(m => m.Type !== "King").map(m => {
@@ -536,20 +530,19 @@ class KingsMessageArea extends React.PureComponent {
             showMessageForm: false
           })
           this.form.style.display = "none"
-          // createTransaction(e)
-          //   .then(transactionResponse => {
-          //     console.log("transacton response", transactionResponse)
-          //   })
+          createTransaction(e)
+            .then(transactionResponse => {
+              console.log("transacton response", transactionResponse)
+            })
           sendMessage(e)
             .then(data => data.blob())
             .then(blob => {
               this.setState({
-                spinnerDisplay: false
+                spinnerDisplay: false,
+                showQr:true
               })
 
-              //todo fix canvas scale
-              // this.qrcanvas.style.display = "initial"
-              toCanvas(blob, this.qrcanvas,this.qrimg)
+              toCanvas(blob,this.qrimg)
             })
         }} className={"send"} defaultValue={"Send!"}/>
       </form>
@@ -557,17 +550,9 @@ class KingsMessageArea extends React.PureComponent {
   }
 }
 
-const toCanvas = async (blob, canvas, qrimg) => {
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-  const img = new Image;
-  img.onload = () => {
-    ctx.drawImage(img, 0, 0, 400, 400);
-  };
+const toCanvas = async (blob, qrimg) => {
   const dataurl = await blobToDataURL(blob)
-  img.src = dataurl
   qrimg.src = dataurl
-  // qrimg = dataurl
 }
 
 const blobToDataURL = blob => {
