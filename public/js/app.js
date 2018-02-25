@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 145:
+/***/ 140:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35,7 +35,7 @@ exports.getOrientation = function (file, callback) {
 
 /***/ }),
 
-/***/ 146:
+/***/ 141:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73,7 +73,7 @@ exports.toPng = function (canvas) {
 
 /***/ }),
 
-/***/ 147:
+/***/ 142:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -103,7 +103,7 @@ exports.serializeImage = function (dataURL) {
 
 /***/ }),
 
-/***/ 214:
+/***/ 211:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -115,19 +115,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(94);
+var _react = __webpack_require__(91);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames = __webpack_require__(148);
+var _classnames = __webpack_require__(143);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _imagetocanvas = __webpack_require__(186);
+var _imagetocanvas = __webpack_require__(181);
 
 var _imagetocanvas2 = _interopRequireDefault(_imagetocanvas);
 
-var _superagent = __webpack_require__(211);
+var _superagent = __webpack_require__(208);
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
@@ -139,15 +139,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _require = __webpack_require__(146),
+var _require = __webpack_require__(141),
     resizeImage = _require.resizeImage,
     toPng = _require.toPng,
     toImg = _require.toImg;
 
-var _require2 = __webpack_require__(145),
+var _require2 = __webpack_require__(140),
     getOrientation = _require2.getOrientation;
 
-var _require3 = __webpack_require__(147),
+var _require3 = __webpack_require__(142),
     serializeImage = _require3.serializeImage;
 
 var Camera = function (_React$Component) {
@@ -516,7 +516,7 @@ exports.default = Camera;
 
 /***/ }),
 
-/***/ 215:
+/***/ 212:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -530,19 +530,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(94);
+var _react = __webpack_require__(91);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames = __webpack_require__(148);
+var _classnames = __webpack_require__(143);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _imagetocanvas = __webpack_require__(186);
+var _imagetocanvas = __webpack_require__(181);
 
 var _imagetocanvas2 = _interopRequireDefault(_imagetocanvas);
 
-var _superagent = __webpack_require__(211);
+var _superagent = __webpack_require__(208);
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
@@ -554,18 +554,18 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _require = __webpack_require__(146),
+var _require = __webpack_require__(141),
     resizeImage = _require.resizeImage,
     toPng = _require.toPng,
     toImg = _require.toImg;
 
-var _require2 = __webpack_require__(145),
+var _require2 = __webpack_require__(140),
     getOrientation = _require2.getOrientation;
 
-var _require3 = __webpack_require__(147),
+var _require3 = __webpack_require__(142),
     serializeImage = _require3.serializeImage;
 
-var uuid = __webpack_require__(523);
+var uuid = __webpack_require__(511);
 
 var createTransaction = function createTransaction(e) {
   var senderId = e.target.form.senderId.value;
@@ -1242,33 +1242,33 @@ var blobToDataURL = function blobToDataURL(blob) {
 
 /***/ }),
 
-/***/ 526:
+/***/ 514:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _camera = __webpack_require__(214);
+var _camera = __webpack_require__(211);
 
 var _camera2 = _interopRequireDefault(_camera);
 
-var _findFace = __webpack_require__(215);
+var _findFace = __webpack_require__(212);
 
 var _findFace2 = _interopRequireDefault(_findFace);
 
-var _react = __webpack_require__(94);
+var _react = __webpack_require__(91);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(217);
+var _reactDom = __webpack_require__(214);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(216);
+__webpack_require__(213);
 
 (0, _reactDom.render)(_react2.default.createElement(_camera2.default, null), document.getElementById('camera'));
 (0, _reactDom.render)(_react2.default.createElement(_findFace2.default, null), document.getElementById('findFace'));
 
 /***/ })
 
-},[526]);
+},[514]);

@@ -418,7 +418,7 @@ body {
 }
 
 .icon-throne:hover, .icon-throne:focus {
-    background-position: 320px 0;
+    background-position: 233px 0;
     animation-name: fadeIn;
     animation-duration: 1s;
     animation-fill-mode: both;

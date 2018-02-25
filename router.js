@@ -50,16 +50,12 @@ const createTransaction = async (ctx, log) => {
         receiverId
       })
     })
-  log.debug("createtransaction", res.status)
-  log.debug("createtransaction", res.statusText)
   return {status: res.status, text: res.statusText}
 }
 
 const uploadMessage = async (ctx, log) => {
   const message = ctx.request.body.message
   const receiverId = ctx.request.body.receiverId
-  log.debug({receiverId})
-  log.debug({message})
   return await fetch("https://acdc1801.azurewebsites.net/api/GenerateQRCode?code=AQ3ood5t6UqTZaAl0eFf3O9VMZdsIzKF910Rc4F0GmCQT7fqXM278A==",
     {
       method:  "POST",
@@ -72,6 +68,7 @@ const uploadMessage = async (ctx, log) => {
       })
     })
 }
+
 
 module.exports = function wrapper(logger) {
   const log = logger.child({
