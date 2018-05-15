@@ -1,35 +1,601 @@
 <!--
-
-The following code is an experiment in Web 1.0 retro. Everything is inline ... for fun
-
+The following code is an experiment in PWA/Web 1.0 retro. Inline everything for speed
 -->
 <!DOCTYPE html>
 <html>
 <head>
- 
-  <title>virtualraven</title>
+  <script>
+    (function (d) {
+      var config = {
+          kitId: 'wdz1lvl',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h = d.documentElement, t = setTimeout(function () {
+          h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+        }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a;
+      h.className += " wf-loading";
+      tk.src = 'https://use.typekit.net/' + config.kitId + '.js';
+      tk.async = true;
+      tk.onload = tk.onreadystatechange = function () {
+        a = this.readyState;
+        if (f || a && a != "complete" && a != "loaded")return;
+        f = true;
+        clearTimeout(t);
+        try {
+          Typekit.load(config)
+        } catch (e) {
+        }
+      };
+      s.parentNode.insertBefore(tk, s)
+    })(document);
+  </script>
+
+  <title>Facer</title>
   <meta name="theme-color" content="#2E3AA1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
   <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <style rel="stylesheet" type="text/css">
+    :root {
+      --font-size: 21px;
+      --white: #ECF1F1;
+      --darkBg: #046380;
+      --lightBg: #44A3C8;
+      --lightClrFont: #F8F7F7
+    }
+
+    html,
+    body {
+      padding: 0;
+      line-height: calc(var(--font-size) * 1.618);
+      background-color: rgba(242, 242, 242, 1);
+      -webkit-font-smoothing: antialiased;
+      font-family: "roboto", sans-serif;
+      font-weight: 200;
+      font-size: var(--font-size);
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      font-style: normal;
+      background: var(--lightBg);
+    }
+
+    .faceApi {
+      font-family: monospace;
+      font-size: 12px;
+      width: 300px;
+      margin: 10px;
+      line-height: 13px;
+      /*background: white;*/
+      border-radius: 3px;
+      word-wrap: break-word;
+    }
+
+    .imageCanvas {
+      display: block;
+      max-width: 600px;
+      margin: 10px;
+      line-height: 150px;
+      color: white;
+      font-weight: bold;
+      font-size: 3em;
+      text-align: center;
+      border-top: 6px solid var(--white);
+      border-left: 6px solid var(--white);
+      border-right: 6px solid var(--white);
+      border-bottom: 20px solid var(--white);
+    }
+
+    .cameraFrame {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      font-family: "roboto", sans-serif;
+      font-weight: 200;
+      color: var(--darkBg);
+    }
+
+    .metaInput {
+      margin-bottom: 50px;
+    }
+
+    .darkInput {
+      width: 220px;
+      border: none;
+      background: var(--darkBg);
+      padding: 25px;
+      border-radius: 15px;
+      font-family: "roboto", sans-serif;
+      font-weight: 200;
+      color: var(--white);
+      font-size: 28px;
+      margin: 20px;
+      border-color: var(--darkBg);
+    }
+
+    .darkButton {
+      width: 270px;
+      border: none;
+      background: var(--darkBg);
+      padding: 25px;
+      border-radius: 15px;
+      font-family: "roboto", sans-serif;
+      font-weight: 200;
+      color: var(--white);
+      font-size: 28px;
+      margin: 20px;
+      border-color: var(--darkBg);
+    }
+
+    /** SPINNER **/
+    .spinner {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      margin: 100px auto;
+    }
+
+    .spinner > .double-bounce1, .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #333;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+      animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .spinner > .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+      0%, 100% {
+        -webkit-transform: scale(0);
+      }
+      50% {
+        -webkit-transform: scale(1);
+      }
+    }
+
+    @keyframes sk-bounce {
+      0%, 100% {
+        transform: scale(0);
+        -webkit-transform: scale(0);
+      }
+      50% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+      }
+    }
+
+    p.paragraph {
+      font-size: var(--font-size);
+      line-height: calc(var(--font-size) * 1.618);
+      letter-spacing: -.004em;
+      font-family: 'Oxygen', Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+      margin: 20px 100px 0 100px;
+      max-width: 75ch;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-family: 'roboto-slab', sans-serif;
+    }
+
+    h1 {
+      font-family: 'roboto-slab', sans-serif;
+      font-size: 48px;
+      font-weight: 200;
+      color: #01222A;
+
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-family: 'roboto-slab', sans-serif;
+    }
+
+    .frontpage-block {
+      padding: 50px 0 0 0;
+      display: flex;
+      width: 100vw;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    a {
+      color: #1a0dab;
+      text-decoration: none;
+    }
+
+    a:visited, a:active, a:hover {
+      color: #609;
+    }
+
+    .logo {
+      padding: 0 0 0 5px;
+    }
+
+    .row-head {
+      display: flex;
+      width: 100%;
+      height: 55px;
+      background-color: rgba(232, 232, 232, 1);
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    footer {
+      color: #777;
+      font-size: 14px;
+      text-align: center;
+      padding: 30px 0 0 0;
+    }
+
+    footer > a, a:visited, a:link {
+      color: #777;
+    }
+
+    footer > a:visited {
+      color: #777;
+    }
+
+    @media screen and (max-width: 768px) {
+      .imageCanvas {
+        max-width: 300px;
+      }
+
+      .frontpage-block {
+        padding: 40px 0 0 0;
+      }
+
+      .row-head {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .row {
+        width: 98vw;
+      }
+
+      img {
+        max-width: 300px;
+      }
+
+      p.paragraph {
+        margin: 20px 25px 0 25px;
+        line-height: 1.75;
+        font-size: 20px;
+      }
+
+    }
+
+    .noscript {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .noscript-item {
+      max-width: 100%;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .holder {
+      max-width: 85%;
+      margin: 0 auto;
+    }
+
+    .animated {
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+
+    @-webkit-keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .fadeIn {
+      -webkit-animation-name: fadeIn;
+      animation-name: fadeIn;
+    }
+
+    @-webkit-keyframes fadeInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+      }
+
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+
+    /* flexbox */
+    .flex-container {
+      display: flex;
+      overflow: hidden;
+    }
+
+    .flex-container > * {
+      flex: 0 0 auto;
+      overflow: scroll;
+    }
+
+    .stretchy {
+      flex: 1 1 auto;
+    }
+
+    .column {
+      flex-direction: column;
+    }
+
+    html,
+    body,
+    .full-screen {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .full-screen {
+      display: flex;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    .full-screen > * {
+      flex: 0 0 auto;
+      overflow: scroll;
+    }
+
+    .full-screen > .header,
+    .full-screen > .footer {
+      height: 50px;
+      background: #ECF1F1;
+      color: #01222A;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 52px;
+      font-family: 'roboto-slab', sans-serif;
+    }
+
+    .full-screen > .footer {
+      background: #01222A;
+      color: #ECF1F1;
+      font-size: 20px;
+    }
+
+    .full-screen > .main {
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .full-screen > .main > * {
+      flex: 0 0 auto;
+      overflow: scroll;
+    }
+
+    .full-screen > .main > .middle {
+      flex: 1 1 auto;
+    }
+
+    .icon-man {
+      padding: 20px 10px 0 30px;
+      width: 180px;
+    }
+
+    .icon-camera {
+      padding: 20px 10px 0 30px;
+      width: 180px;
+    }
+
+    .icon-cloud {
+      width: 320px;
+      padding: 45px;
+
+    }
+
+    .camera-snap {
+      position: relative;
+      overflow: hidden;
+      clear: left;
+    }
+
+    .camera-snap input[type="file"] {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      font-size: 100px;
+      filter: alpha(opacity=0);
+      cursor: pointer;
+    }
+
+    .icon-search {
+      padding: 60px;
+      width: 120px;
+      color: #44A3C8;
+    }
+
+    .flex-container {
+      display: flex;
+      justify-content: start;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .flex-cell {
+      flex: 0 0 50%;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      box-sizing: border-box;
+    }
+
+    .flex-cell.full {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+
+    .flex-cell:before {
+      content: '';
+      display: table;
+      padding-top: 50%;
+    }
+
+    .flex-item {
+      flex-grow: 1;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flex-cell.dark {
+      background: #046380;
+    }
+
+    .flex-cell.light {
+      background: #44A3C8;
+    }
+
+    .cta {
+      font-family: 'roboto-slab', sans-serif;
+      font-size: 32px;
+      font-weight: 200;
+      color: var(--lightClrFont);
+    }
+
+    .cta > a, a:visited, a:link, a:hover {
+      color: #01222A;
+    }
+
+    .cta > a {
+      color: var(--lightClrFont);
+    }
+
+    .cta > a.dark {
+      color: #01222A;
+    }
+
+    .light-color {
+      color: var(--lightClrFont)
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .full-width-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full-width-container > div {
+      flex: 1;
+
+    }
+
+    .background-light {
+      background: var(--lightBg);
+    }
+
+    .background-dark {
+      background: var(--darkBg);
+    }
+
+    /** routes **/
+
+    .route-frontpage {
+      display: none;
+    }
+
+    .route-add {
+      display: none;
+    }
+
+    .route-find {
+      display: none;
+    }
+
+    .route-uploaded {
+      display: none;
+    }
+
+    .route-matching {
+      display: none;
+    }
+
+
+  </style>
+
 </head>
 <body>
 
 <div class="full-screen">
-  <div class="header"><span class="virtual">virtual</span><span class="raven">raven</span></div>
+  <div class="header">FACER</div>
   <div class="main">
     <!--<div class="left">Menu-stuff here. No way this will fit.-->
     <!--<ul>-->
     <!--<li>Menu Entry</li>-->
     <!--</ul>-->
     <!--</div>-->
-
-    <div class="splash">
-      <img src="/assets/raven_large.png">
-      <div class="slogan">VALAR MORGHULIS</div>
-    </div>
 
     <div class="middle animated fadeIn">
 
@@ -38,15 +604,24 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
         <div class="flex-container">
           <div class="flex-cell light">
             <div class="flex-item">
-              <a href="/#find">
-                <img class="icon-throne" src="/assets/transparent.png">
+              <a href="/#add">
+                <img src="/assets/man.svg" class="icon-man" onerror="this.src='/assets/man.png'">
               </a>
             </div>
           </div>
-        </div>
-        <div class="flex-container">
-          <div class="flex-cell small">
-            <div class="flex-item cta"><a href="/#find" class="dark center">PROVE <br/>YOUR WORTH</a></div>
+          <div class="flex-cell light">
+            <div class="flex-item cta"><a href="/#add" class="dark">ADD</a></div>
+          </div>
+          <div class="flex-cell dark">
+            <div class="flex-item cta"><a href="/#find">IDENTIFY</a></div>
+          </div>
+          <div class="flex-cell dark">
+            <div class="flex-item">
+              <a href="/#find">
+                <img src="/assets/search-10.svg" class="icon-search"
+                     onerror="this.src='/assets/search.png'">
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -87,9 +662,21 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       <!-- END FIND -->
 
 
+      <!-- MATCHING -->
+      <div class="route-matching">
+        <div class="full-width-container">
+          <div class="background-light" id="matchingGame">
+            <!--<canvas id="game">No canvas for you?! :(</canvas>-->
+          </div>
+        </div>
+      </div>
+      <!-- END MATCHING -->
+
+
     </div>
+    <!--<div class="right">Another sidebar</div>-->
   </div>
-  <div class="footer" onClick="window.location.href='/'">VALAR MORGHULIS</div>
+  <div class="footer" onClick="window.location.href='/'">HACKED TOGETHER WITH <3</div>
 </div>
 
 
@@ -106,19 +693,19 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register('./serviceworker.js', {scope: './'})
-      .then(navigator.serviceWorker.ready)
-      .then((registration) => {
-        if (registration.active) {
-          console.info('Service Worker is active');
-        }
-        if (registration.waiting) {
-          console.info('Service Worker is in waiting mode');
-        }
-        if (registration.installing) {
-          console.info('Service Worker is installing');
-        }
-      });
+    .register('./serviceworker.js', {scope: './'})
+    .then(navigator.serviceWorker.ready)
+    .then((registration) => {
+      if (registration.active) {
+        console.info('Service Worker is active');
+      }
+      if (registration.waiting) {
+        console.info('Service Worker is in waiting mode');
+      }
+      if (registration.installing) {
+        console.info('Service Worker is installing');
+      }
+    });
   }
 
   if ('storageQuota' in navigator) {
@@ -127,38 +714,32 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
       console.log('used data in bytes', info.usage);
     });
   }
-  
-  const start=2000
-  const p=50
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.9;},start)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.8;},start-p+p*2)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.7;},start-p+p*3)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.6;},start-p+p*4)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.5;},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.4;},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.3;},start-p+p*7)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.2;},start-p+p*8)
-  setTimeout(()=>{document.querySelector(".splash").style.opacity=0.1;},start-p+p*9)
-  setTimeout(()=>{document.querySelector(".splash").style.display="none";},start-p+p*10)
 
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="60px auto";},start)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="80px auto"},start-p+p*2)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="100px auto";},start-p+p*3)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="120px auto";},start-p+p*4)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="140px auto";},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="160px auto";},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="180px auto";},start-p+p*7)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="200px auto";},start-p+p*8)
-  setTimeout(()=>{document.querySelector(".slogan").style.margin="220px auto";},start-p+p*9)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="30px";},start-p+p*5)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="26px";},start-p+p*6)
-  setTimeout(()=>{document.querySelector(".slogan").style.fontSize="24px";},start-p+p*9)
+  const asyncLoadImages = ({node, src, width, height, border, className}) => {
+    const img = new Image();
+    const container = document.querySelector(node);
+    img.width = width;
+    img.height = height;
+    img.border = border;
+    img.src = src;
+    img.className = className || "center";
+    img.alt = "A bridge";
+    img.onload = (e) => container.appendChild(img);
+  };
 
-
+  //      asyncLoadImages({
+  //        node: '.holder',
+  //        src: '//res.cloudinary.com/sven-anders-robbestad/image/upload/fl_progressive.progressive:steep/v1484659594/Towerdefense_ryhgnm.jpg',
+  //        width: 655,
+  //        height: 364,
+  //        border: 1
+  //      });
 
 </script>
 
 
+<!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>-->
+<!--<script type="text/javascript" src="/games/matching.js"></script>-->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.js"></script>
 <script type="text/javascript" defer src="/js/vendor.js"></script>
 <script type="text/javascript" defer src="/js/app.js"></script>
@@ -170,18 +751,20 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
     const addPhoto = document.querySelector(".route-add");
     const uploaded = document.querySelector(".route-uploaded");
     const findFace = document.querySelector(".route-find");
+    const matching = document.querySelector(".route-matching");
 
     frontpage.style.display = "none";
     addPhoto.style.display = "none";
     uploaded.style.display = "none";
     findFace.style.display = "none";
+    matching.style.display = "none";
 
     if (window.location.hash) {
       const hash = window.location.hash;
 
       if (hash === "#add") {
         addPhoto.style.display = "block";
-        document.body.style.background = 'var(--lightBg)';
+        document.body.style.background = '#44A3C8';
       }
       if (hash === "#uploaded") {
         uploaded.style.display = "block";
@@ -191,6 +774,9 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
         document.body.style.background = '#046380';
       }
 
+      if (hash === "#matching") {
+        matching.style.display = "block";
+      }
 
     } else {
       frontpage.style.display = "block";
@@ -206,6 +792,25 @@ The following code is an experiment in Web 1.0 retro. Everything is inline ... f
   };
 
 </script>
+
+<!--
+<script defer src="https://db.robbestad.no/gun.js"></script>
+<script type="text/javascript">
+  setTimeout(() => {
+    const gun = Gun('https://db.robbestad.no/gun');
+    gun.put({NO2: '100mg'}).key("smogAPI");
+    const ref = gun.get("smogAPI");
+    ref.on((data) => {
+      console.log(data);
+//      const div = document.createElement('div');
+//      div.text = data.hello;
+//      div.textContent = data.hello;
+//      document.querySelector('.gundata').appendChild(div);
+    });
+  }, 5000);
+
+</script>
+-->
 
 </body>
 </html>
