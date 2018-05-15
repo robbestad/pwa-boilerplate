@@ -1,56 +1,17 @@
-// var webpack = require('webpack');
-// module.exports = {
-//   entry: './app.jsx',
-//   output: {
-//     path: '../public/js',
-//     filename: 'app.js'
-//   },
-//   plugins: [
-//     new webpack.DefinePlugin({
-//       'process.env': {
-//         'NODE_ENV': JSON.stringify('production')
-//       }
-//     })
-//   ],
-//   module: {
-//     rules: [
-//       {
-//         test: /\.jsx?$/,
-//         exclude: /(node_modules)/,
-//         loader: 'babel-loader',
-//         query: {
-//           presets: ['es2015', 'react']
-//         }
-//       }
-//     ]
-//   }
-// };
-
 const webpack = require('webpack');
 const isProd = process.env.NODE_ENV === "production";
 const pkg = require('./package.json');
+const path = require("path")
 
 const config = {
-  // entry: {
-  //   app: './src/entry.jsx'
-  // },
-  //
-
   entry: {
     app: './app.jsx',
   },
   output: {
     filename: '[name].js',
-    path: '../public/js',
+    path: path.join(__dirname, '../public/js'),
     chunkFilename: '[name]-[chunkhash].js',
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: ({resource}) => /node_modules/.test(resource),
-    })
-  ],
-
   module: {
     rules: [
       {
@@ -58,7 +19,7 @@ const config = {
         exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'react']
+        presets: ['@babel/preset-env', '@babel/preset-react']
         }
 
       }
@@ -67,14 +28,23 @@ const config = {
 };
 if (isProd) {
   config.module.rules = [
-    {
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-      query: {
-        presets: ['es2015', 'react']
-      }
-    },
-    {
+     {
+        test: /\.jsx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            "presets": [
+              ["@babel/preset-env", {
+                "targets": {
+                  "browsers": ["last 2 versions", "safari >= 7"]
+                }
+              }]
+            ]
+          }
+        }
+      },
+        {
       test: /\.css$/,
       use: [
         'style-loader',
@@ -82,41 +52,6 @@ if (isProd) {
       ]
     },
   ];
-
-  config.plugins.push(
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      filename: 'commons.[chunkhash:8].js',
-      children: true,
-      async: true,
-      minChunks: 2
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        screw_ie8: true,
-        conditionals: true,
-        unused: true,
-        comparisons: true,
-        sequences: true,
-        dead_code: true,
-        evaluate: true,
-        if_return: true,
-        join_vars: true,
-      },
-      output: {
-        comments: false,
-      },
-    })
-  );
 }
 
 module.exports = config;

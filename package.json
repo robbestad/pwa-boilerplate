@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "w": "sh scripts/compile.sh",
     "start": "node index",
     "build": "sh scripts/build.sh",
     "release": "standard-version",
@@ -33,7 +34,9 @@
     "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
     "standard-version": "^4.3.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "webpack": "4.x",
+    "webpack-cli": "^2.0.9"
   },
   "devDependencies": {
     "auto-sni": "^1.5.1",
